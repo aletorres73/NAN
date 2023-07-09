@@ -1,0 +1,2 @@
+token_openai="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"
+token_telegram="5848760683:AAEDjGbH11t9cwVepl9h3rzw_kg28szD6zw"
