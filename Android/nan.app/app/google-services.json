@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "74234914700",
+    "project_id": "nanapp-c84b6",
+    "storage_bucket": "nanapp-c84b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74234914700:android:441fa429c944a5d0a218a9",
+        "android_client_info": {
+          "package_name": "com.nan_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-BMT0_OM-SUFt41jg2Z7VKnOcJX7fDa4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

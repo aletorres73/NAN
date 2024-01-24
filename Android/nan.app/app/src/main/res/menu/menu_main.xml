@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.nan_app.activities.MainActivity">
+    <item
+        android:id="@+id/homeButton"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:orderInCategory="100"
+        android:title="Inicio"
+        app:showAsAction="never" />
+</menu>
