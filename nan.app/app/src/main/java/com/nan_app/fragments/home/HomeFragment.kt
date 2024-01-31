@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +21,8 @@ class HomeFragment : Fragment() {
     private lateinit var recClient: RecyclerView
     private lateinit var adapter: ClientAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
+    lateinit var buttomDelete: Button
 
     private lateinit var viewModel: HomeViewModel
 
@@ -73,6 +76,10 @@ class HomeFragment : Fragment() {
         }
     }
 
+
+
+
+
     private fun setupRecyclerView() {
         adapter = ClientAdapter(mutableListOf()) { }
         recClient.layoutManager = LinearLayoutManager(context)
@@ -91,10 +98,12 @@ class HomeFragment : Fragment() {
     private fun showDoneState() {
         viewModel.ClientListDb.observe(viewLifecycleOwner){
             adapter = ClientAdapter(it) { position ->
-                if(position < it!!.size)
+/*                if(position < it!!.size)
                 {
                     Toast.makeText(requireContext(),"Hiciste click en un cliente de la lista...",Toast.LENGTH_SHORT).show()
-                }
+                }*/
+                Toast.makeText(requireContext(),"Hiciste click en un cliente de la lista...",Toast.LENGTH_SHORT).show()
+
             }
             recClient.layoutManager = LinearLayoutManager(context)
             recClient.adapter = adapter
@@ -106,4 +115,6 @@ class HomeFragment : Fragment() {
     private fun showErrorState() {
         Toast.makeText(requireContext(), "Error al cargar la lista...", Toast.LENGTH_SHORT).show()
     }
+
+
 }
