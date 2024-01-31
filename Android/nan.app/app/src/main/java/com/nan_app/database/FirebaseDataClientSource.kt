@@ -40,7 +40,7 @@ class FirebaseDataClientSource: ClientSource {
                 if (client != null) {
                     clientList.add(client)
                 } else {
-                    throw IllegalStateException("No document found with the specified ID")
+                    throw IllegalStateException("No document found")
                 }
                 clientlistFB = clientList
             }

@@ -47,8 +47,8 @@ class ClientAdapter(
 
     override fun onBindViewHolder(holder: ClientHolder, position: Int) {
         if (position < (itemCount + 1)) {
-            holder.setName(clientlist.get(position).name) //probar con el operador indexar
-            holder.setLastName(clientlist.get(position).lastname)
+            holder.setName(clientlist[position].Name)
+            holder.setLastName(clientlist[position].LastName)
             holder.getCard().setOnClickListener { onClick(position) }
         }
     }

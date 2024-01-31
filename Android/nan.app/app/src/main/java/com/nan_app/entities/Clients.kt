@@ -3,17 +3,17 @@ package com.nan_app.entities
 class Clients() {
 
     var id:         Int=0
-    var name:       String=""
-    var lastname:   String=""
+    var Name:       String=""
+    var LastName:   String=""
 
     constructor (
         id:         Int,
-        name:       String,
-        lastname:   String,
+        Name:       String,
+        LastName:   String,
 
     ):this(){
         this.id           = id
-        this.name         = name
-        this.lastname     = lastname
+        this.Name         = Name
+        this.LastName     = LastName
     }
 }

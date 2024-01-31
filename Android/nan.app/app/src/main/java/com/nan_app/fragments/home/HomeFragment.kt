@@ -91,13 +91,6 @@ class HomeFragment : Fragment() {
     private fun showDoneState() {
         viewModel.ClientListDb.observe(viewLifecycleOwner){
             adapter = ClientAdapter(it) { position ->
-                /*if (position < it!!.size) {
-                    viewModel.setDetailProduct(it[position])
-                    val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment()
-                    findNavController().navigate(action)
-                } else {
-                    Toast.makeText(requireContext(), "Lista de productos nula...", Toast.LENGTH_SHORT).show()
-                }*/
                 if(position < it!!.size)
                 {
                     Toast.makeText(requireContext(),"Hiciste click en un cliente de la lista...",Toast.LENGTH_SHORT).show()

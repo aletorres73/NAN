@@ -23,7 +23,7 @@ class HomeViewModel : ViewModel() {
     fun getList(){
         viewModelScope.launch {
             clientSource.clientFb.let { clientSource.loadAllClients() }
-            if(clientSource.clientlistFB.isNullOrEmpty()){
+            if(clientSource.clientlistFB.isEmpty()){
                 viewState.value = STATE_EMPTY
             }else{
                 viewState.value = STATE_LOADING
