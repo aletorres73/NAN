@@ -21,7 +21,7 @@ options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
 driver = webdriver.Firefox(options = options)
 
 link    = "https://listado.mercadolibre.com.ar/"
-search  = "moto g13".replace(" ", "+") 
+search  = "atrapasueños tejidos".replace(" ", "+") 
 
 driver.get(link+search+'#D')
 
@@ -95,6 +95,6 @@ product_list = pd.DataFrame({'TITLE'    : product_title,
 print(product_list)
 
 product_list = product_list.sort_values(by='PRICE',ascending=True)
-product_list.to_csv(r'C:\Users\git\Projects\Python\webScraping\lista_prueba.csv',index=None, header=True, encoding='utf-8-sig')
+product_list.to_csv(r'C:\Users\aleln\OneDrive\Escritorio\lista_prueba.csv',index=None, header=True, encoding='utf-8-sig')
     
     
