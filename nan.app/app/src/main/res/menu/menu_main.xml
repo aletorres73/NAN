@@ -8,4 +8,10 @@
         android:orderInCategory="100"
         android:title="Inicio"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/createClient"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Crear Cliente"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.nan_app.R
 import com.nan_app.adapters.ClientAdapter
+import com.nan_app.adapters.ClientClickListener
 
 class HomeFragment : Fragment() {
 
@@ -22,8 +22,6 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: ClientAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    lateinit var buttomDelete: Button
-
     private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
@@ -31,25 +29,27 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         v = inflater.inflate(R.layout.fragment_home, container, false)
+
         recClient = v.findViewById(R.id.rvClient)
         swipeRefreshLayout = v.findViewById(R.id.swipeRefreshLayout)
-        return v
-    }
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
         viewModel.init()
-        setupRecyclerView()
+//        setupRecyclerView()
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
             swipeRefreshLayout.isRefreshing = false
         }
 
+        return v
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
-            when (state) {
+                when (state) {
                 HomeViewModel.STATE_EMPTY -> {
                     viewModel.loadList()
                     showEmptyListState()
@@ -72,19 +72,20 @@ class HomeFragment : Fragment() {
                     viewModel.getList()
 
                 }
+                HomeViewModel.STATE_DELETE->{
+                    Toast.makeText(requireContext(), "Cliente eliminado", Toast.LENGTH_SHORT).show()
+
+                }
+
             }
         }
     }
 
-
-
-
-
-    private fun setupRecyclerView() {
-        adapter = ClientAdapter(mutableListOf()) { }
-        recClient.layoutManager = LinearLayoutManager(context)
-        recClient.adapter = adapter
-    }
+//    private fun setupRecyclerView() {
+//        adapter = ClientAdapter(mutableListOf()) { }
+//        recClient.layoutManager = LinearLayoutManager(context)
+//        recClient.adapter = adapter
+//    }
 
     private fun showEmptyListState() {
         Toast.makeText(requireContext(), "Lista vacía", Toast.LENGTH_SHORT).show()
@@ -97,24 +98,70 @@ class HomeFragment : Fragment() {
 
     private fun showDoneState() {
         viewModel.ClientListDb.observe(viewLifecycleOwner){
-            adapter = ClientAdapter(it) { position ->
-/*                if(position < it!!.size)
-                {
-                    Toast.makeText(requireContext(),"Hiciste click en un cliente de la lista...",Toast.LENGTH_SHORT).show()
-                }*/
-                Toast.makeText(requireContext(),"Hiciste click en un cliente de la lista...",Toast.LENGTH_SHORT).show()
+/*            adapter = ClientAdapter(it) { position ->
+                showDeleteConfirmationDialog(position)
 
-            }
+                *//*                if(position < it!!.size)
+            {
+                viewModel.viewAction.observe(viewLifecycleOwner){action->
+                    when(action)
+                    {
+                        HomeViewModel.STATE_DELETE->{
+                            Toast.makeText(requireContext(),"Hiciste click en eliminar cliente..",Toast.LENGTH_SHORT).show()
+
+                        }
+                        HomeViewModel.STATE_LAST->{
+                            Toast.makeText(requireContext(),"Hiciste click en un cliente..",Toast.LENGTH_SHORT).show()
+
+                        }
+                        HomeViewModel.STATE_INIT->{
+                            Toast.makeText(requireContext(),"Init..",Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+                }
+            }*//*
+
+            }*/
+            adapter = ClientAdapter(it, object : ClientClickListener {
+                override fun onCardClick(position: Int) {
+                    // Lógica cuando se hace clic en la tarjeta
+                    Toast.makeText(requireContext(),"Hiciste click en un cliente..",Toast.LENGTH_SHORT).show()                }
+
+                override fun onDeleteButtonClick(position: Int) {
+                    // Lógica cuando se hace clic en el botón de eliminación
+                    showDeleteConfirmationDialog(position)
+                }
+            })
             recClient.layoutManager = LinearLayoutManager(context)
             recClient.adapter = adapter
             adapter.notifyItemRemoved(it.size -1)
-            Toast.makeText(requireContext(), "Lista actualizada", Toast.LENGTH_SHORT).show()
+
+
         }
     }
 
     private fun showErrorState() {
-        Toast.makeText(requireContext(), "Error al cargar la lista...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
     }
 
+    private fun showDeleteConfirmationDialog(position: Int) {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+
+        alertDialogBuilder.setTitle("Eliminar cliente")
+        alertDialogBuilder.setMessage("¿Estás seguro de que deseas eliminar este cliente?")
+
+        alertDialogBuilder.setPositiveButton("Sí") { _, _ ->
+            // Lógica para confirmar la eliminación
+            viewModel.deleteClient(position)
+        }
+
+        alertDialogBuilder.setNegativeButton("No") { _, _ ->
+            // No hacer nada o realizar alguna acción adicional si el usuario elige no eliminar
+        }
+
+        val alertDialog: AlertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
 
 }

@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         bottomBar.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.homeFragment -> {
+                R.id.homeButton -> {
                     navHostFragment.navController.navigate(R.id.homeFragment)
                     true
                 }

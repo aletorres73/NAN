@@ -19,7 +19,12 @@ class FirebaseDataClientSource: ClientSource {
 
     lateinit var currentClientId: String
 
-    override suspend fun loadClientById() {
+    override suspend fun loadClientById(id : Int): Boolean {
+        val querySnapshot = collection
+            .whereEqualTo("id", id)
+            .get()
+            .await()
+        return !querySnapshot.isEmpty
     }
 
     override suspend fun loadClientByName() {
@@ -47,6 +52,27 @@ class FirebaseDataClientSource: ClientSource {
         } else {
             clientlistFB = clientList
         }
+    }
+
+    override suspend fun deleteClient(id : Int) {
+        try {
+            val querySnapshot = collection
+                .whereEqualTo("id", id)
+                .get()
+                .await()
+            val documentRef = querySnapshot
+                .first()
+                .reference
+                .delete()
+                .await()
+
+        } catch (e: Exception) {
+            throw IllegalStateException("Failed to remove product into Firestore: ${e.message}")
+        }
+    }
+
+    override suspend fun createClient() {
+        TODO("Not yet implemented")
     }
 
 
