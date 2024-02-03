@@ -16,7 +16,7 @@
         android:layout_margin="10dp">
 
         <TextView
-            android:id="@+id/txtItem"
+            android:id="@+id/txtItemId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -76,7 +76,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.154"
             app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/txtItem"
+            app:layout_constraintTop_toBottomOf="@+id/txtItemId"
             app:layout_constraintVertical_bias="0.042" />
 
         <TextView

@@ -6,12 +6,18 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.nan_app.R
+import com.nan_app.database.FirebaseDataClientSource
+import org.koin.java.KoinJavaComponent
 
 class MainActivity : AppCompatActivity() {
 
 
     lateinit var bottomBar : BottomNavigationView
     lateinit var navHostFragment: NavHostFragment
+
+    private val clientSource: FirebaseDataClientSource by KoinJavaComponent.inject(
+        FirebaseDataClientSource::class.java
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,15 +39,10 @@ class MainActivity : AppCompatActivity() {
                     navHostFragment.navController.navigate(R.id.homeFragment)
                     true
                 }
-/*                R.id.userFragment -> {
-                    navHostFragment.navController.navigate(R.id.userFragment)
+                R.id.createClient ->{
+                    navHostFragment.navController.navigate((R.id.createClientFragment))
                     true
                 }
-                R.id.createProductFragment2 -> {
-                    navHostFragment.navController.navigate(R.id.createProductFragment2)
-                    true
-                }*/
-                // Agrega más casos para los otros elementos de la barra
                 else -> false
             }
         }

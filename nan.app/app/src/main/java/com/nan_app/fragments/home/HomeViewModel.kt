@@ -14,13 +14,11 @@ class HomeViewModel : ViewModel() {
 
     var ClientListDb    : MutableLiveData<MutableList<Clients>> = MutableLiveData()
     var viewState       : MutableLiveData<String> = MutableLiveData()
-    var viewAction      : MutableLiveData<String>  = MutableLiveData()
-    private val clientSource: FirebaseDataClientSource by inject(FirebaseDataClientSource::class.java)
 
+    private val clientSource: FirebaseDataClientSource by inject(FirebaseDataClientSource::class.java)
 
     fun init(){
         viewState.value = STATE_INIT
-        viewAction.value = STATE_INIT
     }
 
     fun getList(){
@@ -51,15 +49,6 @@ class HomeViewModel : ViewModel() {
             else viewState.value = STATE_ERROR
         }
     }
-
-    fun createClient(){
-
-    }
-
-    fun clickOnItem(){
-        viewAction.value = STATE_LAST
-    }
-
 
     companion object {
         const val STATE_ERROR   = "error"

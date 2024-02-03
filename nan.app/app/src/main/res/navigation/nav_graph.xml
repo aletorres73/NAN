@@ -9,4 +9,9 @@
         android:name="com.nan_app.fragments.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/createClientFragment"
+        android:name="com.nan_app.fragments.clients.CreateClientFragment"
+        android:label="fragment_create_client"
+        tools:layout="@layout/fragment_create_client" />
 </navigation>

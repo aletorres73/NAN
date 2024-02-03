@@ -33,10 +33,9 @@ class HomeFragment : Fragment() {
         recClient = v.findViewById(R.id.rvClient)
         swipeRefreshLayout = v.findViewById(R.id.swipeRefreshLayout)
 
-        viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
 
         viewModel.init()
-//        setupRecyclerView()
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
             swipeRefreshLayout.isRefreshing = false
@@ -80,49 +79,8 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-//    private fun setupRecyclerView() {
-//        adapter = ClientAdapter(mutableListOf()) { }
-//        recClient.layoutManager = LinearLayoutManager(context)
-//        recClient.adapter = adapter
-//    }
-
-    private fun showEmptyListState() {
-        Toast.makeText(requireContext(), "Lista vacía", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showLoadingState() {
-        // Mostrar un estado de carga en el adapter
-        Toast.makeText(requireContext(), "Cargando...", Toast.LENGTH_SHORT).show()
-    }
-
     private fun showDoneState() {
         viewModel.ClientListDb.observe(viewLifecycleOwner){
-/*            adapter = ClientAdapter(it) { position ->
-                showDeleteConfirmationDialog(position)
-
-                *//*                if(position < it!!.size)
-            {
-                viewModel.viewAction.observe(viewLifecycleOwner){action->
-                    when(action)
-                    {
-                        HomeViewModel.STATE_DELETE->{
-                            Toast.makeText(requireContext(),"Hiciste click en eliminar cliente..",Toast.LENGTH_SHORT).show()
-
-                        }
-                        HomeViewModel.STATE_LAST->{
-                            Toast.makeText(requireContext(),"Hiciste click en un cliente..",Toast.LENGTH_SHORT).show()
-
-                        }
-                        HomeViewModel.STATE_INIT->{
-                            Toast.makeText(requireContext(),"Init..",Toast.LENGTH_SHORT).show()
-
-                        }
-                    }
-                }
-            }*//*
-
-            }*/
             adapter = ClientAdapter(it, object : ClientClickListener {
                 override fun onCardClick(position: Int) {
                     // Lógica cuando se hace clic en la tarjeta
@@ -136,9 +94,14 @@ class HomeFragment : Fragment() {
             recClient.layoutManager = LinearLayoutManager(context)
             recClient.adapter = adapter
             adapter.notifyItemRemoved(it.size -1)
-
-
         }
+    }
+    private fun showEmptyListState() {
+        Toast.makeText(requireContext(), "Lista vacía", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoadingState() {
+        Toast.makeText(requireContext(), "Cargando...", Toast.LENGTH_SHORT).show()
     }
 
     private fun showErrorState() {
@@ -152,12 +115,10 @@ class HomeFragment : Fragment() {
         alertDialogBuilder.setMessage("¿Estás seguro de que deseas eliminar este cliente?")
 
         alertDialogBuilder.setPositiveButton("Sí") { _, _ ->
-            // Lógica para confirmar la eliminación
             viewModel.deleteClient(position)
         }
 
         alertDialogBuilder.setNegativeButton("No") { _, _ ->
-            // No hacer nada o realizar alguna acción adicional si el usuario elige no eliminar
         }
 
         val alertDialog: AlertDialog = alertDialogBuilder.create()

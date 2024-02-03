@@ -15,19 +15,16 @@ import com.nan_app.entities.Clients
 import com.nan_app.entities.clientModule
 import com.nan_app.fragments.home.HomeViewModel
 import org.koin.java.KoinJavaComponent
+import org.w3c.dom.Text
 
 class ClientAdapter(
     private var clientlist: MutableList<Clients>,
-//    var onClick: (Int) -> Unit
     private val clikListener: ClientClickListener
 ): RecyclerView.Adapter<ClientAdapter.ClientHolder>() {
 
     class ClientHolder(v: View) : RecyclerView.ViewHolder(v) {
         private var view: View
 
-        val clientSource: HomeViewModel by KoinJavaComponent.inject(
-            HomeViewModel::class.java
-        )
         init {
             this.view = v
         }
@@ -42,6 +39,11 @@ class ClientAdapter(
             txtLastName.text = lastname
         }
 
+        fun setId(id : String){
+            val txtId : TextView = view.findViewById(R.id.txtItemId)
+            txtId.text = id
+        }
+
         fun getCard(): CardView {
             return view.findViewById(R.id.cardImage)
         }
@@ -54,6 +56,7 @@ class ClientAdapter(
         fun bind(client: Clients){
             setName(client.Name)
             setLastName(client.LastName)
+            setId(client.id.toString())
         }
     }
 
@@ -68,11 +71,6 @@ class ClientAdapter(
     override fun onBindViewHolder(holder: ClientHolder, position: Int) {
         if (position < (itemCount + 1)) {
             holder.bind(clientlist[position])
-//            holder.getCard().setOnClickListener { onClick(position) }
-//            holder.getButtonDelete().setOnClickListener {
-//                onClick(position)
-//                holder.clientSource.deleteClient(clientlist[position].id)
-//            }
             holder.getCard().setOnClickListener{ clikListener.onCardClick(position)}
             holder.getButtonDelete().setOnClickListener {
                 clikListener.onDeleteButtonClick(position)

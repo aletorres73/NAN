@@ -71,9 +71,18 @@ class FirebaseDataClientSource: ClientSource {
         }
     }
 
-    override suspend fun createClient() {
-        TODO("Not yet implemented")
+    override suspend fun insertClient(newClient: Clients) {
+        try {
+//            clientlistFB.add(newClients)
+            collection.add(newClient).await()
+        } catch (e: Exception) {
+            throw IllegalStateException("Failed to insert product into Firestore: ${e.message}")
+        }
     }
+
+/*    override suspend fun getLastIdfromList(): Int {
+
+    }*/
 
 
 }
