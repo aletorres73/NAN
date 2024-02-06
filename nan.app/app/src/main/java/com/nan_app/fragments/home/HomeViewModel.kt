@@ -24,7 +24,7 @@ class HomeViewModel : ViewModel() {
     fun getList(){
         viewModelScope.launch {
             clientSource.clientFb.let { clientSource.loadAllClients() }
-            if(clientSource.clientlistFB.isEmpty()){
+            if(clientSource.clientListFB.isEmpty()){
                 viewState.value = STATE_EMPTY
             }else{
                 viewState.value = STATE_LOADING
@@ -32,7 +32,7 @@ class HomeViewModel : ViewModel() {
         }
     }
     fun loadList() {
-        ClientListDb.value = clientSource.clientlistFB
+        ClientListDb.value = clientSource.clientListFB
         viewState.value = STATE_DONE
     }
     fun refresh(){
@@ -40,7 +40,7 @@ class HomeViewModel : ViewModel() {
     }
 
     fun deleteClient( position: Int){
-        val id = clientSource.clientlistFB[position].id
+        val id = clientSource.clientListFB[position].id
         viewModelScope.launch {
             if(clientSource.loadClientById(id)){
                 clientSource.deleteClient(id)
@@ -48,6 +48,9 @@ class HomeViewModel : ViewModel() {
             }
             else viewState.value = STATE_ERROR
         }
+    }
+    fun getCurrentClient(position: Int){
+        clientSource.currentClient = clientSource.clientListFB[position]
     }
 
     companion object {

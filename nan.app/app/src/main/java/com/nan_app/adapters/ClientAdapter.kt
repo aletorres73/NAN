@@ -4,18 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.nan_app.R
-import com.nan_app.database.FirebaseDataClientSource
 import com.nan_app.entities.Clients
-import com.nan_app.entities.clientModule
-import com.nan_app.fragments.home.HomeViewModel
-import org.koin.java.KoinJavaComponent
-import org.w3c.dom.Text
 
 class ClientAdapter(
     private var clientlist: MutableList<Clients>,
@@ -40,23 +34,31 @@ class ClientAdapter(
         }
 
         fun setId(id : String){
-            val txtId : TextView = view.findViewById(R.id.txtItemId)
+            val txtId : TextView = view.findViewById(R.id.txtId)
             txtId.text = id
         }
+
+/*        fun setImageClient():{
+            val imageClient : ImageView =
+        }*/
 
         fun getCard(): CardView {
             return view.findViewById(R.id.cardImage)
         }
 
         fun getButtonDelete() : Button{
-            return view.findViewById(R.id.buttonDelete)
+            return view.findViewById(R.id.btnDeleteClient)
 
+        }
+        fun getButtonEdit():Button{
+            return view.findViewById(R.id.btnEditClient)
         }
 
         fun bind(client: Clients){
             setName(client.Name)
             setLastName(client.LastName)
             setId(client.id.toString())
+//            setImageClient()
         }
     }
 
@@ -71,9 +73,12 @@ class ClientAdapter(
     override fun onBindViewHolder(holder: ClientHolder, position: Int) {
         if (position < (itemCount + 1)) {
             holder.bind(clientlist[position])
-            holder.getCard().setOnClickListener{ clikListener.onCardClick(position)}
+//            holder.getCard().setOnClickListener{ clikListener.onCardClick(position)}
             holder.getButtonDelete().setOnClickListener {
                 clikListener.onDeleteButtonClick(position)
+            }
+            holder.getButtonEdit().setOnClickListener {
+                clikListener.onEditButtonClick(position)
             }
         }
     }

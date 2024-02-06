@@ -8,10 +8,19 @@
         android:id="@+id/homeFragment"
         android:name="com.nan_app.fragments.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_editClientFragment"
+            app:destination="@id/editClientFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createClientFragment"
         android:name="com.nan_app.fragments.clients.CreateClientFragment"
         android:label="fragment_create_client"
         tools:layout="@layout/fragment_create_client" />
+    <fragment
+        android:id="@+id/editClientFragment"
+        android:name="com.nan_app.fragments.clients.EditClientFragment"
+        android:label="fragment_edit_client"
+        tools:layout="@layout/fragment_edit_client" />
 </navigation>

@@ -2,7 +2,6 @@ package com.nan_app.fragments.clients
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Phone
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +12,6 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.nan_app.R
 import com.nan_app.entities.Clients
-import com.nan_app.fragments.home.HomeViewModel
-import org.koin.core.component.getScopeId
 
 class CreateClientFragment : Fragment() {
 
@@ -28,6 +25,7 @@ class CreateClientFragment : Fragment() {
     lateinit var inputDayPay    : EditText
     lateinit var inputFinishDay : EditText
     lateinit var inputAmount    : EditText
+    lateinit var inputId        : EditText
 
     lateinit var btnMakeClient  : Button
     lateinit var btnLoadImage   : Button
@@ -76,9 +74,6 @@ class CreateClientFragment : Fragment() {
                 }
             }
         }
-
-
-
     }
 
     private fun inflateViews(v: View) {
@@ -90,6 +85,7 @@ class CreateClientFragment : Fragment() {
         inputDayPay    = v.findViewById(R.id.editTextDayPay)
         inputFinishDay = v.findViewById(R.id.editTextFinishDay)
         inputAmount    = v.findViewById(R.id.editTextAmount)
+        inputId        = v.findViewById(R.id.editTextId)
 
         btnMakeClient  = v.findViewById(R.id.btnMakeClient)
         btnLoadImage   = v.findViewById(R.id.btnLoadImageClient)
@@ -98,7 +94,7 @@ class CreateClientFragment : Fragment() {
     }
     private fun getInputs(): Clients{
 //        newClient.id         = viewModel.getNewId()
-        newClient.id         = viewModel.getNewId()
+        newClient.id         = inputId.text.toString().toInt()
         newClient.Name       = inputName.text.toString()
         newClient.LastName   = inputLastName.text.toString()
         newClient.Birthday   = inputBirthday.text.toString()
@@ -113,6 +109,10 @@ class CreateClientFragment : Fragment() {
         return newClient
     }
     private fun checkInput(): Boolean{
+        if (inputId.text.isEmpty()){
+            Toast.makeText(requireContext(), "Ingresar Id ", Toast.LENGTH_SHORT).show()
+            return false
+        }
         if(inputName.text.isEmpty()){
             Toast.makeText(requireContext(), "Ingresar Nombre", Toast.LENGTH_SHORT).show()
             return false

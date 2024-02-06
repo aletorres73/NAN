@@ -45,14 +45,5 @@ class CreateClientViewModel : ViewModel() {
             clientSource.insertClient(newClient)
         }
     }
-    fun getNewId():Int{
-        if(clientSource.clientlistFB.isEmpty()) return 0
-        else{
-            return (clientSource.clientlistFB[clientSource.clientlistFB.size - 1].id + 1)
-        }
-
-    }
-
-
 
 }

@@ -15,10 +15,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var bottomBar : BottomNavigationView
     lateinit var navHostFragment: NavHostFragment
 
-    private val clientSource: FirebaseDataClientSource by KoinJavaComponent.inject(
-        FirebaseDataClientSource::class.java
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

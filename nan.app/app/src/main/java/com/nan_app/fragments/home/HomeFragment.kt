@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -24,6 +25,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,6 +34,7 @@ class HomeFragment : Fragment() {
 
         recClient = v.findViewById(R.id.rvClient)
         swipeRefreshLayout = v.findViewById(R.id.swipeRefreshLayout)
+
 
         viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
 
@@ -51,12 +54,12 @@ class HomeFragment : Fragment() {
                 when (state) {
                 HomeViewModel.STATE_EMPTY -> {
                     viewModel.loadList()
-                    showEmptyListState()
+                    Toast.makeText(requireContext(), "Lista vacía", Toast.LENGTH_SHORT).show()
                 }
 
                 HomeViewModel.STATE_LOADING -> {
                     viewModel.loadList()
-                    showLoadingState()
+//                    Toast.makeText(requireContext(), "Cargando...", Toast.LENGTH_SHORT).show()
                 }
 
                 HomeViewModel.STATE_DONE -> {
@@ -64,7 +67,7 @@ class HomeFragment : Fragment() {
                 }
 
                 HomeViewModel.STATE_ERROR -> {
-                    showErrorState()
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
 
                 HomeViewModel.STATE_INIT -> {
@@ -83,12 +86,15 @@ class HomeFragment : Fragment() {
         viewModel.ClientListDb.observe(viewLifecycleOwner){
             adapter = ClientAdapter(it, object : ClientClickListener {
                 override fun onCardClick(position: Int) {
-                    // Lógica cuando se hace clic en la tarjeta
                     Toast.makeText(requireContext(),"Hiciste click en un cliente..",Toast.LENGTH_SHORT).show()                }
 
                 override fun onDeleteButtonClick(position: Int) {
-                    // Lógica cuando se hace clic en el botón de eliminación
                     showDeleteConfirmationDialog(position)
+                }
+
+                override fun onEditButtonClick(position: Int) {
+                    viewModel.getCurrentClient(position)
+                    goEditFragment()
                 }
             })
             recClient.layoutManager = LinearLayoutManager(context)
@@ -96,18 +102,6 @@ class HomeFragment : Fragment() {
             adapter.notifyItemRemoved(it.size -1)
         }
     }
-    private fun showEmptyListState() {
-        Toast.makeText(requireContext(), "Lista vacía", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showLoadingState() {
-        Toast.makeText(requireContext(), "Cargando...", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showErrorState() {
-        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-    }
-
     private fun showDeleteConfirmationDialog(position: Int) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
 
@@ -123,6 +117,10 @@ class HomeFragment : Fragment() {
 
         val alertDialog: AlertDialog = alertDialogBuilder.create()
         alertDialog.show()
+    }
+    private fun goEditFragment(){
+        val action = HomeFragmentDirections.actionHomeFragmentToEditClientFragment()
+        findNavController().navigate(action)
     }
 
 }
