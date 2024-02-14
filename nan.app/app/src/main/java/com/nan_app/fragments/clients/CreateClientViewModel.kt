@@ -1,6 +1,7 @@
 package com.nan_app.fragments.clients
 
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +12,8 @@ import org.koin.java.KoinJavaComponent
 
 class CreateClientViewModel : ViewModel() {
 
-    var viewState : MutableLiveData<String> = MutableLiveData()
+    var viewState   : MutableLiveData<String> = MutableLiveData()
+    var viewUrl     : MutableLiveData<String> = MutableLiveData()
 
     private val clientSource: FirebaseDataClientSource by KoinJavaComponent.inject(
         FirebaseDataClientSource::class.java)
@@ -43,6 +45,11 @@ class CreateClientViewModel : ViewModel() {
     fun makeNewClient(newClient : Clients){
         viewModelScope.launch {
             clientSource.insertClient(newClient)
+        }
+    }
+    fun uploadImage(data : Uri) {
+        viewModelScope.launch {
+            viewUrl.value= clientSource.loadImageUri(data)
         }
     }
 

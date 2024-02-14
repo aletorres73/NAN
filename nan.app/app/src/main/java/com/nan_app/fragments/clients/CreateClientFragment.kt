@@ -1,21 +1,42 @@
 package com.nan_app.fragments.clients
 
+import android.Manifest
+import android.app.Activity
+import android.content.ContentValues
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.nan_app.R
 import com.nan_app.entities.Clients
 
 class CreateClientFragment : Fragment() {
 
     private lateinit var v: View
+
+    companion object{
+        private val REQUEST_GALLERY = 1001
+        private val REQUEST_CAMERA = 1002
+        private val REQUEST_PERMISSIONS = 1003
+
+    }
+
 
     lateinit var inputName      : EditText
     lateinit var inputLastName  : EditText
@@ -32,9 +53,15 @@ class CreateClientFragment : Fragment() {
     lateinit var btnDeleteImage : Button
     lateinit var btnSelectDays  : Button
 
+    lateinit var imageClient    : ImageView
+
     private var newClient : Clients = Clients()
 
     private lateinit var viewModel: CreateClientViewModel
+
+    private var foto : Uri? = null
+    private val urlLoadImage = "https://png.pngtree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
+
 
 
     override fun onCreateView(
@@ -45,11 +72,15 @@ class CreateClientFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[CreateClientViewModel::class.java]
 
         inflateViews(v)
+
         return v
     }
 
     override fun onStart() {
         super.onStart()
+
+        loadImage(urlLoadImage)
+
 
         btnMakeClient.setOnClickListener {
             viewModel.initState()
@@ -69,11 +100,14 @@ class CreateClientFragment : Fragment() {
                     }
                     CreateClientViewModel.STATE_ERROR->{
                         Toast.makeText(requireContext(), "Error al crear cliente nuevo", Toast.LENGTH_SHORT).show()
-                        findNavController().popBackStack()
                     }
                 }
             }
         }
+        btnLoadImage.setOnClickListener {
+            showOptionsDialog()
+        }
+
     }
 
     private fun inflateViews(v: View) {
@@ -91,9 +125,10 @@ class CreateClientFragment : Fragment() {
         btnLoadImage   = v.findViewById(R.id.btnLoadImageClient)
         btnDeleteImage = v.findViewById(R.id.btnDeletImg)
         btnSelectDays  = v.findViewById(R.id.btnDaySelect)
+
+        imageClient = v.findViewById(R.id.imageCreateClient)
     }
     private fun getInputs(): Clients{
-//        newClient.id         = viewModel.getNewId()
         newClient.id         = inputId.text.toString().toInt()
         newClient.Name       = inputName.text.toString()
         newClient.LastName   = inputLastName.text.toString()
@@ -103,7 +138,7 @@ class CreateClientFragment : Fragment() {
         newClient.PayDay     = inputDayPay.text.toString()
         newClient.FinishDay  = inputFinishDay.text.toString()
         newClient.State      = ""
-        newClient.ImageUri   = ""
+//        newClient.ImageUri   = ""
         newClient.AmountClass= ""
 
         return newClient
@@ -120,6 +155,10 @@ class CreateClientFragment : Fragment() {
         else if(inputLastName.text.isEmpty()){
             Toast.makeText(requireContext(), "Ingresar Apellido", Toast.LENGTH_SHORT).show()
             return false
+        }
+        else if(newClient.ImageUri.isEmpty()){
+            newClient.ImageUri = ""
+            return true
         }
 /*        else if(inputBirthday.text.isEmpty()){
             Toast.makeText(requireContext(), "Ingresar fecha de nacimiento", Toast.LENGTH_SHORT).show()
@@ -140,6 +179,127 @@ class CreateClientFragment : Fragment() {
         return true
 
     }
+    private fun loadImage(uri: String){
+
+        Glide.with(this)
+            .load(uri)
+            .into(imageClient)
+    }
+
+    private fun openCamera(){
+        if(arePermissionsGrantedCamera()){
+            val value = ContentValues()
+            value.put(MediaStore.Images.Media.TITLE, "New Image")
+            foto= requireActivity().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,value)
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, foto)
+            startActivityForResult(cameraIntent,REQUEST_CAMERA)
+        }
+        else requestPermissions(REQUEST_CAMERA)
+    }
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun openGallery() {
+        if(arePermissionsGrantedGallery()){
+            val intentGallery = Intent(Intent.ACTION_PICK)
+            intentGallery.type = "image/*"
+            startActivityForResult(intentGallery, REQUEST_GALLERY)
+        }
+        else requestPermissions(REQUEST_GALLERY)
+
+    }
+    private fun getImageCamera(data: Uri?){
+        if (data != null) {
+            viewModel.uploadImage(data)
+            viewModel.viewUrl.observe(viewLifecycleOwner) {
+                newClient.ImageUri = it
+                loadImage(newClient.ImageUri)
+            }
+
+            Toast.makeText(requireContext(), "Imagen cargada", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun getImageGallery(data: Intent?) {
+        val imageUri = data?.data
+        if (imageUri != null) {
+            viewModel.uploadImage(imageUri)
+            viewModel.viewUrl.observe(viewLifecycleOwner) {
+                newClient.ImageUri = it
+                loadImage(newClient.ImageUri)
+            }
+            imageClient.setImageURI(imageUri)
+            Toast.makeText(requireContext(), "Imagen cargada", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_GALLERY) {
+            getImageGallery(data)
+        }
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CAMERA) {
+            getImageCamera(foto)
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            REQUEST_GALLERY->{
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        openGallery()
+                    }
+                else
+                    Toast.makeText(requireContext(),"No tienes permiso a la galería",Toast.LENGTH_SHORT).show()
+            }
+            REQUEST_CAMERA->{
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    openCamera()
+                else
+                    Toast.makeText(requireContext(),"No tienes permiso a la cámara",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun arePermissionsGrantedCamera(): Boolean {
+        return ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED
+                ||  ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
+        }
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun arePermissionsGrantedGallery(): Boolean {
+        return ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_DENIED
+    }
+
+    private fun requestPermissions(request : Int) {
+        when(request){
+            REQUEST_CAMERA->{
+                val permissions = arrayOf(Manifest.permission.CAMERA)
+                requestPermissions(permissions, request)
+            }
+            REQUEST_GALLERY->{
+                val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+                requestPermissions(permissions, request)
+            }
+        }
+
+    }
+
+
+    private fun showOptionsDialog() {
+        val options = arrayOf("Abrir desde Galería", "Abrir Cámara")
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Selecciona una opción")
+        builder.setItems(options) { dialog, which ->
+            when (which) {
+                0 -> openGallery()
+                1 -> openCamera()
+            }
+        }
+        builder.show()
+    }
+
 
 
 }

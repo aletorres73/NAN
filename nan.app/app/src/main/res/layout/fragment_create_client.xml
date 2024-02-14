@@ -10,14 +10,15 @@
 
     <ImageView
         android:id="@+id/imageCreateClient"
-        android:layout_width="184dp"
-        android:layout_height="230dp"
+        android:layout_width="162dp"
+        android:layout_height="203dp"
+        android:background="@drawable/border_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.876"
+        app:layout_constraintHorizontal_bias="0.859"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.233"
+        app:layout_constraintVertical_bias="0.113"
         tools:src="@tools:sample/avatars" />
 
     <Button
@@ -27,10 +28,10 @@
         android:text="Eliminar imagen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintHorizontal_bias="0.853"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.535" />
+        app:layout_constraintVertical_bias="0.489" />
 
     <Button
         android:id="@+id/btnMakeClient"
@@ -39,22 +40,22 @@
         android:text="Crear"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.792"
+        app:layout_constraintHorizontal_bias="0.777"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.721" />
+        app:layout_constraintVertical_bias="0.676" />
 
     <Button
         android:id="@+id/btnLoadImageClient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="52dp"
         android:text="Cargar imagen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.821"
+        app:layout_constraintHorizontal_bias="0.85"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.087" />
+        app:layout_constraintVertical_bias="0.396" />
 
     <EditText
         android:id="@+id/editTextName"
@@ -179,10 +180,10 @@
         android:text="Seleccionar días"
         app:layout_constraintBottom_toTopOf="@+id/btnMakeClient"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.859"
+        app:layout_constraintHorizontal_bias="0.863"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnDeletImg"
-        app:layout_constraintVertical_bias="0.833" />
+        app:layout_constraintVertical_bias="0.343" />
 
     <EditText
         android:id="@+id/editTextId"

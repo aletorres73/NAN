@@ -39,6 +39,9 @@ class EditClientFragment : Fragment() {
 
     private var currentClient : Clients = Clients()
 
+    val imageDefect = "https://png.pngtree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,7 +51,7 @@ class EditClientFragment : Fragment() {
         viewModel = ViewModelProvider(this)[EditClientViewModel::class.java]
 
         inflateView(v)
-        loadImage(v)
+        loadImage(imageDefect)
 
         return v
     }
@@ -63,6 +66,7 @@ class EditClientFragment : Fragment() {
                 EditClientViewModel.STATE_INIT -> {
                     currentClient = viewModel.getClient()
                     loadClientInfo(currentClient)
+                    loadImage(currentClient.ImageUri)
 
                 }
                 EditClientViewModel.STATE_LOADING->{
@@ -92,6 +96,9 @@ class EditClientFragment : Fragment() {
         editAmount     = v.findViewById(R.id.edTxtAmount)
 
         btnUpdateClient= v.findViewById(R.id.btnUpdate)
+
+        imageClient = v.findViewById(R.id.imageEditedClient)
+
 
     }
 
@@ -129,13 +136,10 @@ class EditClientFragment : Fragment() {
         return currentClient
     }
 
-    private fun loadImage(v: View){
-        imageClient = v.findViewById(R.id.imageEditedClient)
-
-        val url = "https://png.pngtree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
+    private fun loadImage(uri : String){
 
         Glide.with(this)
-            .load(url)
+            .load(uri)
             .into(imageClient)
     }
 

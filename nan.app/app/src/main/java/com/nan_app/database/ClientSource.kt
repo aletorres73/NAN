@@ -1,5 +1,6 @@
 package com.nan_app.database
 
+import android.net.Uri
 import com.nan_app.entities.Clients
 import java.lang.ref.PhantomReference
 
@@ -13,4 +14,5 @@ interface ClientSource {
     suspend fun insertClient(newClient: Clients)
     suspend fun updateClientById(id: Int, field : String, value: String, reference: String)
     suspend fun getClientReference(id: Int): String
+    suspend fun loadImageUri (uri: Uri) :String
 }

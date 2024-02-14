@@ -1,5 +1,6 @@
 package com.nan_app.database
 
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.firestore.AggregateQuerySnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -7,6 +8,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.snapshots
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.nan_app.entities.Clients
 import kotlinx.coroutines.tasks.await
 
@@ -14,6 +16,8 @@ import kotlinx.coroutines.tasks.await
 class FirebaseDataClientSource: ClientSource {
 
     val db = Firebase.firestore
+    val storage = Firebase.storage
+
     private val collectionName: String = "clients"
     private val collection = db.collection(collectionName)
 
@@ -113,5 +117,13 @@ class FirebaseDataClientSource: ClientSource {
             Log.e("TAG", "Error al obtener la referencia del cliente: ${e.message}")
             throw e
         }
+    }
+
+    override suspend fun loadImageUri(uri: Uri): String {
+        val storageRef = storage.reference
+        val fileRef = storageRef.child("images/${uri.lastPathSegment}")
+        fileRef.putFile(uri).await() // Esperar a que se complete la carga
+        val downloadUrl = fileRef.downloadUrl.await() // Esperar a que se obtenga la URL de descarga
+        return downloadUrl.toString()
     }
 }

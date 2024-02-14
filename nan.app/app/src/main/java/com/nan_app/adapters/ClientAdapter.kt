@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.nan_app.R
 import com.nan_app.entities.Clients
 
@@ -38,9 +39,12 @@ class ClientAdapter(
             txtId.text = id
         }
 
-/*        fun setImageClient():{
-            val imageClient : ImageView =
-        }*/
+        fun setImageClient(uri : String){
+            val imageClient : ImageView =view.findViewById(R.id.imageProductItem)
+            Glide.with(imageClient.context)
+                .load(uri)
+                .into(imageClient)
+        }
 
         fun getCard(): CardView {
             return view.findViewById(R.id.cardImage)
@@ -58,7 +62,7 @@ class ClientAdapter(
             setName(client.Name)
             setLastName(client.LastName)
             setId(client.id.toString())
-//            setImageClient()
+            setImageClient(client.ImageUri)
         }
     }
 
