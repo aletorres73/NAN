@@ -7,6 +7,7 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.nan_app.R
 import com.nan_app.database.FirebaseDataClientSource
+import com.nan_app.fragments.clients.CreateClientViewModel
 import org.koin.java.KoinJavaComponent
 
 class MainActivity : AppCompatActivity() {
@@ -14,6 +15,9 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var bottomBar : BottomNavigationView
     lateinit var navHostFragment: NavHostFragment
+
+    private val createViewModel: CreateClientViewModel by KoinJavaComponent.inject(
+        CreateClientViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +36,12 @@ class MainActivity : AppCompatActivity() {
         bottomBar.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeButton -> {
+                    createViewModel.deleteImageFromBottomBar()
                     navHostFragment.navController.navigate(R.id.homeFragment)
                     true
                 }
                 R.id.createClient ->{
+                    createViewModel.deleteImageFromBottomBar()
                     navHostFragment.navController.navigate((R.id.createClientFragment))
                     true
                 }

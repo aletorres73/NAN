@@ -19,38 +19,68 @@ class CreateClientViewModel : ViewModel() {
         FirebaseDataClientSource::class.java)
 
     companion object {
-        const val STATE_ERROR   = "error"
-        const val STATE_DONE    = "done"
-        const val STATE_LOADING = "loading"
-        const val STATE_EMPTY   = "empty"
-        const val STATE_INIT    = "init"
-        const val STATE_REMOVING= "removing"
-        const val STATE_LAST    = "last"
-        const val STATE_DELETE  = "delete"
+        const val STATE_LOAD_NEW_CLIENT     = "STATE_LOAD_NEW_CLIENT"
+        const val STATE_ERROR_NEW_CLIENT    = "STATE_ERROR_NEW_CLIENT"
+        const val STATE_DONE_NEW_CLIENT     = "STATE_DONE_NEW_CLIENT"
+        const val STATE_LOAD_NEW_IMAGE      = "STATE_LOAD_NEW_IMAGE"
+        const val STATE_GALLERY             = "STATE_GALLERY"
+        const val STATE_CAMERA              = "STATE_CAMERA"
+        const val STATE_DELETE_IMAGE        = "STATE_DELETE_IMAGE"
+        const val STATE_IMAGE_EMPTY         = "STATE_IMAGE_EMPTY"
+        const val STATE_DONE_IMAGE_DELETE   = "STATE_DONE_IMAGE_DELETE"
+        const val STATE_ERROR_IMAGE_DELETE  = "STATE_ERROR_IMAGE_DELETE"
+        const val STATE_INIT                = "STATE_INIT"
     }
 
-    fun initState(){
-        viewState.value = STATE_INIT
-    }
-    fun error(){
-        viewState.value = STATE_ERROR
-    }
-    fun loading(){
-        viewState.value = STATE_LOADING
-    }
-    fun done(){
-        viewState.value = STATE_DONE
+    fun loadState(state : String){
+        when(state){
+            "init"              ->{viewState.value = STATE_INIT}
+            "newClient"         ->{viewState.value = STATE_LOAD_NEW_CLIENT}
+            "errorClientLoad"   ->{viewState.value = STATE_ERROR_NEW_CLIENT}
+            "newClientLoad"     ->{viewState.value = STATE_DONE_NEW_CLIENT}
+            "loadNewImage"      ->{viewState.value = STATE_LOAD_NEW_IMAGE}
+            "openGallery"       ->{viewState.value = STATE_GALLERY}
+            "openCamera"        ->{viewState.value = STATE_CAMERA}
+            "deleteImage"       ->{viewState.value = STATE_DELETE_IMAGE}
+            "emptyImage"        ->{viewState.value = STATE_IMAGE_EMPTY}
+            "imageDeleted"      ->{viewState.value = STATE_DONE_IMAGE_DELETE}
+            "errorImageDelete"  ->{viewState.value = STATE_ERROR_IMAGE_DELETE}
+        }
+
     }
 
-    fun makeNewClient(newClient : Clients){
+    fun loadNewClient(newClient : Clients){
         viewModelScope.launch {
-            clientSource.insertClient(newClient)
+            if(clientSource.insertClient(newClient))
+                loadState("newClientLoad")
+            else
+                loadState("errorClientLoad")
         }
     }
     fun uploadImage(data : Uri) {
+        clientSource.deletImageName = data.lastPathSegment.toString()
         viewModelScope.launch {
             viewUrl.value= clientSource.loadImageUri(data)
         }
     }
 
+    fun deleteImage(imageUri : Uri){
+        viewModelScope.launch {
+            if(clientSource.deleteImage(imageUri.lastPathSegment.toString()))
+                loadState("imageDeleted")
+            else
+                loadState("errorImageDelete")
+        }
+    }
+    fun deleteImageFromBottomBar() {
+        if(clientSource.deletImageName.isNotEmpty()){
+            viewModelScope.launch {
+                if (clientSource.deleteImage(clientSource.deletImageName))
+                    loadState("imageDeleted")
+                else
+                    loadState("errorImageDelete")
+            }
+        }
+
+    }
 }

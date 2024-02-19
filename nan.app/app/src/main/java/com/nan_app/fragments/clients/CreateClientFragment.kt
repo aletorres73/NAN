@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.createViewModelLazy
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.nan_app.R
@@ -33,7 +34,6 @@ class CreateClientFragment : Fragment() {
     companion object{
         private val REQUEST_GALLERY = 1001
         private val REQUEST_CAMERA = 1002
-        private val REQUEST_PERMISSIONS = 1003
 
     }
 
@@ -59,11 +59,8 @@ class CreateClientFragment : Fragment() {
 
     private lateinit var viewModel: CreateClientViewModel
 
-    private var foto : Uri? = null
+    private var imageUri : Uri? = null
     private val urlLoadImage = "https://png.pngtree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,38 +73,81 @@ class CreateClientFragment : Fragment() {
         return v
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onStart() {
         super.onStart()
 
         loadImage(urlLoadImage)
+        viewModel.loadState("init")
 
-
-        btnMakeClient.setOnClickListener {
-            viewModel.initState()
-            viewModel.viewState.observe(viewLifecycleOwner){state ->
-                when(state){
-                    CreateClientViewModel.STATE_INIT->{
-                        if(!checkInput()) viewModel.error()
-                        else viewModel.loading()
+        viewModel.viewState.observe(viewLifecycleOwner){state->
+            when(state){
+                CreateClientViewModel.STATE_INIT-> {
+                    btnMakeClient.setOnClickListener {
+                        viewModel.loadState("newClient")
                     }
-                    CreateClientViewModel.STATE_LOADING->{
-                        viewModel.makeNewClient(getInputs())
-                        viewModel.done()
+                    btnLoadImage.setOnClickListener {
+                        showOptionsDialog()
                     }
-                    CreateClientViewModel.STATE_DONE->{
-                        Toast.makeText(requireContext(), "Cliente agregado", Toast.LENGTH_SHORT).show()
-                        findNavController().popBackStack()
-                    }
-                    CreateClientViewModel.STATE_ERROR->{
-                        Toast.makeText(requireContext(), "Error al crear cliente nuevo", Toast.LENGTH_SHORT).show()
+                    btnDeleteImage.setOnClickListener {
+                        viewModel.loadState("deleteImage")
                     }
                 }
-            }
-        }
-        btnLoadImage.setOnClickListener {
-            showOptionsDialog()
-        }
+                CreateClientViewModel.STATE_LOAD_NEW_CLIENT->{
+                    if(!checkInput())
+                        viewModel.loadState("errorMakeNewClient")
+                    else
+                        viewModel.loadNewClient(getInputs())
+                }
+                CreateClientViewModel.STATE_ERROR_NEW_CLIENT->{
+                    showToast("No se pudo cargar alumno nuevo")
+                    viewModel.loadState("init")
+                }
+                CreateClientViewModel.STATE_DONE_NEW_CLIENT->{
+                    showToast("Alumno agregado")
+                    viewModel.loadState("init")
+                    findNavController().popBackStack()
 
+                }
+                CreateClientViewModel.STATE_GALLERY->{
+                    openGallery()
+                    viewModel.loadState("init")
+                }
+                CreateClientViewModel.STATE_CAMERA->{
+                    openCamera()
+                    viewModel.loadState("init")
+                }
+                CreateClientViewModel.STATE_DELETE_IMAGE->{
+                    if(newClient.ImageUri == ""){
+                        viewModel.loadState("emptyImage")
+                        viewModel.loadState("init")
+
+                    }
+                    else {
+                        viewModel.deleteImage(imageUri!!)
+                        viewModel.loadState("init")
+                    }
+                }
+                CreateClientViewModel.STATE_IMAGE_EMPTY->{
+                    showToast("No hay imagen cargada")
+                }
+                CreateClientViewModel.STATE_DONE_IMAGE_DELETE->{
+                    showToast("Imagen borrada")
+                    newClient.ImageUri = ""
+                    loadImage(urlLoadImage)
+                    viewModel.loadState("init")
+                }
+                CreateClientViewModel.STATE_ERROR_IMAGE_DELETE->{
+                    showToast("Error al borrar imagen")
+                    viewModel.loadState("init")
+                }
+            }
+
+        }
+    }
+
+    private fun showToast(msg: String){
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun inflateViews(v: View) {
@@ -138,7 +178,6 @@ class CreateClientFragment : Fragment() {
         newClient.PayDay     = inputDayPay.text.toString()
         newClient.FinishDay  = inputFinishDay.text.toString()
         newClient.State      = ""
-//        newClient.ImageUri   = ""
         newClient.AmountClass= ""
 
         return newClient
@@ -190,9 +229,9 @@ class CreateClientFragment : Fragment() {
         if(arePermissionsGrantedCamera()){
             val value = ContentValues()
             value.put(MediaStore.Images.Media.TITLE, "New Image")
-            foto= requireActivity().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,value)
+            imageUri= requireActivity().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,value)
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, foto)
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
             startActivityForResult(cameraIntent,REQUEST_CAMERA)
         }
         else requestPermissions(REQUEST_CAMERA)
@@ -205,7 +244,6 @@ class CreateClientFragment : Fragment() {
             startActivityForResult(intentGallery, REQUEST_GALLERY)
         }
         else requestPermissions(REQUEST_GALLERY)
-
     }
     private fun getImageCamera(data: Uri?){
         if (data != null) {
@@ -214,19 +252,17 @@ class CreateClientFragment : Fragment() {
                 newClient.ImageUri = it
                 loadImage(newClient.ImageUri)
             }
-
             Toast.makeText(requireContext(), "Imagen cargada", Toast.LENGTH_SHORT).show()
         }
     }
     private fun getImageGallery(data: Intent?) {
-        val imageUri = data?.data
+        imageUri = data?.data
         if (imageUri != null) {
-            viewModel.uploadImage(imageUri)
+            viewModel.uploadImage(imageUri!!)
             viewModel.viewUrl.observe(viewLifecycleOwner) {
                 newClient.ImageUri = it
                 loadImage(newClient.ImageUri)
             }
-            imageClient.setImageURI(imageUri)
             Toast.makeText(requireContext(), "Imagen cargada", Toast.LENGTH_SHORT).show()
         }
 
@@ -238,7 +274,7 @@ class CreateClientFragment : Fragment() {
             getImageGallery(data)
         }
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CAMERA) {
-            getImageCamera(foto)
+            getImageCamera(imageUri)
         }
     }
 
@@ -285,16 +321,16 @@ class CreateClientFragment : Fragment() {
         }
 
     }
-
-
+    
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun showOptionsDialog() {
         val options = arrayOf("Abrir desde Galería", "Abrir Cámara")
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Selecciona una opción")
         builder.setItems(options) { dialog, which ->
             when (which) {
-                0 -> openGallery()
-                1 -> openCamera()
+                0 -> viewModel.loadState("openGallery")
+                1 -> viewModel.loadState("openCamera")
             }
         }
         builder.show()

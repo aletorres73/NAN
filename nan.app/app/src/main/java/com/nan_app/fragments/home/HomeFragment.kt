@@ -76,7 +76,7 @@ class HomeFragment : Fragment() {
                 }
                 HomeViewModel.STATE_DELETE->{
                     Toast.makeText(requireContext(), "Cliente eliminado", Toast.LENGTH_SHORT).show()
-
+//                    viewModel.doneState()
                 }
 
             }

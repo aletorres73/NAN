@@ -25,6 +25,7 @@ class FirebaseDataClientSource: ClientSource {
     var clientFb: Clients = Clients()
     var currentClient: Clients = Clients()
     var clientListFB = mutableListOf<Clients>()
+    var deletImageName = ""
 
 
     override suspend fun loadClientById(id: Int): Boolean {
@@ -79,11 +80,13 @@ class FirebaseDataClientSource: ClientSource {
         }
     }
 
-    override suspend fun insertClient(newClient: Clients) {
-        try {
+    override suspend fun insertClient(newClient: Clients): Boolean {
+        return try{
             collection.add(newClient).await()
+            true
         } catch (e: Exception) {
-            throw IllegalStateException("Failed to insert product into Firestore: ${e.message}")
+            Log.e("Insert Client","Failed to insert product into Firestore: ${e.message}")
+            false
         }
     }
 
@@ -125,5 +128,18 @@ class FirebaseDataClientSource: ClientSource {
         fileRef.putFile(uri).await() // Esperar a que se complete la carga
         val downloadUrl = fileRef.downloadUrl.await() // Esperar a que se obtenga la URL de descarga
         return downloadUrl.toString()
+    }
+
+    override suspend fun deleteImage(name: String): Boolean {
+        return try{
+            storage.reference
+                .child("images/${name}")
+                .delete()
+                .await()
+            true
+        }catch (e: Exception){
+            Log.e("Delete Image", "Error al eliminar imagen: ${e.message}")
+            false
+        }
     }
 }

@@ -38,6 +38,9 @@ class HomeViewModel : ViewModel() {
     fun refresh(){
         viewState.value = STATE_INIT
     }
+    fun doneState(){
+        viewState.value = STATE_DONE
+    }
 
     fun deleteClient( position: Int){
         val id = clientSource.clientListFB[position].id
