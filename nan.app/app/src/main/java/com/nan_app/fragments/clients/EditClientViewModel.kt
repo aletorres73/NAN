@@ -12,30 +12,49 @@ class EditClientViewModel : ViewModel() {
 
      var viewState : MutableLiveData<String> = MutableLiveData()
 
-    companion object {
+/*    companion object {
         const val STATE_ERROR   = "error"
         const val STATE_DONE    = "done"
         const val STATE_LOADING = "loading"
-        const val STATE_EMPTY   = "empty"
         const val STATE_INIT    = "init"
-        const val STATE_REMOVING= "removing"
-        const val STATE_LAST    = "last"
-        const val STATE_DELETE  = "delete"
-    }
+    }*/
 
+    companion object {
+
+        const val STATE_DONE_UPDATE_CLIENT  = "STATE_DONE_NEW_CLIENT"
+        const val STATE_ERROR_UPDATE_CLIENT = "STATE_DONE_UPDATE_CLIENT"
+        const val STATE_LOAD_NEW_IMAGE      = "STATE_LOAD_NEW_IMAGE"
+        const val STATE_GALLERY             = "STATE_GALLERY"
+        const val STATE_CAMERA              = "STATE_CAMERA"
+        const val STATE_DELETE_IMAGE        = "STATE_DELETE_IMAGE"
+        const val STATE_IMAGE_EMPTY         = "STATE_IMAGE_EMPTY"
+        const val STATE_DONE_IMAGE_DELETE   = "STATE_DONE_IMAGE_DELETE"
+        const val STATE_ERROR_IMAGE_DELETE  = "STATE_ERROR_IMAGE_DELETE"
+        const val STATE_INIT                = "STATE_INIT"
+    }
+    fun loadState(state : String){
+         when(state){
+            "init"              ->{viewState.value = STATE_INIT}
+            "doneUpdateClient"  ->{viewState.value = STATE_DONE_UPDATE_CLIENT}
+            "errorUpdateClient" ->{viewState.value = STATE_ERROR_UPDATE_CLIENT}
+            "loadNewImage"      ->{viewState.value = STATE_LOAD_NEW_IMAGE}
+            "openGallery"       ->{viewState.value = STATE_GALLERY}
+            "openCamera"        ->{viewState.value = STATE_CAMERA}
+            "deleteImage"       ->{viewState.value = STATE_DELETE_IMAGE}
+            "emptyImage"        ->{viewState.value = STATE_IMAGE_EMPTY}
+            "imageDeleted"      ->{viewState.value = STATE_DONE_IMAGE_DELETE}
+            "errorImageDelete"  ->{viewState.value = STATE_ERROR_IMAGE_DELETE}
+         }
+    }
     private val clientSource: FirebaseDataClientSource by KoinJavaComponent.inject(
         FirebaseDataClientSource::class.java
     )
-
     fun getClient(): Clients{
-        viewState.value = STATE_LOADING
         return clientSource.currentClient
     }
     fun updatedClient(editedClient : Clients, id : Int){
-
         viewModelScope.launch {
             val referenceClient = clientSource.getClientReference(id)
-
             if(clientSource.loadClientById(id)){
                 if(editedClient.Name != "")
                     clientSource.updateClientById(id, "name", editedClient.Name, referenceClient)
@@ -54,16 +73,27 @@ class EditClientViewModel : ViewModel() {
                 if(editedClient.AmountClass != "")
                     clientSource.updateClientById(id, "amountClass", editedClient.AmountClass, referenceClient)
 
-                viewState.value= STATE_DONE
+                loadState("doneUpdateClient")
             }
             else
-                viewState.value= STATE_ERROR
+                loadState("errorUpdateClient")
         }
-
-
-
     }
-    fun init(){
-        viewState.value = STATE_INIT
+    fun updateClientByImage(client: Clients, id: Int){
+        viewModelScope.launch {
+            val referenceClient = clientSource.getClientReference(id)
+            if(clientSource.loadClientById(id)){
+                clientSource.updateClientById(id, "imageName",client.ImageName,referenceClient)
+                clientSource.updateClientById(id, "imageUri",client.ImageUri,referenceClient)
+            }
+        }
+    }
+    fun deleteImage(imageName : String){
+        viewModelScope.launch {
+            if(clientSource.deleteImage(imageName))
+                loadState("imageDeleted")
+            else
+                loadState("errorImageDelete")
+        }
     }
 }

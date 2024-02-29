@@ -36,6 +36,8 @@ class EditClientFragment : Fragment() {
     private lateinit var imageClient    :ImageView
 
     private lateinit var btnUpdateClient: Button
+    private lateinit var btnEditImage   : Button
+    private lateinit var btnDeleteImage : Button
 
     private var currentClient : Clients = Clients()
 
@@ -53,33 +55,76 @@ class EditClientFragment : Fragment() {
         inflateView(v)
         loadImage(imageDefect)
 
+        currentClient = viewModel.getClient()
+        loadClientInfo(currentClient)
+        if(currentClient.ImageUri != "")
+            loadImage(currentClient.ImageUri)
+        else
+            loadImage(imageDefect)
+
         return v
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.init()
+
+        viewModel.loadState("init")
 
         viewModel.viewState.observe(viewLifecycleOwner){state ->
             when(state) {
 
                 EditClientViewModel.STATE_INIT -> {
-                    currentClient = viewModel.getClient()
-                    loadClientInfo(currentClient)
-                    loadImage(currentClient.ImageUri)
-
-                }
-                EditClientViewModel.STATE_LOADING->{
                     btnUpdateClient.setOnClickListener {
                         viewModel.updatedClient(getEditedClient(currentClient), currentClient.id)
                     }
+
+                    btnDeleteImage.setOnClickListener {
+                        if(currentClient.ImageUri == ""){
+                            viewModel.loadState("emptyImage")
+                        }
+                        else
+                            viewModel.loadState("deleteImage")
+                    }
+                    btnEditImage.setOnClickListener {
+//                        showOptionDialog()
+                    }
                 }
-                EditClientViewModel.STATE_ERROR->{
-                    Toast.makeText(requireContext(), "No se pudieron actualizar los datos", Toast.LENGTH_SHORT).show()
+                EditClientViewModel.STATE_ERROR_UPDATE_CLIENT->{
+                    showToast("No se pudieron actualizar los datos")
+                    viewModel.loadState("init")
                 }
-                EditClientViewModel.STATE_DONE->{
+                EditClientViewModel.STATE_DONE_UPDATE_CLIENT->{
                     Toast.makeText(requireContext(), "Datos actualizados", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
+                }
+                EditClientViewModel.STATE_DELETE_IMAGE->{
+                    if(currentClient.ImageUri == ""){
+                        viewModel.loadState("emptyImage")
+                        viewModel.loadState("init")
+
+                    }
+                    else {
+                        viewModel.deleteImage(currentClient.ImageName)
+                        viewModel.loadState("init")
+                    }
+                }
+                EditClientViewModel.STATE_DONE_IMAGE_DELETE->{
+                    currentClient.ImageUri  = ""
+                    currentClient.ImageName = ""
+                    loadImage(imageDefect)
+                    showToast("Imagen borrada")
+
+                    viewModel.updateClientByImage(currentClient, currentClient.id)
+
+                    viewModel.loadState("init")
+                }
+                EditClientViewModel.STATE_ERROR_IMAGE_DELETE->{
+                    showToast("Error al borrar la imagen")
+                    viewModel.loadState("init")
+                }
+                EditClientViewModel.STATE_IMAGE_EMPTY->{
+                    showToast("No hay imagen cargada")
+                    viewModel.loadState("init")
                 }
             }
         }
@@ -96,6 +141,8 @@ class EditClientFragment : Fragment() {
         editAmount     = v.findViewById(R.id.edTxtAmount)
 
         btnUpdateClient= v.findViewById(R.id.btnUpdate)
+        btnEditImage   = v.findViewById(R.id.btnEditImage)
+        btnDeleteImage = v.findViewById(R.id.btnEdDeleteImg)
 
         imageClient = v.findViewById(R.id.imageEditedClient)
 
@@ -141,6 +188,10 @@ class EditClientFragment : Fragment() {
         Glide.with(this)
             .load(uri)
             .into(imageClient)
+    }
+
+    private fun showToast(msg: String){
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 
 }

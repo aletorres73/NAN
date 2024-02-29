@@ -12,8 +12,9 @@ import org.koin.java.KoinJavaComponent
 
 class CreateClientViewModel : ViewModel() {
 
-    var viewState   : MutableLiveData<String> = MutableLiveData()
-    var viewUrl     : MutableLiveData<String> = MutableLiveData()
+    var viewState     : MutableLiveData<String> = MutableLiveData()
+    var viewUrl       : MutableLiveData<String> = MutableLiveData()
+    var viewImageName : MutableLiveData<String> = MutableLiveData()
 
     private val clientSource: FirebaseDataClientSource by KoinJavaComponent.inject(
         FirebaseDataClientSource::class.java)
@@ -58,29 +59,36 @@ class CreateClientViewModel : ViewModel() {
         }
     }
     fun uploadImage(data : Uri) {
-        clientSource.deletImageName = data.lastPathSegment.toString()
+        clientSource.deleteImageName = data.lastPathSegment.toString()
+        viewImageName.value          = data.lastPathSegment.toString()
+
         viewModelScope.launch {
-            viewUrl.value= clientSource.loadImageUri(data)
+            viewUrl.value                = clientSource.loadImageUri(data)
         }
     }
+    fun getImageName(): String{
+        return if(viewImageName.value != null)
+            viewImageName.value!!
+        else
+            ""
+    }
 
-    fun deleteImage(imageUri : Uri){
+    fun deleteImage(imageName : String){
         viewModelScope.launch {
-            if(clientSource.deleteImage(imageUri.lastPathSegment.toString()))
+            if(clientSource.deleteImage(imageName))
                 loadState("imageDeleted")
             else
                 loadState("errorImageDelete")
         }
     }
     fun deleteImageFromBottomBar() {
-        if(clientSource.deletImageName.isNotEmpty()){
+        if(clientSource.deleteImageName.isNotEmpty()){
             viewModelScope.launch {
-                if (clientSource.deleteImage(clientSource.deletImageName))
+                if (clientSource.deleteImage(clientSource.deleteImageName))
                     loadState("imageDeleted")
                 else
                     loadState("errorImageDelete")
             }
         }
-
     }
 }

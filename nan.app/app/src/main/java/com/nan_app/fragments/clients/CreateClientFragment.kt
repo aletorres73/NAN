@@ -98,6 +98,7 @@ class CreateClientFragment : Fragment() {
                         viewModel.loadState("errorMakeNewClient")
                     else
                         viewModel.loadNewClient(getInputs())
+                    viewModel.loadState("init")
                 }
                 CreateClientViewModel.STATE_ERROR_NEW_CLIENT->{
                     showToast("No se pudo cargar alumno nuevo")
@@ -107,7 +108,6 @@ class CreateClientFragment : Fragment() {
                     showToast("Alumno agregado")
                     viewModel.loadState("init")
                     findNavController().popBackStack()
-
                 }
                 CreateClientViewModel.STATE_GALLERY->{
                     openGallery()
@@ -120,11 +120,11 @@ class CreateClientFragment : Fragment() {
                 CreateClientViewModel.STATE_DELETE_IMAGE->{
                     if(newClient.ImageUri == ""){
                         viewModel.loadState("emptyImage")
-                        viewModel.loadState("init")
+//                        viewModel.loadState("init")
 
                     }
                     else {
-                        viewModel.deleteImage(imageUri!!)
+                        viewModel.deleteImage(viewModel.getImageName())
                         viewModel.loadState("init")
                     }
                 }
@@ -177,8 +177,7 @@ class CreateClientFragment : Fragment() {
         newClient.Phone      = inputPhone.text.toString()
         newClient.PayDay     = inputDayPay.text.toString()
         newClient.FinishDay  = inputFinishDay.text.toString()
-        newClient.State      = ""
-        newClient.AmountClass= ""
+        newClient.ImageName  = viewModel.getImageName()
 
         return newClient
     }
@@ -195,28 +194,8 @@ class CreateClientFragment : Fragment() {
             Toast.makeText(requireContext(), "Ingresar Apellido", Toast.LENGTH_SHORT).show()
             return false
         }
-        else if(newClient.ImageUri.isEmpty()){
-            newClient.ImageUri = ""
-            return true
-        }
-/*        else if(inputBirthday.text.isEmpty()){
-            Toast.makeText(requireContext(), "Ingresar fecha de nacimiento", Toast.LENGTH_SHORT).show()
-            return false
-        }*/
-/*        else if(inputPhone.text.isEmpty()){
-            Toast.makeText(requireContext(), "Ingresar número de teléfono", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        else if(inputEmail.text.isEmpty()){
-            Toast.makeText(requireContext(), "Ingresar dirección de correo", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        else if(inputDayPay.text.isEmpty()){
-            Toast.makeText(requireContext(), "Ingresar fecha de pago", Toast.LENGTH_SHORT).show()
-            return false
-        }*/
-        return true
 
+        return true
     }
     private fun loadImage(uri: String){
 

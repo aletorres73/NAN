@@ -15,6 +15,7 @@ class Clients() {
     var ImageUri    : String  =""
     var Email       : String  =""
     var Phone       : String  =""
+    var ImageName   : String  =""
     constructor (
         id         : Int,
         Name       : String,
@@ -26,7 +27,8 @@ class Clients() {
         AmountClass: String,
         ImageUri   : String,
         Email      : String,
-        Phone      : String
+        Phone      : String,
+        ImageName  : String
 
     ):this() {
         this.id          = id
@@ -40,5 +42,6 @@ class Clients() {
         this.ImageUri    = ImageUri
         this.Email       = Email
         this.Phone       = Phone
+        this.ImageName   = ImageName
     }
 }

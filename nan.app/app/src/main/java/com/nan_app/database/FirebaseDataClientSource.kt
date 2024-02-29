@@ -11,6 +11,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.nan_app.entities.Clients
 import kotlinx.coroutines.tasks.await
+import org.koin.core.component.getScopeName
 
 
 class FirebaseDataClientSource: ClientSource {
@@ -25,7 +26,7 @@ class FirebaseDataClientSource: ClientSource {
     var clientFb: Clients = Clients()
     var currentClient: Clients = Clients()
     var clientListFB = mutableListOf<Clients>()
-    var deletImageName = ""
+    var deleteImageName = ""
 
 
     override suspend fun loadClientById(id: Int): Boolean {
@@ -90,19 +91,12 @@ class FirebaseDataClientSource: ClientSource {
         }
     }
 
-    override suspend fun updateClientById(
-        id: Int,
-        field: String,
-        value: String,
-        reference: String
-    ) {
-
+    override suspend fun updateClientById(id: Int, field: String, value: String, reference: String)
+    {
         collection
             .document(reference)
             .update(
-                mapOf(
-                    field to value
-                ),
+                mapOf( field to value),
             )
             .await()
     }
