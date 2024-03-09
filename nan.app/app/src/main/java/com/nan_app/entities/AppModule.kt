@@ -12,6 +12,5 @@ import org.koin.dsl.module
 val clientModule = module {
 //    single<UserSource> {FirebaseDataUserSource()}
     single { FirebaseDataClientSource() } bind ClientSource::class
-    single { HomeViewModel()}
-    single {CreateClientViewModel()}
+
 }

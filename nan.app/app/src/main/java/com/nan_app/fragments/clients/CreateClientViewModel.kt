@@ -2,6 +2,7 @@ package com.nan_app.fragments.clients
 
 
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,7 @@ class CreateClientViewModel : ViewModel() {
     var viewState     : MutableLiveData<String> = MutableLiveData()
     var viewUrl       : MutableLiveData<String> = MutableLiveData()
     var viewImageName : MutableLiveData<String> = MutableLiveData()
+    var viewImageuri  : MutableLiveData<Uri>    = MutableLiveData()
 
     private val clientSource: FirebaseDataClientSource by KoinJavaComponent.inject(
         FirebaseDataClientSource::class.java)
@@ -52,10 +54,21 @@ class CreateClientViewModel : ViewModel() {
 
     fun loadNewClient(newClient : Clients){
         viewModelScope.launch {
+
+
+            viewUrl.value = viewImageuri.value?.let { clientSource.loadImageUri(it) }
+            newClient.ImageUri = viewUrl.value.toString()
+            newClient.ImageName = viewImageName.value.toString()
+
+
             if(clientSource.insertClient(newClient))
                 loadState("newClientLoad")
             else
                 loadState("errorClientLoad")
+
+            viewImageuri.value  = "".toUri()
+            viewImageName.value = ""
+            viewUrl.value       = ""
         }
     }
     fun uploadImage(data : Uri) {
@@ -81,14 +94,11 @@ class CreateClientViewModel : ViewModel() {
                 loadState("errorImageDelete")
         }
     }
-    fun deleteImageFromBottomBar() {
-        if(clientSource.deleteImageName.isNotEmpty()){
-            viewModelScope.launch {
-                if (clientSource.deleteImage(clientSource.deleteImageName))
-                    loadState("imageDeleted")
-                else
-                    loadState("errorImageDelete")
-            }
-        }
+
+    fun saveImage(image : Uri){
+        clientSource.deleteImageName = image.lastPathSegment.toString()
+        viewImageuri.value  = image
+        viewImageName.value = image.lastPathSegment.toString()
+
     }
 }

@@ -76,7 +76,8 @@ class HomeFragment : Fragment() {
                 }
                 HomeViewModel.STATE_DELETE->{
                     Toast.makeText(requireContext(), "Cliente eliminado", Toast.LENGTH_SHORT).show()
-//                    viewModel.doneState()
+                    viewModel.refresh()
+                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentSelf())
                 }
 
             }
@@ -90,6 +91,7 @@ class HomeFragment : Fragment() {
 
                 override fun onDeleteButtonClick(position: Int) {
                     showDeleteConfirmationDialog(position)
+                    adapter.notifyItemRemoved(it.size -1)
                 }
 
                 override fun onEditButtonClick(position: Int) {
@@ -99,7 +101,7 @@ class HomeFragment : Fragment() {
             })
             recClient.layoutManager = LinearLayoutManager(context)
             recClient.adapter = adapter
-            adapter.notifyItemRemoved(it.size -1)
+
         }
     }
     private fun showDeleteConfirmationDialog(position: Int) {

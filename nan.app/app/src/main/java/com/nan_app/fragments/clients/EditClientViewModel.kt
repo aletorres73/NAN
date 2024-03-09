@@ -1,5 +1,6 @@
 package com.nan_app.fragments.clients
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +11,10 @@ import org.koin.java.KoinJavaComponent
 
 class EditClientViewModel : ViewModel() {
 
-     var viewState : MutableLiveData<String> = MutableLiveData()
+    var viewState     : MutableLiveData<String> = MutableLiveData()
+    var viewUrl       : MutableLiveData<String> = MutableLiveData()
+    var viewImageName : MutableLiveData<String> = MutableLiveData()
+    var viewImageuri  : MutableLiveData<Uri>    = MutableLiveData()
 
 /*    companion object {
         const val STATE_ERROR   = "error"
@@ -21,7 +25,7 @@ class EditClientViewModel : ViewModel() {
 
     companion object {
 
-        const val STATE_DONE_UPDATE_CLIENT  = "STATE_DONE_NEW_CLIENT"
+        const val STATE_DONE_UPDATE_CLIENT  = "STATE_DONE_EDIT_CLIENT"
         const val STATE_ERROR_UPDATE_CLIENT = "STATE_DONE_UPDATE_CLIENT"
         const val STATE_LOAD_NEW_IMAGE      = "STATE_LOAD_NEW_IMAGE"
         const val STATE_GALLERY             = "STATE_GALLERY"
@@ -72,6 +76,14 @@ class EditClientViewModel : ViewModel() {
                     clientSource.updateClientById(id, "finishDay", editedClient.FinishDay, referenceClient)
                 if(editedClient.AmountClass != "")
                     clientSource.updateClientById(id, "amountClass", editedClient.AmountClass, referenceClient)
+                if(editedClient.ImageUri == "" || editedClient.ImageUri == "null")
+                {
+                    viewUrl.value = clientSource.loadImageUri(viewImageuri.value!!)
+                    clientSource.updateClientById(id, "imageUri", viewUrl.value!!, referenceClient)
+                }
+                if(editedClient.ImageName != "" || editedClient.ImageUri == "null")
+                    clientSource.updateClientById(id, "imageName", editedClient.ImageName, referenceClient)
+
 
                 loadState("doneUpdateClient")
             }
@@ -95,5 +107,12 @@ class EditClientViewModel : ViewModel() {
             else
                 loadState("errorImageDelete")
         }
+    }
+
+    fun saveImage(image : Uri){
+        clientSource.deleteImageName = image.lastPathSegment.toString()
+        viewImageuri.value  = image
+        viewImageName.value = image.lastPathSegment.toString()
+
     }
 }

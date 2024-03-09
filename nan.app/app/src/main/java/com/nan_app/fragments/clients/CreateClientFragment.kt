@@ -60,7 +60,7 @@ class CreateClientFragment : Fragment() {
     private lateinit var viewModel: CreateClientViewModel
 
     private var imageUri : Uri? = null
-    private val urlLoadImage = "https://png.pngtree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
+    private val imageDefect = "https://png.pngtree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,6 +69,7 @@ class CreateClientFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[CreateClientViewModel::class.java]
 
         inflateViews(v)
+        loadImage(imageDefect)
 
         return v
     }
@@ -77,11 +78,11 @@ class CreateClientFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        loadImage(urlLoadImage)
         viewModel.loadState("init")
 
         viewModel.viewState.observe(viewLifecycleOwner){state->
             when(state){
+
                 CreateClientViewModel.STATE_INIT-> {
                     btnMakeClient.setOnClickListener {
                         viewModel.loadState("newClient")
@@ -93,6 +94,7 @@ class CreateClientFragment : Fragment() {
                         viewModel.loadState("deleteImage")
                     }
                 }
+
                 CreateClientViewModel.STATE_LOAD_NEW_CLIENT->{
                     if(!checkInput())
                         viewModel.loadState("errorMakeNewClient")
@@ -100,49 +102,55 @@ class CreateClientFragment : Fragment() {
                         viewModel.loadNewClient(getInputs())
                     viewModel.loadState("init")
                 }
+
                 CreateClientViewModel.STATE_ERROR_NEW_CLIENT->{
                     showToast("No se pudo cargar alumno nuevo")
                     viewModel.loadState("init")
                 }
+
                 CreateClientViewModel.STATE_DONE_NEW_CLIENT->{
                     showToast("Alumno agregado")
                     viewModel.loadState("init")
                     findNavController().popBackStack()
                 }
+
                 CreateClientViewModel.STATE_GALLERY->{
                     openGallery()
                     viewModel.loadState("init")
                 }
+
                 CreateClientViewModel.STATE_CAMERA->{
                     openCamera()
                     viewModel.loadState("init")
                 }
+
                 CreateClientViewModel.STATE_DELETE_IMAGE->{
                     if(newClient.ImageUri == ""){
                         viewModel.loadState("emptyImage")
 //                        viewModel.loadState("init")
-
                     }
                     else {
                         viewModel.deleteImage(viewModel.getImageName())
                         viewModel.loadState("init")
                     }
                 }
+
                 CreateClientViewModel.STATE_IMAGE_EMPTY->{
                     showToast("No hay imagen cargada")
                 }
+
                 CreateClientViewModel.STATE_DONE_IMAGE_DELETE->{
                     showToast("Imagen borrada")
                     newClient.ImageUri = ""
-                    loadImage(urlLoadImage)
+                    loadImage(imageDefect)
                     viewModel.loadState("init")
                 }
+
                 CreateClientViewModel.STATE_ERROR_IMAGE_DELETE->{
                     showToast("Error al borrar imagen")
                     viewModel.loadState("init")
                 }
             }
-
         }
     }
 
@@ -178,6 +186,7 @@ class CreateClientFragment : Fragment() {
         newClient.PayDay     = inputDayPay.text.toString()
         newClient.FinishDay  = inputFinishDay.text.toString()
         newClient.ImageName  = viewModel.getImageName()
+
 
         return newClient
     }
@@ -226,23 +235,29 @@ class CreateClientFragment : Fragment() {
     }
     private fun getImageCamera(data: Uri?){
         if (data != null) {
-            viewModel.uploadImage(data)
+//            viewModel.uploadImage(data)
+
+/*            // la url se puede cargar en el getInputs igual que la imageName
             viewModel.viewUrl.observe(viewLifecycleOwner) {
                 newClient.ImageUri = it
                 loadImage(newClient.ImageUri)
             }
-            Toast.makeText(requireContext(), "Imagen cargada", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Imagen cargada", Toast.LENGTH_SHORT).show()*/
+            viewModel.saveImage(data)
+            imageClient.setImageURI(data)
         }
     }
     private fun getImageGallery(data: Intent?) {
         imageUri = data?.data
         if (imageUri != null) {
-            viewModel.uploadImage(imageUri!!)
+/*            viewModel.uploadImage(imageUri!!)
             viewModel.viewUrl.observe(viewLifecycleOwner) {
                 newClient.ImageUri = it
                 loadImage(newClient.ImageUri)
             }
-            Toast.makeText(requireContext(), "Imagen cargada", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Imagen cargada", Toast.LENGTH_SHORT).show()*/
+            viewModel.saveImage(imageUri!!)
+            imageClient.setImageURI(imageUri)
         }
 
     }
@@ -298,7 +313,6 @@ class CreateClientFragment : Fragment() {
                 requestPermissions(permissions, request)
             }
         }
-
     }
     
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -314,7 +328,4 @@ class CreateClientFragment : Fragment() {
         }
         builder.show()
     }
-
-
-
 }

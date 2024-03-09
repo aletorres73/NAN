@@ -43,10 +43,11 @@ class HomeViewModel : ViewModel() {
     }
 
     fun deleteClient( position: Int){
-        val id = clientSource.clientListFB[position].id
+        val client = clientSource.clientListFB[position]
         viewModelScope.launch {
-            if(clientSource.loadClientById(id)){
-                clientSource.deleteClient(id)
+            if(clientSource.loadClientById(client.id)){
+                clientSource.deleteImage(client.ImageName)
+                clientSource.deleteClient(client.id)
                 viewState.value = STATE_DELETE
             }
             else viewState.value = STATE_ERROR

@@ -117,11 +117,15 @@ class FirebaseDataClientSource: ClientSource {
     }
 
     override suspend fun loadImageUri(uri: Uri): String {
-        val storageRef = storage.reference
-        val fileRef = storageRef.child("images/${uri.lastPathSegment}")
-        fileRef.putFile(uri).await() // Esperar a que se complete la carga
-        val downloadUrl = fileRef.downloadUrl.await() // Esperar a que se obtenga la URL de descarga
-        return downloadUrl.toString()
+        return if(uri.toString() != "") {
+            val storageRef = storage.reference
+            val fileRef = storageRef.child("images/${uri.lastPathSegment}")
+            fileRef.putFile(uri).await() // Esperar a que se complete la carga
+            val downloadUrl =
+                fileRef.downloadUrl.await() // Esperar a que se obtenga la URL de descarga
+            downloadUrl.toString()
+        } else
+            ""
     }
 
     override suspend fun deleteImage(name: String): Boolean {
