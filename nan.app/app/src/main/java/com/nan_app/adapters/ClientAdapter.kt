@@ -41,9 +41,13 @@ class ClientAdapter(
 
         fun setImageClient(uri : String){
             val imageClient : ImageView =view.findViewById(R.id.imageProductItem)
-            Glide.with(imageClient.context)
-                .load(uri)
-                .into(imageClient)
+            if(uri != "null")
+                if (uri != "")
+                {
+                    Glide.with(imageClient.context)
+                    .load(uri)
+                    .into(imageClient)
+                }
         }
 
         fun getCard(): CardView {

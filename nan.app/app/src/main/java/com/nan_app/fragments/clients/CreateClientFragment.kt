@@ -50,7 +50,6 @@ class CreateClientFragment : Fragment() {
 
     lateinit var btnMakeClient  : Button
     lateinit var btnLoadImage   : Button
-    lateinit var btnDeleteImage : Button
     lateinit var btnSelectDays  : Button
 
     lateinit var imageClient    : ImageView
@@ -60,7 +59,7 @@ class CreateClientFragment : Fragment() {
     private lateinit var viewModel: CreateClientViewModel
 
     private var imageUri : Uri? = null
-    private val imageDefect = "https://png.pngtree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
+//    private val imageDefect = "https://png.pntree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,7 +68,7 @@ class CreateClientFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[CreateClientViewModel::class.java]
 
         inflateViews(v)
-        loadImage(imageDefect)
+//        loadImage(imageDefect)
 
         return v
     }
@@ -89,9 +88,6 @@ class CreateClientFragment : Fragment() {
                     }
                     btnLoadImage.setOnClickListener {
                         showOptionsDialog()
-                    }
-                    btnDeleteImage.setOnClickListener {
-                        viewModel.loadState("deleteImage")
                     }
                 }
 
@@ -123,33 +119,6 @@ class CreateClientFragment : Fragment() {
                     openCamera()
                     viewModel.loadState("init")
                 }
-
-                CreateClientViewModel.STATE_DELETE_IMAGE->{
-                    if(newClient.ImageUri == ""){
-                        viewModel.loadState("emptyImage")
-//                        viewModel.loadState("init")
-                    }
-                    else {
-                        viewModel.deleteImage(viewModel.getImageName())
-                        viewModel.loadState("init")
-                    }
-                }
-
-                CreateClientViewModel.STATE_IMAGE_EMPTY->{
-                    showToast("No hay imagen cargada")
-                }
-
-                CreateClientViewModel.STATE_DONE_IMAGE_DELETE->{
-                    showToast("Imagen borrada")
-                    newClient.ImageUri = ""
-                    loadImage(imageDefect)
-                    viewModel.loadState("init")
-                }
-
-                CreateClientViewModel.STATE_ERROR_IMAGE_DELETE->{
-                    showToast("Error al borrar imagen")
-                    viewModel.loadState("init")
-                }
             }
         }
     }
@@ -171,7 +140,6 @@ class CreateClientFragment : Fragment() {
 
         btnMakeClient  = v.findViewById(R.id.btnMakeClient)
         btnLoadImage   = v.findViewById(R.id.btnLoadImageClient)
-        btnDeleteImage = v.findViewById(R.id.btnDeletImg)
         btnSelectDays  = v.findViewById(R.id.btnDaySelect)
 
         imageClient = v.findViewById(R.id.imageCreateClient)

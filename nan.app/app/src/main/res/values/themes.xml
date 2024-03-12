@@ -1,8 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Nan_app" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.Nan_app" parent="Theme.Material3.Light">
+        <item name="colorPrimary">#8075E1</item>
+        <item name="colorAccent">#8075E1</item>
+        <item name="colorButtonNormal">#8075E1</item>
+        <item name="colorContainer">#FFFFFF</item>
+
     </style>
 
     <style name="Theme.Nan_app" parent="Base.Theme.Nan_app" />
