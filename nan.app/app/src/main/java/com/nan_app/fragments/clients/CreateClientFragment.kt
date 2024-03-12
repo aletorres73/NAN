@@ -1,6 +1,7 @@
 package com.nan_app.fragments.clients
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
@@ -15,12 +16,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.createViewModelLazy
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -89,6 +93,9 @@ class CreateClientFragment : Fragment() {
                     btnLoadImage.setOnClickListener {
                         showOptionsDialog()
                     }
+                    inputBirthday.setOnClickListener { viewModel.loadState("selectBirthday") }
+                    inputDayPay.setOnClickListener { viewModel.loadState("selectDayPay") }
+                    inputFinishDay.setOnClickListener { viewModel.loadState("selectFinishDay") }
                 }
 
                 CreateClientViewModel.STATE_LOAD_NEW_CLIENT->{
@@ -119,9 +126,40 @@ class CreateClientFragment : Fragment() {
                     openCamera()
                     viewModel.loadState("init")
                 }
+
+                CreateClientViewModel.STATE_SELECT_BIRTHDAY->{
+                    val datePicker = DatePickerFragment { year, month, day -> onDateSelectedBirthday(year, month, day) }
+                    datePicker.show(parentFragmentManager,"datePicker")
+                }
+
+                CreateClientViewModel.STATE_SELECT_PAYDAY->{
+                    val datePicker = DatePickerFragment { year, month, day -> onDateSelectedDayPay(year, month, day) }
+                    datePicker.show(parentFragmentManager,"datePicker")
+                }
+
+                CreateClientViewModel.STATE_SELECT_FINISHDAY->{
+                    val datePicker = DatePickerFragment { year, month, day -> onDateSelectedFinshDay(year, month, day) }
+                    datePicker.show(parentFragmentManager,"datePicker")
+                }
             }
         }
     }
+
+    @SuppressLint("SetTextI18n")
+    private fun onDateSelectedFinshDay(year: Int, month: Int, day: Int) {
+        inputFinishDay.setText("$day/$month/$year")
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun onDateSelectedDayPay(year: Int, month: Int, day: Int) {
+        inputDayPay.setText("$day/$month/$year")
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun onDateSelectedBirthday(year: Int, month: Int, day: Int) {
+        inputBirthday.setText("$day/$month/$year")
+    }
+
 
     private fun showToast(msg: String){
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
@@ -174,13 +212,6 @@ class CreateClientFragment : Fragment() {
 
         return true
     }
-    private fun loadImage(uri: String){
-
-        Glide.with(this)
-            .load(uri)
-            .into(imageClient)
-    }
-
     private fun openCamera(){
         if(arePermissionsGrantedCamera()){
             val value = ContentValues()
@@ -203,14 +234,6 @@ class CreateClientFragment : Fragment() {
     }
     private fun getImageCamera(data: Uri?){
         if (data != null) {
-//            viewModel.uploadImage(data)
-
-/*            // la url se puede cargar en el getInputs igual que la imageName
-            viewModel.viewUrl.observe(viewLifecycleOwner) {
-                newClient.ImageUri = it
-                loadImage(newClient.ImageUri)
-            }
-            Toast.makeText(requireContext(), "Imagen cargada", Toast.LENGTH_SHORT).show()*/
             viewModel.saveImage(data)
             imageClient.setImageURI(data)
         }
@@ -218,12 +241,6 @@ class CreateClientFragment : Fragment() {
     private fun getImageGallery(data: Intent?) {
         imageUri = data?.data
         if (imageUri != null) {
-/*            viewModel.uploadImage(imageUri!!)
-            viewModel.viewUrl.observe(viewLifecycleOwner) {
-                newClient.ImageUri = it
-                loadImage(newClient.ImageUri)
-            }
-            Toast.makeText(requireContext(), "Imagen cargada", Toast.LENGTH_SHORT).show()*/
             viewModel.saveImage(imageUri!!)
             imageClient.setImageURI(imageUri)
         }
@@ -239,7 +256,6 @@ class CreateClientFragment : Fragment() {
             getImageCamera(imageUri)
         }
     }
-
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -269,7 +285,6 @@ class CreateClientFragment : Fragment() {
     private fun arePermissionsGrantedGallery(): Boolean {
         return ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_DENIED
     }
-
     private fun requestPermissions(request : Int) {
         when(request){
             REQUEST_CAMERA->{
@@ -282,7 +297,6 @@ class CreateClientFragment : Fragment() {
             }
         }
     }
-    
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun showOptionsDialog() {
         val options = arrayOf("Abrir desde Galería", "Abrir Cámara")
@@ -296,4 +310,5 @@ class CreateClientFragment : Fragment() {
         }
         builder.show()
     }
+
 }

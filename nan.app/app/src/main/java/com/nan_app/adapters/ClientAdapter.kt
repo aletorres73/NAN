@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -50,6 +51,21 @@ class ClientAdapter(
                 }
         }
 
+        fun setBirthday(date: String){
+            val dateBirtday: TextView = view.findViewById(R.id.textBirthday)
+            dateBirtday.text = date
+        }
+
+        fun setPayDay(date: String){
+            val datePayDay: TextView = view.findViewById(R.id.textBirthday)
+            datePayDay.text = date
+        }
+
+        fun setFinishDay(date: String){
+            val dateFinishDay: TextView = view.findViewById(R.id.textBirthday)
+            dateFinishDay.text = date
+        }
+
         fun getCard(): CardView {
             return view.findViewById(R.id.cardImage)
         }
@@ -67,6 +83,9 @@ class ClientAdapter(
             setLastName(client.LastName)
             setId(client.id.toString())
             setImageClient(client.ImageUri)
+            setBirthday(client.Birthday)
+            setPayDay(client.PayDay)
+            setFinishDay(client.FinishDay)
         }
     }
 

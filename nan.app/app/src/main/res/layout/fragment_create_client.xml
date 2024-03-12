@@ -118,7 +118,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+        android:focusable="false"
+        android:clickable="false"/>
 
     <EditText
         android:id="@+id/editTextBirthday"
@@ -132,7 +134,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLastName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextLastName"
+        android:focusable="false"
+        android:clickable="false"/>
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -160,7 +164,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDayPay" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextDayPay"
+        android:focusable="false"
+        android:clickable="false"/>
 
     <Button
         android:id="@+id/btnDaySelect"

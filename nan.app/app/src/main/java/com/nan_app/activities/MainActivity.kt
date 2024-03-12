@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
         bottomBar.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeButton -> {

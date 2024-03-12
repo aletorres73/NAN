@@ -33,6 +33,9 @@ class CreateClientViewModel : ViewModel() {
         const val STATE_DONE_IMAGE_DELETE   = "STATE_DONE_IMAGE_DELETE"
         const val STATE_ERROR_IMAGE_DELETE  = "STATE_ERROR_IMAGE_DELETE"
         const val STATE_INIT                = "STATE_INIT"
+        const val STATE_SELECT_BIRTHDAY     ="STATE_SELECT_BIRTHDAY"
+        const val STATE_SELECT_PAYDAY       ="STATE_SELECT_PAYDAY"
+        const val STATE_SELECT_FINISHDAY    ="STATE_SELECT_FINISHDAY"
     }
 
     fun loadState(state : String){
@@ -48,6 +51,9 @@ class CreateClientViewModel : ViewModel() {
             "emptyImage"        ->{viewState.value = STATE_IMAGE_EMPTY}
             "imageDeleted"      ->{viewState.value = STATE_DONE_IMAGE_DELETE}
             "errorImageDelete"  ->{viewState.value = STATE_ERROR_IMAGE_DELETE}
+            "selectBirthday"    ->{viewState.value = STATE_SELECT_BIRTHDAY}
+            "selectDayPay"       ->{viewState.value = STATE_SELECT_PAYDAY}
+            "selectFinishDay"   ->{viewState.value = STATE_SELECT_FINISHDAY}
         }
 
     }
