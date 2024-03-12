@@ -13,12 +13,13 @@
         android:id="@+id/imageCreateClient"
         android:layout_width="215dp"
         android:layout_height="290dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/border_background"
         android:padding="11dp"
         android:src="@drawable/df"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.918"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.117"
@@ -26,31 +27,35 @@
 
     <Button
         android:id="@+id/btnMakeClient"
-        android:layout_width="152dp"
-        android:layout_height="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Crear nuevo alumno"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.845"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.697" />
+        app:layout_constraintTop_toBottomOf="@+id/btnDaySelect"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnLoadImageClient"
-        android:layout_width="150dp"
-        android:layout_height="52dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Cargar imagen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.839"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.503" />
+        app:layout_constraintTop_toBottomOf="@+id/imageCreateClient"
+        app:layout_constraintVertical_bias="0.003" />
 
     <EditText
         android:id="@+id/editTextName"
-        android:layout_width="160dp"
+        android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
@@ -64,7 +69,7 @@
 
     <EditText
         android:id="@+id/editTextPhone"
-        android:layout_width="160dp"
+        android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:ems="10"
@@ -78,12 +83,12 @@
 
     <EditText
         android:id="@+id/editTextAmount"
-        android:layout_width="160dp"
+        android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Cantidad de clases"
-        android:inputType="text"
+        android:inputType="number"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +99,7 @@
 
     <EditText
         android:id="@+id/editTextLastName"
-        android:layout_width="160dp"
+        android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
@@ -108,39 +113,39 @@
 
     <EditText
         android:id="@+id/editTextDayPay"
-        android:layout_width="160dp"
+        android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:clickable="false"
         android:ems="10"
-        android:hint="Fecha de pago*"
+        android:focusable="false"
+        android:hint="Fecha de pago"
         android:inputType="datetime"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
-        android:focusable="false"
-        android:clickable="false"/>
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
     <EditText
         android:id="@+id/editTextBirthday"
-        android:layout_width="160dp"
+        android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:clickable="false"
         android:ems="10"
+        android:focusable="false"
         android:hint="Fecha de nacimiento*"
         android:inputType="datetime"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLastName"
-        android:focusable="false"
-        android:clickable="false"/>
+        app:layout_constraintTop_toBottomOf="@+id/editTextLastName" />
 
     <EditText
         android:id="@+id/editTextEmail"
-        android:layout_width="160dp"
+        android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:ems="10"
@@ -154,42 +159,42 @@
 
     <EditText
         android:id="@+id/editTextFinishDay"
-        android:layout_width="160dp"
+        android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:clickable="false"
         android:ems="10"
+        android:focusable="false"
         android:hint="Fecha de finalización"
         android:inputType="datetime"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDayPay"
-        android:focusable="false"
-        android:clickable="false"/>
+        app:layout_constraintTop_toBottomOf="@+id/editTextDayPay" />
 
     <Button
         android:id="@+id/btnDaySelect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Seleccionar días"
-        app:layout_constraintBottom_toTopOf="@+id/btnMakeClient"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.852"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLoadImageClient"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/editTextId"
-        android:layout_width="160dp"
+        android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:ems="10"
         android:hint="Id alumno*"
-        android:inputType="text"
+        android:inputType="number"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
