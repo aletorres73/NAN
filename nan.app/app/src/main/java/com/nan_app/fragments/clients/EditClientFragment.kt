@@ -1,6 +1,7 @@
 package com.nan_app.fragments.clients
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
@@ -110,6 +111,10 @@ class EditClientFragment : Fragment() {
                         else
                             viewModel.loadState("init")
                     }
+                    editBirthday.setOnClickListener { viewModel.loadState("selectBirthday") }
+                    editPayDay.setOnClickListener { viewModel.loadState("selectDayPay") }
+                    editFinishDay.setOnClickListener { viewModel.loadState("selectFinishDay") }
+
                 }
 
                 EditClientViewModel.STATE_ERROR_UPDATE_CLIENT -> {
@@ -167,25 +172,53 @@ class EditClientFragment : Fragment() {
                     openCamera()
                     viewModel.loadState("init")
                 }
+                CreateClientViewModel.STATE_SELECT_BIRTHDAY->{
+                    val datePicker = DatePickerFragment { year, month, day -> onDateSelectedBirthday(year, month, day) }
+                    datePicker.show(parentFragmentManager,"datePicker")
+                }
+
+                CreateClientViewModel.STATE_SELECT_PAYDAY->{
+                    val datePicker = DatePickerFragment { year, month, day -> onDateSelectedDayPay(year, month, day) }
+                    datePicker.show(parentFragmentManager,"datePicker")
+                }
+
+                CreateClientViewModel.STATE_SELECT_FINISHDAY->{
+                    val datePicker = DatePickerFragment { year, month, day -> onDateSelectedFinshDay(year, month, day) }
+                    datePicker.show(parentFragmentManager,"datePicker")
+                }
             }
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun onDateSelectedFinshDay(year: Int, month: Int, day: Int) {
+        editFinishDay.setText("$day/$month/$year")
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun onDateSelectedDayPay(year: Int, month: Int, day: Int) {
+        editPayDay.setText("$day/$month/$year")
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun onDateSelectedBirthday(year: Int, month: Int, day: Int) {
+        editBirthday.setText("$day/$month/$year")
+    }
     private fun inflateView(v: View) {
-        editName = v.findViewById(R.id.edTextName)
-        editLastName = v.findViewById(R.id.edTxtLastName)
-        editBirthday = v.findViewById(R.id.edTxtBirthday)
-        editPhone = v.findViewById(R.id.edTxtPhone)
-        editEmail = v.findViewById(R.id.edTxtEmail)
-        editPayDay = v.findViewById(R.id.edTxtDayPay)
-        editFinishDay = v.findViewById(R.id.edtxtFinishDay)
-        editAmount = v.findViewById(R.id.edTxtAmount)
+        editName        = v.findViewById(R.id.edTextName)
+        editLastName    = v.findViewById(R.id.edTxtLastName)
+        editBirthday    = v.findViewById(R.id.edTxtBirthday)
+        editPhone       = v.findViewById(R.id.edTxtPhone)
+        editEmail       = v.findViewById(R.id.edTxtEmail)
+        editPayDay      = v.findViewById(R.id.edTxtDayPay)
+        editFinishDay   = v.findViewById(R.id.edtxtFinishDay)
+        editAmount      = v.findViewById(R.id.edTxtAmount)
 
         btnUpdateClient = v.findViewById(R.id.btnUpdate)
-        btnEditImage = v.findViewById(R.id.btnEditImage)
-        btnDeleteImage = v.findViewById(R.id.btnEdDeleteImg)
+        btnEditImage    = v.findViewById(R.id.btnEditImage)
+        btnDeleteImage  = v.findViewById(R.id.btnEdDeleteImg)
 
-        imageClient = v.findViewById(R.id.imageEditedClient)
+        imageClient     = v.findViewById(R.id.imageEditedClient)
 
 
     }

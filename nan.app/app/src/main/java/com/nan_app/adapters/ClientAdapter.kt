@@ -1,10 +1,10 @@
 package com.nan_app.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -51,18 +51,43 @@ class ClientAdapter(
                 }
         }
 
+        @SuppressLint("SetTextI18n")
         fun setBirthday(date: String){
-            val dateBirtday: TextView = view.findViewById(R.id.textBirthday)
-            dateBirtday.text = date
+            val dateBirthday: TextView = view.findViewById(R.id.textBirthday)
+
+            if(date != "")
+            {
+                val birthday = date.split("/").toMutableList()
+
+                when (birthday[1]){
+
+                    '1'.toString() -> birthday[1] = "Enero"
+                    '2'.toString() -> birthday[1] = "Febrero"
+                    '3'.toString() -> birthday[1] = "Marzo"
+                    '4'.toString() -> birthday[1] = "Abril"
+                    '5'.toString() -> birthday[1] = "Mayo"
+                    '6'.toString() -> birthday[1] = "Junio"
+                    '7'.toString() -> birthday[1] = "Julio"
+                    '8'.toString() -> birthday[1] = "Agosto"
+                    '9'.toString() -> birthday[1] = "Septiembre"
+
+                    "10"-> birthday[2] = "Octubre"
+                    "11"-> birthday[2] = "Noviembre"
+                    "12"-> birthday[2] = "Diciembre"
+                }
+                dateBirthday.text = "${birthday[0]} de ${birthday[1]}"
+            }
+            else
+                dateBirthday.text = date
         }
 
         fun setPayDay(date: String){
-            val datePayDay: TextView = view.findViewById(R.id.textBirthday)
+            val datePayDay: TextView = view.findViewById(R.id.txtPayDay)
             datePayDay.text = date
         }
 
         fun setFinishDay(date: String){
-            val dateFinishDay: TextView = view.findViewById(R.id.textBirthday)
+            val dateFinishDay: TextView = view.findViewById(R.id.txtFinishDay)
             dateFinishDay.text = date
         }
 

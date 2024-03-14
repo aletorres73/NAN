@@ -16,12 +16,6 @@ class EditClientViewModel : ViewModel() {
     var viewImageName : MutableLiveData<String> = MutableLiveData()
     var viewImageuri  : MutableLiveData<Uri>    = MutableLiveData()
 
-/*    companion object {
-        const val STATE_ERROR   = "error"
-        const val STATE_DONE    = "done"
-        const val STATE_LOADING = "loading"
-        const val STATE_INIT    = "init"
-    }*/
 
     companion object {
 
@@ -35,6 +29,9 @@ class EditClientViewModel : ViewModel() {
         const val STATE_DONE_IMAGE_DELETE   = "STATE_DONE_IMAGE_DELETE"
         const val STATE_ERROR_IMAGE_DELETE  = "STATE_ERROR_IMAGE_DELETE"
         const val STATE_INIT                = "STATE_INIT"
+        const val STATE_SELECT_BIRTHDAY     ="STATE_SELECT_BIRTHDAY"
+        const val STATE_SELECT_PAYDAY       ="STATE_SELECT_PAYDAY"
+        const val STATE_SELECT_FINISHDAY    ="STATE_SELECT_FINISHDAY"
     }
     fun loadState(state : String){
          when(state){
@@ -48,6 +45,9 @@ class EditClientViewModel : ViewModel() {
             "emptyImage"        ->{viewState.value = STATE_IMAGE_EMPTY}
             "imageDeleted"      ->{viewState.value = STATE_DONE_IMAGE_DELETE}
             "errorImageDelete"  ->{viewState.value = STATE_ERROR_IMAGE_DELETE}
+            "selectBirthday"    ->{viewState.value = CreateClientViewModel.STATE_SELECT_BIRTHDAY}
+            "selectDayPay"      ->{viewState.value = CreateClientViewModel.STATE_SELECT_PAYDAY}
+            "selectFinishDay"   ->{viewState.value = CreateClientViewModel.STATE_SELECT_FINISHDAY}
          }
     }
     private val clientSource: FirebaseDataClientSource by KoinJavaComponent.inject(
