@@ -32,7 +32,7 @@ class HomeViewModel : ViewModel() {
         }
     }
     fun loadList() {
-        ClientListDb.value = clientSource.clientListFB
+        ClientListDb.value = clientSource.clientListFB.sortedBy{it.id} as MutableList
         viewState.value = STATE_DONE
     }
     fun refresh(){

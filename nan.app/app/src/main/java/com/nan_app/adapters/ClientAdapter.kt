@@ -20,27 +20,17 @@ class ClientAdapter(
 
     class ClientHolder(v: View) : RecyclerView.ViewHolder(v) {
         private var view: View
-
-        init {
-            this.view = v
-        }
-
-        fun setName(name: String) {
+        init { this.view = v }
+        private fun setName(name: String) {
             val txtName: TextView = view.findViewById(R.id.txtName)
-            txtName.text = name
-        }
-
+            txtName.text = name }
         fun setLastName(lastname: String) {
             val txtLastName: TextView = view.findViewById(R.id.txtLastName)
-            txtLastName.text = lastname
-        }
-
-        fun setId(id : String){
+            txtLastName.text = lastname }
+        private fun setId(id : String){
             val txtId : TextView = view.findViewById(R.id.txtId)
-            txtId.text = id
-        }
-
-        fun setImageClient(uri : String){
+            txtId.text = id }
+        private fun setImageClient(uri : String){
             val imageClient : ImageView =view.findViewById(R.id.imageProductItem)
             if(uri != "null")
                 if (uri != "")
@@ -54,13 +44,10 @@ class ClientAdapter(
         @SuppressLint("SetTextI18n")
         fun setBirthday(date: String){
             val dateBirthday: TextView = view.findViewById(R.id.textBirthday)
-
             if(date != "")
             {
                 val birthday = date.split("/").toMutableList()
-
                 when (birthday[1]){
-
                     '1'.toString() -> birthday[1] = "Enero"
                     '2'.toString() -> birthday[1] = "Febrero"
                     '3'.toString() -> birthday[1] = "Marzo"
@@ -70,38 +57,30 @@ class ClientAdapter(
                     '7'.toString() -> birthday[1] = "Julio"
                     '8'.toString() -> birthday[1] = "Agosto"
                     '9'.toString() -> birthday[1] = "Septiembre"
-
                     "10"-> birthday[2] = "Octubre"
                     "11"-> birthday[2] = "Noviembre"
-                    "12"-> birthday[2] = "Diciembre"
-                }
+                    "12"-> birthday[2] = "Diciembre" }
                 dateBirthday.text = "${birthday[0]} de ${birthday[1]}"
             }
             else
                 dateBirthday.text = date
         }
 
-        fun setPayDay(date: String){
+        private fun setPayDay(date: String){
             val datePayDay: TextView = view.findViewById(R.id.txtPayDay)
-            datePayDay.text = date
-        }
+            datePayDay.text = date }
 
-        fun setFinishDay(date: String){
+        private fun setFinishDay(date: String){
             val dateFinishDay: TextView = view.findViewById(R.id.txtFinishDay)
-            dateFinishDay.text = date
-        }
+            dateFinishDay.text = date }
 
         fun getCard(): CardView {
-            return view.findViewById(R.id.cardImage)
-        }
+            return view.findViewById(R.id.cardImage)}
 
         fun getButtonDelete() : Button{
-            return view.findViewById(R.id.btnDeleteClient)
-
-        }
+            return view.findViewById(R.id.btnDeleteClient)}
         fun getButtonEdit():Button{
-            return view.findViewById(R.id.btnEditClient)
-        }
+            return view.findViewById(R.id.btnEditClient)}
 
         fun bind(client: Clients){
             setName(client.Name)
@@ -110,8 +89,7 @@ class ClientAdapter(
             setImageClient(client.ImageUri)
             setBirthday(client.Birthday)
             setPayDay(client.PayDay)
-            setFinishDay(client.FinishDay)
-        }
+            setFinishDay(client.FinishDay) }
     }
 
     override fun getItemCount(): Int = clientlist.size

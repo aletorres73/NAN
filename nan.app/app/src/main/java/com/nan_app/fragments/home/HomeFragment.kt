@@ -16,8 +16,7 @@ import com.nan_app.R
 import com.nan_app.adapters.ClientAdapter
 import com.nan_app.adapters.ClientClickListener
 
-// modificar la carga de clientes, el id, y la vista de estado del adapter
-
+// modificar el adapter para que la lista aparezca ordenada por id
 
 class HomeFragment : Fragment() {
 
