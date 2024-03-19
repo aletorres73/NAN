@@ -2,10 +2,12 @@ package com.nan_app.fragments.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.PointerIcon
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,8 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.nan_app.R
 import com.nan_app.adapters.ClientAdapter
 import com.nan_app.adapters.ClientClickListener
-
-// modificar el adapter para que la lista aparezca ordenada por id
+import com.nan_app.entities.Clients
 
 class HomeFragment : Fragment() {
 
@@ -25,8 +26,10 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: ClientAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
+
     private lateinit var viewModel: HomeViewModel
 
+    private var deletePosition = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,16 +47,12 @@ class HomeFragment : Fragment() {
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
             swipeRefreshLayout.isRefreshing = false
+
         }
 
-        return v
-    }
-
-    override fun onStart() {
-        super.onStart()
 
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
-                when (state) {
+            when (state) {
                 HomeViewModel.STATE_EMPTY -> {
                     viewModel.loadList()
                     Toast.makeText(requireContext(), "Lista vacía", Toast.LENGTH_SHORT).show()
@@ -77,23 +76,27 @@ class HomeFragment : Fragment() {
 
                 }
                 HomeViewModel.STATE_DELETE->{
+                    adapter.notifyItemRemoved(deletePosition)
+                    viewModel.removeItemList(deletePosition)
                     Toast.makeText(requireContext(), "Cliente eliminado", Toast.LENGTH_SHORT).show()
-                    viewModel.refresh()
-                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentSelf())
                 }
-
             }
         }
+        return v
     }
+
     private fun showDoneState() {
         viewModel.ClientListDb.observe(viewLifecycleOwner){
-            adapter = ClientAdapter(it, object : ClientClickListener {
+            adapter = ClientAdapter(
+                it,
+                object : ClientClickListener {
+
                 override fun onCardClick(position: Int) {
                     Toast.makeText(requireContext(),"Hiciste click en un cliente..",Toast.LENGTH_SHORT).show()                }
 
                 override fun onDeleteButtonClick(position: Int) {
                     showDeleteConfirmationDialog(position)
-                    adapter.notifyItemRemoved(it.size -1)
+                    deletePosition = position
                 }
 
                 override fun onEditButtonClick(position: Int) {
@@ -103,7 +106,6 @@ class HomeFragment : Fragment() {
             })
             recClient.layoutManager = LinearLayoutManager(context)
             recClient.adapter = adapter
-
         }
     }
     private fun showDeleteConfirmationDialog(position: Int) {

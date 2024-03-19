@@ -18,8 +18,6 @@ class FirebaseDataClientSource: ClientSource {
     private val collectionName: String = "clients"
     private val collection  = db.collection(collectionName)
 
-
-
     var clientFb: Clients = Clients()
     var currentClient: Clients = Clients()
     var clientListFB = mutableListOf<Clients>()

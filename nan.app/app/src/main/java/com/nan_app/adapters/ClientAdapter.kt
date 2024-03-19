@@ -15,7 +15,7 @@ import com.nan_app.entities.Clients
 
 class ClientAdapter(
     private var clientlist: MutableList<Clients>,
-    private val clikListener: ClientClickListener
+    private val clickListener: ClientClickListener
 ): RecyclerView.Adapter<ClientAdapter.ClientHolder>() {
 
     class ClientHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -24,7 +24,7 @@ class ClientAdapter(
         private fun setName(name: String) {
             val txtName: TextView = view.findViewById(R.id.txtName)
             txtName.text = name }
-        fun setLastName(lastname: String) {
+        private fun setLastName(lastname: String) {
             val txtLastName: TextView = view.findViewById(R.id.txtLastName)
             txtLastName.text = lastname }
         private fun setId(id : String){
@@ -40,7 +40,6 @@ class ClientAdapter(
                     .into(imageClient)
                 }
         }
-
         @SuppressLint("SetTextI18n")
         fun setBirthday(date: String){
             val dateBirthday: TextView = view.findViewById(R.id.textBirthday)
@@ -92,7 +91,7 @@ class ClientAdapter(
             setFinishDay(client.FinishDay) }
     }
 
-    override fun getItemCount(): Int = clientlist.size
+    override fun getItemCount() = clientlist.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -105,10 +104,10 @@ class ClientAdapter(
             holder.bind(clientlist[position])
 //            holder.getCard().setOnClickListener{ clikListener.onCardClick(position)}
             holder.getButtonDelete().setOnClickListener {
-                clikListener.onDeleteButtonClick(position)
+                clickListener.onDeleteButtonClick(position)
             }
             holder.getButtonEdit().setOnClickListener {
-                clikListener.onEditButtonClick(position)
+                clickListener.onEditButtonClick(position)
             }
         }
     }

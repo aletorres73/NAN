@@ -32,7 +32,10 @@ class HomeViewModel : ViewModel() {
         }
     }
     fun loadList() {
-        ClientListDb.value = clientSource.clientListFB.sortedBy{it.id} as MutableList
+        if(clientSource.clientListFB.isEmpty())
+            ClientListDb.value = clientSource.clientListFB
+        else
+            ClientListDb.value = clientSource.clientListFB.sortedBy{it.id} as MutableList
         viewState.value = STATE_DONE
     }
     fun refresh(){
@@ -43,18 +46,28 @@ class HomeViewModel : ViewModel() {
     }
 
     fun deleteClient( position: Int){
-        val client = clientSource.clientListFB[position]
+        val client = clientSource.clientListFB
         viewModelScope.launch {
-            if(clientSource.loadClientById(client.id)){
-                clientSource.deleteImage(client.ImageName)
-                clientSource.deleteClient(client.id)
+            if(clientSource.loadClientById(client[position].id)){
+                if(client[position].ImageName != "" || client[position].ImageName != "null")
+                    clientSource.deleteImage(client[position].ImageName)
+                clientSource.deleteClient(client[position].id)
+/*                client.removeAt(position)
+                ClientListDb.value = client*/
                 viewState.value = STATE_DELETE
             }
             else viewState.value = STATE_ERROR
         }
+
     }
     fun getCurrentClient(position: Int){
         clientSource.currentClient = clientSource.clientListFB[position]
+    }
+
+    fun removeItemList(deletePosition: Int) {
+        val remove = clientSource.clientListFB
+        remove.removeAt(deletePosition)
+        ClientListDb.value = remove
     }
 
     companion object {

@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardImage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
     app:cardBackgroundColor="#E8E9EF"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="30dp">
+    app:cardCornerRadius="10dp"
+    app:cardElevation="15dp"
+    android:layout_gravity="center_horizontal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp">
-
 
         <TextView
             android:id="@+id/txtId"
@@ -64,17 +63,17 @@
 
         <ImageView
             android:id="@+id/imageProductItem"
-            android:layout_width="128dp"
-            android:layout_height="167dp"
+            android:layout_width="141dp"
+            android:layout_height="198dp"
             android:background="@drawable/border_background"
-            android:padding="8dp"
+            android:padding="6dp"
             android:src="@drawable/df"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.024"
+            app:layout_constraintVertical_bias="0.0"
             app:shapeAppearanceOverlay="@style/radius" />
 
         <TextView
@@ -243,33 +242,32 @@
 
         <Button
             android:id="@+id/btnEditClient"
+            style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:backgroundTint="#7E60B3"
-            android:text="Editar datos"
-            android:textSize="12sp"
             app:icon="@android:drawable/ic_menu_edit"
             app:iconGravity="textStart"
+            app:iconTint="@color/white"
+            app:iconSize="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageProductItem"
-            app:layout_constraintVertical_bias="0.055" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/btnDeleteClient"
+            style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:backgroundTint="#7E60B3"
             android:isScrollContainer="false"
-            android:text="Eliminar alumno"
-            android:textAlignment="center"
-            android:textSize="12sp"
             app:icon="@android:drawable/ic_menu_delete"
-            app:iconGravity="textStart"
+            app:iconSize="25dp"
+            app:iconTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
