@@ -18,6 +18,7 @@ import com.nan_app.adapters.ClientClickListener
 
 // modificar la carga de clientes, el id, y la vista de estado del adapter
 
+
 class HomeFragment : Fragment() {
 
     private lateinit var v: View

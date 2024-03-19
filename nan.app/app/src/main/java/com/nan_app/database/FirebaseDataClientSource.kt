@@ -2,16 +2,12 @@ package com.nan_app.database
 
 import android.net.Uri
 import android.util.Log
-import com.google.firebase.firestore.AggregateQuerySnapshot
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.snapshots
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.nan_app.entities.Clients
 import kotlinx.coroutines.tasks.await
-import org.koin.core.component.getScopeName
 
 
 class FirebaseDataClientSource: ClientSource {
@@ -20,7 +16,8 @@ class FirebaseDataClientSource: ClientSource {
     val storage = Firebase.storage
 
     private val collectionName: String = "clients"
-    private val collection = db.collection(collectionName)
+    private val collection  = db.collection(collectionName)
+
 
 
     var clientFb: Clients = Clients()
@@ -82,10 +79,25 @@ class FirebaseDataClientSource: ClientSource {
     }
 
     override suspend fun insertClient(newClient: Clients): Boolean {
+
+        val newDocument = hashMapOf(
+            "id"            to newClient.id,
+            "name"          to newClient.Name,
+            "lastName"      to newClient.LastName,
+            "birthday"      to newClient.Birthday,
+            "email"         to newClient.Email,
+            "phone"         to newClient.Phone,
+            "state"         to newClient.State,
+            "payDay"        to newClient.PayDay,
+            "finishDay"      to newClient.FinishDay,
+            "amountClass"   to newClient.AmountClass,
+            "imageName"     to newClient.ImageName,
+            "imageUri"      to newClient.ImageUri )
         return try{
-            collection.add(newClient).await()
+            collection.document()
+                .set(newDocument)
             true
-        } catch (e: Exception) {
+        }catch (e: Exception) {
             Log.e("Insert Client","Failed to insert product into Firestore: ${e.message}")
             false
         }
@@ -111,7 +123,7 @@ class FirebaseDataClientSource: ClientSource {
                 .reference
             return querySnapshot.id
         } catch (e: Exception) {
-            Log.e("TAG", "Error al obtener la referencia del cliente: ${e.message}")
+            Log.e("TAG", "Fail to get client's reference: ${e.message}")
             throw e
         }
     }
@@ -128,10 +140,10 @@ class FirebaseDataClientSource: ClientSource {
             ""
     }
 
-    override suspend fun deleteImage(name: String): Boolean {
+    override suspend fun deleteImage(path: String): Boolean {
         return try{
             storage.reference
-                .child("images/${name}")
+                .child("images/${path}")
                 .delete()
                 .await()
             true

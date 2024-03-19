@@ -19,7 +19,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20"
+        app:layout_constraintVertical_bias="0.16000003"
         app:shapeAppearanceOverlay="@style/radius" />
 
     <EditText
@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toStartOf="@+id/imageEditedClient"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.100000024" />
 
     <EditText
         android:id="@+id/edTxtLastName"
@@ -151,12 +151,12 @@
 
     <Button
         android:id="@+id/btnUpdate"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:backgroundTint="#7E60B3"
         android:text="Listo"
-        android:textAlignment="viewStart"
+        android:textAlignment="center"
         android:textSize="15sp"
         android:typeface="normal"
         app:icon="?android:attr/textCheckMarkInverse"
@@ -167,7 +167,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edTxtAmount"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.100000024" />
 
     <Button
         android:id="@+id/btnEditImage"
@@ -213,7 +213,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.061" />
+        app:layout_constraintVertical_bias="0.00999999" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

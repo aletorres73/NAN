@@ -43,7 +43,7 @@ class CreateClientViewModel : ViewModel() {
             "init"              ->{viewState.value = STATE_INIT}
             "newClient"         ->{viewState.value = STATE_LOAD_NEW_CLIENT}
             "errorClientLoad"   ->{viewState.value = STATE_ERROR_NEW_CLIENT}
-            "newClientLoad"     ->{viewState.value = STATE_DONE_NEW_CLIENT}
+            "newClientLoaded"   ->{viewState.value = STATE_DONE_NEW_CLIENT}
             "loadNewImage"      ->{viewState.value = STATE_LOAD_NEW_IMAGE}
             "openGallery"       ->{viewState.value = STATE_GALLERY}
             "openCamera"        ->{viewState.value = STATE_CAMERA}
@@ -52,7 +52,7 @@ class CreateClientViewModel : ViewModel() {
             "imageDeleted"      ->{viewState.value = STATE_DONE_IMAGE_DELETE}
             "errorImageDelete"  ->{viewState.value = STATE_ERROR_IMAGE_DELETE}
             "selectBirthday"    ->{viewState.value = STATE_SELECT_BIRTHDAY}
-            "selectDayPay"       ->{viewState.value = STATE_SELECT_PAYDAY}
+            "selectDayPay"      ->{viewState.value = STATE_SELECT_PAYDAY}
             "selectFinishDay"   ->{viewState.value = STATE_SELECT_FINISHDAY}
         }
 
@@ -60,15 +60,12 @@ class CreateClientViewModel : ViewModel() {
 
     fun loadNewClient(newClient : Clients){
         viewModelScope.launch {
-
-
             viewUrl.value = viewImageuri.value?.let { clientSource.loadImageUri(it) }
             newClient.ImageUri = viewUrl.value.toString()
             newClient.ImageName = viewImageName.value.toString()
 
-
             if(clientSource.insertClient(newClient))
-                loadState("newClientLoad")
+                loadState("newClientLoaded")
             else
                 loadState("errorClientLoad")
 

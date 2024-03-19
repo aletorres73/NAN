@@ -63,7 +63,7 @@ class CreateClientFragment : Fragment() {
     private lateinit var viewModel: CreateClientViewModel
 
     private var imageUri : Uri? = null
-//    private val imageDefect = "https://png.pntree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,8 +72,6 @@ class CreateClientFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[CreateClientViewModel::class.java]
 
         inflateViews(v)
-//        loadImage(imageDefect)
-
         return v
     }
 
@@ -100,10 +98,9 @@ class CreateClientFragment : Fragment() {
 
                 CreateClientViewModel.STATE_LOAD_NEW_CLIENT->{
                     if(!checkInput())
-                        viewModel.loadState("errorMakeNewClient")
+                        viewModel.loadState("errorClientLoad")
                     else
                         viewModel.loadNewClient(getInputs())
-                    viewModel.loadState("init")
                 }
 
                 CreateClientViewModel.STATE_ERROR_NEW_CLIENT->{
