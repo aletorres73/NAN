@@ -101,7 +101,7 @@ class CreateClientFragment : Fragment() {
                         viewModel.loadState("errorClientLoad")
                     else
                         viewModel.loadNewClient(getInputs())
-                    viewModel.loadState("init")
+//                    viewModel.loadState("init")
                 }
 
                 CreateClientViewModel.STATE_ERROR_NEW_CLIENT->{
@@ -111,7 +111,7 @@ class CreateClientFragment : Fragment() {
 
                 CreateClientViewModel.STATE_DONE_NEW_CLIENT->{
                     showToast("Alumno agregado")
-                    viewModel.loadState("init")
+//                    viewModel.loadState("init")
                     findNavController().popBackStack()
                 }
 

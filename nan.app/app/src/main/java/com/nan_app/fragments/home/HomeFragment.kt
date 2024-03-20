@@ -26,6 +26,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
     private var deletePosition  = 0
+    private var adapterItemCount  = 0
     private var listClient      = mutableListOf<Clients>()
 
     override fun onCreateView(
@@ -64,6 +65,7 @@ class HomeFragment : Fragment() {
                 HomeViewModel.STATE_DELETE->{
                     listClient.removeAt(deletePosition)
                     adapter.notifyItemRemoved(deletePosition)
+                    adapter.notifyItemRangeChanged(deletePosition, adapterItemCount)
                     Toast.makeText(requireContext(), "Cliente eliminado", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -72,9 +74,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun showDoneState() {
-        val adapterList = listClient
         adapter = ClientAdapter(
-            adapterList,
+            listClient,
             object : ClientClickListener {
 
                 override fun onCardClick(position: Int) {
@@ -83,6 +84,7 @@ class HomeFragment : Fragment() {
                 override fun onDeleteButtonClick(position: Int) {
                     showDeleteConfirmationDialog(position)
                     deletePosition = position
+                    adapterItemCount = adapter.itemCount
                 }
 
                 override fun onEditButtonClick(position: Int) {
