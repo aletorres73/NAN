@@ -13,95 +13,148 @@ import org.koin.java.KoinJavaComponent
 
 class CreateClientViewModel : ViewModel() {
 
-    var viewState     : MutableLiveData<String> = MutableLiveData()
-    var viewUrl       : MutableLiveData<String> = MutableLiveData()
-    var viewImageName : MutableLiveData<String> = MutableLiveData()
-    var viewImageuri  : MutableLiveData<Uri>    = MutableLiveData()
+    var viewState: MutableLiveData<String> = MutableLiveData()
+    var viewUrl: MutableLiveData<String> = MutableLiveData()
+    var viewImageName: MutableLiveData<String> = MutableLiveData()
+    var viewImageuri: MutableLiveData<Uri> = MutableLiveData()
 
     private val clientSource: FirebaseDataClientSource by KoinJavaComponent.inject(
-        FirebaseDataClientSource::class.java)
+        FirebaseDataClientSource::class.java
+    )
 
     companion object {
-        const val STATE_LOAD_NEW_CLIENT     = "STATE_LOAD_NEW_CLIENT"
-        const val STATE_ERROR_NEW_CLIENT    = "STATE_ERROR_NEW_CLIENT"
-        const val STATE_DONE_NEW_CLIENT     = "STATE_DONE_NEW_CLIENT"
-        const val STATE_LOAD_NEW_IMAGE      = "STATE_LOAD_NEW_IMAGE"
-        const val STATE_GALLERY             = "STATE_GALLERY"
-        const val STATE_CAMERA              = "STATE_CAMERA"
-        const val STATE_DELETE_IMAGE        = "STATE_DELETE_IMAGE"
-        const val STATE_IMAGE_EMPTY         = "STATE_IMAGE_EMPTY"
-        const val STATE_DONE_IMAGE_DELETE   = "STATE_DONE_IMAGE_DELETE"
-        const val STATE_ERROR_IMAGE_DELETE  = "STATE_ERROR_IMAGE_DELETE"
-        const val STATE_INIT                = "STATE_INIT"
-        const val STATE_SELECT_BIRTHDAY     ="STATE_SELECT_BIRTHDAY"
-        const val STATE_SELECT_PAYDAY       ="STATE_SELECT_PAYDAY"
-        const val STATE_SELECT_FINISHDAY    ="STATE_SELECT_FINISHDAY"
+        const val STATE_LOAD_NEW_CLIENT = "STATE_LOAD_NEW_CLIENT"
+        const val STATE_ERROR_NEW_CLIENT = "STATE_ERROR_NEW_CLIENT"
+        const val STATE_DONE_NEW_CLIENT = "STATE_DONE_NEW_CLIENT"
+        const val STATE_LOAD_NEW_IMAGE = "STATE_LOAD_NEW_IMAGE"
+        const val STATE_GALLERY = "STATE_GALLERY"
+        const val STATE_CAMERA = "STATE_CAMERA"
+        const val STATE_DELETE_IMAGE = "STATE_DELETE_IMAGE"
+        const val STATE_IMAGE_EMPTY = "STATE_IMAGE_EMPTY"
+        const val STATE_DONE_IMAGE_DELETE = "STATE_DONE_IMAGE_DELETE"
+        const val STATE_ERROR_IMAGE_DELETE = "STATE_ERROR_IMAGE_DELETE"
+        const val STATE_INIT = "STATE_INIT"
+        const val STATE_SELECT_BIRTHDAY = "STATE_SELECT_BIRTHDAY"
+        const val STATE_SELECT_PAYDAY = "STATE_SELECT_PAYDAY"
+        const val STATE_SELECT_FINISHDAY = "STATE_SELECT_FINISHDAY"
     }
 
-    fun loadState(state : String){
-        when(state){
-            "init"              ->{viewState.value = STATE_INIT}
-            "newClient"         ->{viewState.value = STATE_LOAD_NEW_CLIENT}
-            "errorClientLoad"   ->{viewState.value = STATE_ERROR_NEW_CLIENT}
-            "newClientLoaded"   ->{viewState.value = STATE_DONE_NEW_CLIENT}
-            "loadNewImage"      ->{viewState.value = STATE_LOAD_NEW_IMAGE}
-            "openGallery"       ->{viewState.value = STATE_GALLERY}
-            "openCamera"        ->{viewState.value = STATE_CAMERA}
-            "deleteImage"       ->{viewState.value = STATE_DELETE_IMAGE}
-            "emptyImage"        ->{viewState.value = STATE_IMAGE_EMPTY}
-            "imageDeleted"      ->{viewState.value = STATE_DONE_IMAGE_DELETE}
-            "errorImageDelete"  ->{viewState.value = STATE_ERROR_IMAGE_DELETE}
-            "selectBirthday"    ->{viewState.value = STATE_SELECT_BIRTHDAY}
-            "selectDayPay"      ->{viewState.value = STATE_SELECT_PAYDAY}
-            "selectFinishDay"   ->{viewState.value = STATE_SELECT_FINISHDAY}
+    fun loadState(state: String) {
+        when (state) {
+            "init" -> {
+                viewState.value = STATE_INIT
+            }
+
+            "newClient" -> {
+                viewState.value = STATE_LOAD_NEW_CLIENT
+            }
+
+            "errorClientLoad" -> {
+                viewState.value = STATE_ERROR_NEW_CLIENT
+            }
+
+            "newClientLoaded" -> {
+                viewState.value = STATE_DONE_NEW_CLIENT
+            }
+
+            "loadNewImage" -> {
+                viewState.value = STATE_LOAD_NEW_IMAGE
+            }
+
+            "openGallery" -> {
+                viewState.value = STATE_GALLERY
+            }
+
+            "openCamera" -> {
+                viewState.value = STATE_CAMERA
+            }
+
+            "deleteImage" -> {
+                viewState.value = STATE_DELETE_IMAGE
+            }
+
+            "emptyImage" -> {
+                viewState.value = STATE_IMAGE_EMPTY
+            }
+
+            "imageDeleted" -> {
+                viewState.value = STATE_DONE_IMAGE_DELETE
+            }
+
+            "errorImageDelete" -> {
+                viewState.value = STATE_ERROR_IMAGE_DELETE
+            }
+
+            "selectBirthday" -> {
+                viewState.value = STATE_SELECT_BIRTHDAY
+            }
+
+            "selectDayPay" -> {
+                viewState.value = STATE_SELECT_PAYDAY
+            }
+
+            "selectFinishDay" -> {
+                viewState.value = STATE_SELECT_FINISHDAY
+            }
         }
 
     }
 
-    fun loadNewClient(newClient : Clients){
+    fun loadNewClient(newClient: Clients) {
         viewModelScope.launch {
             viewUrl.value = viewImageuri.value?.let { clientSource.loadImageUri(it) }
             newClient.ImageUri = viewUrl.value.toString()
             newClient.ImageName = viewImageName.value.toString()
 
-            if(clientSource.insertClient(newClient))
+            if (clientSource.insertClient(newClient))
                 loadState("newClientLoaded")
             else
                 loadState("errorClientLoad")
 
-            viewImageuri.value  = "".toUri()
+            viewImageuri.value = "".toUri()
             viewImageName.value = ""
-            viewUrl.value       = ""
+            viewUrl.value = ""
         }
     }
-    fun uploadImage(data : Uri) {
+
+    fun uploadImage(data: Uri) {
         clientSource.deleteImageName = data.lastPathSegment.toString()
-        viewImageName.value          = data.lastPathSegment.toString()
+        viewImageName.value = data.lastPathSegment.toString()
 
         viewModelScope.launch {
-            viewUrl.value                = clientSource.loadImageUri(data)
+            viewUrl.value = clientSource.loadImageUri(data)
         }
     }
-    fun getImageName(): String{
-        return if(viewImageName.value != null)
+
+    fun getImageName(): String {
+        return if (viewImageName.value != null)
             viewImageName.value!!
         else
             ""
     }
 
-    fun deleteImage(imageName : String){
+    fun deleteImage(imageName: String) {
         viewModelScope.launch {
-            if(clientSource.deleteImage(imageName))
+            if (clientSource.deleteImage(imageName))
                 loadState("imageDeleted")
             else
                 loadState("errorImageDelete")
         }
     }
 
-    fun saveImage(image : Uri){
+    fun saveImage(image: Uri) {
         clientSource.deleteImageName = image.lastPathSegment.toString()
-        viewImageuri.value  = image
+        viewImageuri.value = image
         viewImageName.value = image.lastPathSegment.toString()
 
+    }
+
+    fun checkID(id: Int): Boolean {
+        val iterator = clientSource.clientListFB.iterator()
+        while (iterator.hasNext()) {
+            if (iterator.next().id == id)
+                return true
+        }
+        return false
     }
 }

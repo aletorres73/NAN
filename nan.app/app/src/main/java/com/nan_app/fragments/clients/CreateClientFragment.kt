@@ -16,18 +16,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.createViewModelLazy
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.nan_app.R
 import com.nan_app.entities.Clients
 
@@ -36,27 +31,27 @@ class CreateClientFragment : Fragment() {
     private lateinit var v: View
 
     companion object{
-        private val REQUEST_GALLERY = 1001
-        private val REQUEST_CAMERA = 1002
+        private const val REQUEST_GALLERY = 1001
+        private const val REQUEST_CAMERA = 1002
 
     }
 
 
-    lateinit var inputName      : EditText
-    lateinit var inputLastName  : EditText
-    lateinit var inputBirthday  : EditText
-    lateinit var inputPhone     : EditText
-    lateinit var inputEmail     : EditText
-    lateinit var inputDayPay    : EditText
-    lateinit var inputFinishDay : EditText
-    lateinit var inputAmount    : EditText
-    lateinit var inputId        : EditText
+    private lateinit var inputName      : EditText
+    private lateinit var inputLastName  : EditText
+    private lateinit var inputBirthday  : EditText
+    private lateinit var inputPhone     : EditText
+    private lateinit var inputEmail     : EditText
+    private lateinit var inputDayPay    : EditText
+    private lateinit var inputFinishDay : EditText
+    private lateinit var inputAmount    : EditText
+    private lateinit var inputId        : EditText
 
-    lateinit var btnMakeClient  : Button
-    lateinit var btnLoadImage   : Button
-    lateinit var btnSelectDays  : Button
+    private lateinit var btnMakeClient  : Button
+    private lateinit var btnLoadImage   : Button
+    private lateinit var btnSelectDays  : Button
 
-    lateinit var imageClient    : ImageView
+    private lateinit var imageClient    : ImageView
 
     private var newClient : Clients = Clients()
 
@@ -91,9 +86,15 @@ class CreateClientFragment : Fragment() {
                     btnLoadImage.setOnClickListener {
                         showOptionsDialog()
                     }
-                    inputBirthday.setOnClickListener { viewModel.loadState("selectBirthday") }
-                    inputDayPay.setOnClickListener { viewModel.loadState("selectDayPay") }
-                    inputFinishDay.setOnClickListener { viewModel.loadState("selectFinishDay") }
+                    inputBirthday.setOnClickListener {
+                        viewModel.loadState("selectBirthday")
+                    }
+                    inputDayPay.setOnClickListener {
+                        viewModel.loadState("selectDayPay")
+                    }
+                    inputFinishDay.setOnClickListener {
+                        viewModel.loadState("selectFinishDay")
+                    }
                 }
 
                 CreateClientViewModel.STATE_LOAD_NEW_CLIENT->{
@@ -110,9 +111,9 @@ class CreateClientFragment : Fragment() {
                 }
 
                 CreateClientViewModel.STATE_DONE_NEW_CLIENT->{
-                    showToast("Alumno agregado")
-//                    viewModel.loadState("init")
                     findNavController().popBackStack()
+                    showToast("Alumno agregado")
+                    viewModel.loadState("init")
                 }
 
                 CreateClientViewModel.STATE_GALLERY->{
@@ -197,6 +198,10 @@ class CreateClientFragment : Fragment() {
     private fun checkInput(): Boolean{
         if (inputId.text.isEmpty()){
             Toast.makeText(requireContext(), "Ingresar Id ", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if(viewModel.checkID(inputId.text.toString().toInt())){
+            Toast.makeText(requireContext(), "Ya existe un alumnno con el Id ${inputId.text} ", Toast.LENGTH_SHORT).show()
             return false
         }
         if(inputName.text.isEmpty()){
