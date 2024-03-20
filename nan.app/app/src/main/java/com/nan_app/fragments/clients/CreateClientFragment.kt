@@ -101,6 +101,7 @@ class CreateClientFragment : Fragment() {
                         viewModel.loadState("errorClientLoad")
                     else
                         viewModel.loadNewClient(getInputs())
+                    viewModel.loadState("init")
                 }
 
                 CreateClientViewModel.STATE_ERROR_NEW_CLIENT->{

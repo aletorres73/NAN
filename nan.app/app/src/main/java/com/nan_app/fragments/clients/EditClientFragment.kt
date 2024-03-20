@@ -77,8 +77,10 @@ class EditClientFragment : Fragment() {
 
         currentClient = viewModel.getClient()
         loadClientInfo(currentClient)
+
         if (currentClient.ImageUri != "")
-            loadImage(currentClient.ImageUri)
+            if(currentClient.ImageUri != "null")
+                loadImage(currentClient.ImageUri)
         else
             loadImage(imageDefect)
 
@@ -106,14 +108,22 @@ class EditClientFragment : Fragment() {
                             viewModel.loadState("deleteImage")
                     }
                     btnEditImage.setOnClickListener {
-                        if(currentClient.ImageName == "" || currentClient.ImageName == "null")
-                            showOptionsDialog()
+                        if(currentClient.ImageName == "")
+                                showOptionsDialog()
+                        if(currentClient.ImageName == "null")
+                                showOptionsDialog()
                         else
                             viewModel.loadState("init")
                     }
-                    editBirthday.setOnClickListener { viewModel.loadState("selectBirthday") }
-                    editPayDay.setOnClickListener { viewModel.loadState("selectDayPay") }
-                    editFinishDay.setOnClickListener { viewModel.loadState("selectFinishDay") }
+                    editBirthday.setOnClickListener {
+                        viewModel.loadState("selectBirthday")
+                    }
+                    editPayDay.setOnClickListener {
+                        viewModel.loadState("selectDayPay")
+                    }
+                    editFinishDay.setOnClickListener {
+                        viewModel.loadState("selectFinishDay")
+                    }
 
                 }
 
@@ -219,8 +229,6 @@ class EditClientFragment : Fragment() {
         btnDeleteImage  = v.findViewById(R.id.btnEdDeleteImg)
 
         imageClient     = v.findViewById(R.id.imageEditedClient)
-
-
     }
 
     private fun loadClientInfo(currentClient: Clients) {
@@ -244,23 +252,17 @@ class EditClientFragment : Fragment() {
     }
 
     private fun getEditedClient(currentClient: Clients): Clients {
-        currentClient.Name = editName.text.toString()
-        currentClient.LastName = editLastName.text.toString()
-        currentClient.Birthday = editBirthday.text.toString()
-        currentClient.Phone = editPhone.text.toString()
-        currentClient.Email = editEmail.text.toString()
-        currentClient.Phone = editPhone.text.toString()
-        currentClient.PayDay = editPayDay.text.toString()
-        currentClient.FinishDay = editFinishDay.text.toString()
-        currentClient.AmountClass = editAmount.text.toString()
-
-        viewModel.viewUrl.observe(viewLifecycleOwner){
-            currentClient.ImageUri = it
-        }
-        viewModel.viewImageName.observe(viewLifecycleOwner){
-            currentClient.ImageName = it
-        }
-
+        currentClient.Name          = editName.text.toString()
+        currentClient.LastName      = editLastName.text.toString()
+        currentClient.Birthday      = editBirthday.text.toString()
+        currentClient.Phone         = editPhone.text.toString()
+        currentClient.Email         = editEmail.text.toString()
+        currentClient.Phone         = editPhone.text.toString()
+        currentClient.PayDay        = editPayDay.text.toString()
+        currentClient.FinishDay     = editFinishDay.text.toString()
+        currentClient.AmountClass   = editAmount.text.toString()
+        currentClient.ImageUri      = viewModel.getUri()
+        currentClient.ImageName     = viewModel.getImageName()
 
         return currentClient
     }
@@ -314,15 +316,7 @@ class EditClientFragment : Fragment() {
     }
     private fun getImageCamera(data: Uri?){
         if (data != null) {
-            /*            viewModel.uploadImage(data)
-            viewModel.viewUrl.observe(viewLifecycleOwner) {
-                currentClient.ImageUri = it
-                loadImage(currentClient.ImageUri)
-                showToast("Imagen cargada")
-            }
-            viewModel.viewImageName.observe(viewLifecycleOwner){
-                currentClient.ImageName = it
-            }*/
+
             viewModel.saveImage(data)
             imageClient.setImageURI(data)
         }
@@ -331,15 +325,7 @@ class EditClientFragment : Fragment() {
     private fun getImageGallery(data: Intent?) {
         imageUri = data?.data
         if (imageUri != null) {
- /*           viewModel.uploadImage(imageUri!!)
-            viewModel.viewUrl.observe(viewLifecycleOwner) {
-                currentClient.ImageUri = it
-                loadImage(currentClient.ImageUri)
-                showToast("Imagen cargada")
-            }
-            viewModel.viewImageName.observe(viewLifecycleOwner){
-                currentClient.ImageName = it
-            }*/
+
             viewModel.saveImage(imageUri!!)
             imageClient.setImageURI(imageUri)
         }

@@ -76,13 +76,15 @@ class EditClientViewModel : ViewModel() {
                     clientSource.updateClientById(id, "finishDay", editedClient.FinishDay, referenceClient)
                 if(editedClient.AmountClass != "")
                     clientSource.updateClientById(id, "amountClass", editedClient.AmountClass, referenceClient)
-                if(editedClient.ImageUri == "" || editedClient.ImageUri == "null")
-                {
-                    viewUrl.value = clientSource.loadImageUri(viewImageuri.value!!)
-                    clientSource.updateClientById(id, "imageUri", viewUrl.value!!, referenceClient)
-                }
-                if(editedClient.ImageName != "" || editedClient.ImageUri == "null")
-                    clientSource.updateClientById(id, "imageName", editedClient.ImageName, referenceClient)
+                if(editedClient.ImageUri != "")
+                    if(viewImageuri.value != null)
+                    {
+                        viewUrl.value = clientSource.loadImageUri(viewImageuri.value!!)
+                        clientSource.updateClientById(id, "imageUri", viewUrl.value!!, referenceClient)
+                    }
+                if(editedClient.ImageName != "")
+                    if(editedClient.ImageUri != "null")
+                        clientSource.updateClientById(id, "imageName", editedClient.ImageName, referenceClient)
 
 
                 loadState("doneUpdateClient")
@@ -114,5 +116,13 @@ class EditClientViewModel : ViewModel() {
         viewImageuri.value  = image
         viewImageName.value = image.lastPathSegment.toString()
 
+    }
+
+    fun getUri(): String {
+        return viewImageuri.value.toString()
+    }
+
+    fun getImageName(): String {
+        return viewImageName.value.toString()
     }
 }

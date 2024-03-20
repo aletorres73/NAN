@@ -62,12 +62,6 @@ class HomeViewModel : ViewModel() {
         clientSource.currentClient = clientSource.clientListFB[position]
     }
 
-//    fun removeItemList(deletePosition: Int) {
-//        val remove = clientSource.clientListFB
-//        remove.removeAt(deletePosition)
-//        ClientListDb.value = remove
-//    }
-
     companion object {
         const val STATE_ERROR   = "error"
         const val STATE_DONE    = "done"
