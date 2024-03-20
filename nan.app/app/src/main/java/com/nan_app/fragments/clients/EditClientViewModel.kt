@@ -45,9 +45,9 @@ class EditClientViewModel : ViewModel() {
             "emptyImage"        ->{viewState.value = STATE_IMAGE_EMPTY}
             "imageDeleted"      ->{viewState.value = STATE_DONE_IMAGE_DELETE}
             "errorImageDelete"  ->{viewState.value = STATE_ERROR_IMAGE_DELETE}
-            "selectBirthday"    ->{viewState.value = CreateClientViewModel.STATE_SELECT_BIRTHDAY}
-            "selectDayPay"      ->{viewState.value = CreateClientViewModel.STATE_SELECT_PAYDAY}
-            "selectFinishDay"   ->{viewState.value = CreateClientViewModel.STATE_SELECT_FINISHDAY}
+            "selectBirthday"    ->{viewState.value = STATE_SELECT_BIRTHDAY}
+            "selectDayPay"      ->{viewState.value = STATE_SELECT_PAYDAY}
+            "selectFinishDay"   ->{viewState.value = STATE_SELECT_FINISHDAY}
          }
     }
     private val clientSource: FirebaseDataClientSource by KoinJavaComponent.inject(

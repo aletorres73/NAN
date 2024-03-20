@@ -9,10 +9,9 @@ import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 import java.text.FieldPosition
 
-
 class HomeViewModel : ViewModel() {
 
-    var ClientListDb    : MutableLiveData<MutableList<Clients>> = MutableLiveData()
+    //    var ClientListDb    : MutableLiveData<MutableList<Clients>> = MutableLiveData()
     var viewState       : MutableLiveData<String> = MutableLiveData()
 
     private val clientSource: FirebaseDataClientSource by inject(FirebaseDataClientSource::class.java)
@@ -31,12 +30,11 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
-    fun loadList() {
-        if(clientSource.clientListFB.isEmpty())
-            ClientListDb.value = clientSource.clientListFB
+    fun loadList() : MutableList<Clients> {
+        return if(clientSource.clientListFB.isEmpty())
+            clientSource.clientListFB.toMutableList()
         else
-            ClientListDb.value = clientSource.clientListFB.sortedBy{it.id} as MutableList
-        viewState.value = STATE_DONE
+            clientSource.clientListFB.sortedBy{it.id}.toMutableList()
     }
     fun refresh(){
         viewState.value = STATE_INIT
@@ -52,8 +50,8 @@ class HomeViewModel : ViewModel() {
                 if(client[position].ImageName != "" || client[position].ImageName != "null")
                     clientSource.deleteImage(client[position].ImageName)
                 clientSource.deleteClient(client[position].id)
-/*                client.removeAt(position)
-                ClientListDb.value = client*/
+                /*                client.removeAt(position)
+                                ClientListDb.value = client*/
                 viewState.value = STATE_DELETE
             }
             else viewState.value = STATE_ERROR
@@ -64,11 +62,11 @@ class HomeViewModel : ViewModel() {
         clientSource.currentClient = clientSource.clientListFB[position]
     }
 
-    fun removeItemList(deletePosition: Int) {
-        val remove = clientSource.clientListFB
-        remove.removeAt(deletePosition)
-        ClientListDb.value = remove
-    }
+//    fun removeItemList(deletePosition: Int) {
+//        val remove = clientSource.clientListFB
+//        remove.removeAt(deletePosition)
+//        ClientListDb.value = remove
+//    }
 
     companion object {
         const val STATE_ERROR   = "error"

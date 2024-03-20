@@ -2,12 +2,10 @@ package com.nan_app.fragments.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.PointerIcon
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -21,15 +19,14 @@ import com.nan_app.entities.Clients
 
 class HomeFragment : Fragment() {
 
-    private lateinit var v: View
-    private lateinit var recClient: RecyclerView
-    private lateinit var adapter: ClientAdapter
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-
+    private lateinit var v                  : View
+    private lateinit var recClient          : RecyclerView
+    private lateinit var adapter            : ClientAdapter
+    private lateinit var swipeRefreshLayout : SwipeRefreshLayout
 
     private lateinit var viewModel: HomeViewModel
-
-    private var deletePosition = 0
+    private var deletePosition  = 0
+    private var listClient      = mutableListOf<Clients>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,45 +36,34 @@ class HomeFragment : Fragment() {
 
         recClient = v.findViewById(R.id.rvClient)
         swipeRefreshLayout = v.findViewById(R.id.swipeRefreshLayout)
-
-
         viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
-
         viewModel.init()
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
             swipeRefreshLayout.isRefreshing = false
-
         }
-
 
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 HomeViewModel.STATE_EMPTY -> {
-                    viewModel.loadList()
                     Toast.makeText(requireContext(), "Lista vacía", Toast.LENGTH_SHORT).show()
                 }
-
                 HomeViewModel.STATE_LOADING -> {
-                    viewModel.loadList()
-//                    Toast.makeText(requireContext(), "Cargando...", Toast.LENGTH_SHORT).show()
+                    listClient = viewModel.loadList()
+                    viewModel.viewState.value = HomeViewModel.STATE_DONE
                 }
-
                 HomeViewModel.STATE_DONE -> {
                     showDoneState()
                 }
-
                 HomeViewModel.STATE_ERROR -> {
                     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
-
                 HomeViewModel.STATE_INIT -> {
                     viewModel.getList()
-
                 }
                 HomeViewModel.STATE_DELETE->{
+                    listClient.removeAt(deletePosition)
                     adapter.notifyItemRemoved(deletePosition)
-                    viewModel.removeItemList(deletePosition)
                     Toast.makeText(requireContext(), "Cliente eliminado", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -86,10 +72,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun showDoneState() {
-        viewModel.ClientListDb.observe(viewLifecycleOwner){
-            adapter = ClientAdapter(
-                it,
-                object : ClientClickListener {
+        val adapterList = listClient
+        adapter = ClientAdapter(
+            adapterList,
+            object : ClientClickListener {
 
                 override fun onCardClick(position: Int) {
                     Toast.makeText(requireContext(),"Hiciste click en un cliente..",Toast.LENGTH_SHORT).show()                }
@@ -104,9 +90,9 @@ class HomeFragment : Fragment() {
                     goEditFragment()
                 }
             })
-            recClient.layoutManager = LinearLayoutManager(context)
-            recClient.adapter = adapter
-        }
+        recClient.layoutManager = LinearLayoutManager(context)
+        recClient.adapter = adapter
+
     }
     private fun showDeleteConfirmationDialog(position: Int) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
