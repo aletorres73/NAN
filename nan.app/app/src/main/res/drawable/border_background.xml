@@ -4,6 +4,6 @@
         android:layout_height="wrap_content">
     <stroke
         android:width="5dp"
-        android:color="#8890BA"/>
+        android:color="#AA98CC"/>
 
     </shape>

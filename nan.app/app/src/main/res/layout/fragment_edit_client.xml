@@ -10,17 +10,17 @@
         android:id="@+id/imageEditedClient"
         android:layout_width="215dp"
         android:layout_height="290dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="15dp"
         android:background="@drawable/border_background"
-        android:padding="15dp"
+        android:padding="10dp"
         android:src="@drawable/df"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.994"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16000003"
-        app:shapeAppearanceOverlay="@style/radius" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/edTextName"
@@ -87,18 +87,19 @@
 
     <EditText
         android:id="@+id/edTxtEmail"
-        android:layout_width="168dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="38dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:hint="Email"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageEditedClient"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edTxtPhone"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHorizontal_bias="0"/>
 
     <EditText
         android:id="@+id/edTxtDayPay"
@@ -152,7 +153,7 @@
     <Button
         android:id="@+id/btnUpdate"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_marginTop="8dp"
         android:backgroundTint="#7E60B3"
         android:text="Listo"
@@ -171,36 +172,34 @@
 
     <Button
         android:id="@+id/btnEditImage"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_width="240dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="60dp"
         android:backgroundTint="#7E60B3"
         android:text="Cargar foto de perfil"
         app:icon="@android:drawable/ic_menu_edit"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnUpdate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageEditedClient"
-        app:layout_constraintVertical_bias="0.0"
-        />
+        app:layout_constraintTop_toBottomOf="@id/imageEditedClient" />
 
     <Button
         android:id="@+id/btnEdDeleteImg"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_width="240dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
         android:backgroundTint="#7E60B3"
         android:text="Eliminar foto de perfil"
         app:icon="@android:drawable/ic_menu_delete"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnUpdate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEditImage"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/btnEditImage" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -214,7 +213,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.00999999" />
+        app:layout_constraintVertical_bias="0.05" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
