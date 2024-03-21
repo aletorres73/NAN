@@ -67,6 +67,9 @@ class CreateClientFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[CreateClientViewModel::class.java]
 
         inflateViews(v)
+
+        viewModel.loadState("init")
+
         return v
     }
 
@@ -74,14 +77,21 @@ class CreateClientFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        viewModel.loadState("init")
-
         viewModel.viewState.observe(viewLifecycleOwner){state->
             when(state){
 
                 CreateClientViewModel.STATE_INIT-> {
                     btnMakeClient.setOnClickListener {
-                        viewModel.loadState("newClient")
+                        if(!checkInput())
+                            viewModel.loadState("errorClientLoad")
+                        else
+                        {
+                            getInputs()
+                            if (newClient.ImageName != "")
+                                viewModel.loadState("loadNewImage")
+                            else
+                                viewModel.loadState("newClient")
+                        }
                     }
                     btnLoadImage.setOnClickListener {
                         showOptionsDialog()
@@ -98,11 +108,13 @@ class CreateClientFragment : Fragment() {
                 }
 
                 CreateClientViewModel.STATE_LOAD_NEW_CLIENT->{
-                    if(!checkInput())
-                        viewModel.loadState("errorClientLoad")
-                    else
-                        viewModel.loadNewClient(getInputs())
+                    viewModel.loadNewClient(newClient)
 //                    viewModel.loadState("init")
+                }
+
+                CreateClientViewModel.STATE_LOAD_NEW_IMAGE->{
+                    viewModel.loadImage(newClient)
+                    viewModel.loadState("init")
                 }
 
                 CreateClientViewModel.STATE_ERROR_NEW_CLIENT->{
@@ -111,7 +123,8 @@ class CreateClientFragment : Fragment() {
                 }
 
                 CreateClientViewModel.STATE_DONE_NEW_CLIENT->{
-                    findNavController().popBackStack()
+                    val action = CreateClientFragmentDirections.actionCreateClientFragmentToHomeFragment()
+                    findNavController().navigate(action)
                     showToast("Alumno agregado")
                     viewModel.loadState("init")
                 }
@@ -181,7 +194,7 @@ class CreateClientFragment : Fragment() {
 
         imageClient = v.findViewById(R.id.imageCreateClient)
     }
-    private fun getInputs(): Clients{
+    private fun getInputs(){
         newClient.id         = inputId.text.toString().toInt()
         newClient.Name       = inputName.text.toString()
         newClient.LastName   = inputLastName.text.toString()
@@ -192,8 +205,6 @@ class CreateClientFragment : Fragment() {
         newClient.FinishDay  = inputFinishDay.text.toString()
         newClient.ImageName  = viewModel.getImageName()
 
-
-        return newClient
     }
     private fun checkInput(): Boolean{
         if (inputId.text.isEmpty()){

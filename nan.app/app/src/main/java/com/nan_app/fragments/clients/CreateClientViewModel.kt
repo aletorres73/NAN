@@ -102,18 +102,10 @@ class CreateClientViewModel : ViewModel() {
 
     fun loadNewClient(newClient: Clients) {
         viewModelScope.launch {
-            viewUrl.value = viewImageuri.value?.let { clientSource.loadImageUri(it) }
-            newClient.ImageUri = viewUrl.value.toString()
-            newClient.ImageName = viewImageName.value.toString()
-
             if (clientSource.insertClient(newClient))
                 loadState("newClientLoaded")
             else
                 loadState("errorClientLoad")
-
-            viewImageuri.value = "".toUri()
-            viewImageName.value = ""
-            viewUrl.value = ""
         }
     }
 
@@ -156,5 +148,21 @@ class CreateClientViewModel : ViewModel() {
                 return true
         }
         return false
+    }
+
+    fun loadImage(newClient: Clients) {
+
+        viewModelScope.launch {
+            viewUrl.value = viewImageuri.value?.let { clientSource.loadImageUri(it) }
+            newClient.ImageUri = viewUrl.value.toString()
+            newClient.ImageName = viewImageName.value.toString()
+
+            viewImageuri.value = "".toUri()
+            viewImageName.value = ""
+            viewUrl.value = ""
+
+            loadState("newClient")
+
+        }
     }
 }
