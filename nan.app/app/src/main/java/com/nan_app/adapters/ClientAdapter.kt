@@ -56,9 +56,9 @@ class ClientAdapter(
                     '7'.toString() -> birthday[1] = "Julio"
                     '8'.toString() -> birthday[1] = "Agosto"
                     '9'.toString() -> birthday[1] = "Septiembre"
-                    "10"-> birthday[2] = "Octubre"
-                    "11"-> birthday[2] = "Noviembre"
-                    "12"-> birthday[2] = "Diciembre" }
+                    "10"-> birthday[1] = "Octubre"
+                    "11"-> birthday[1] = "Noviembre"
+                    "12"-> birthday[1] = "Diciembre" }
                 dateBirthday.text = "${birthday[0]} de ${birthday[1]}"
             }
             else
@@ -110,5 +110,10 @@ class ClientAdapter(
                 clickListener.onEditButtonClick(position)
             }
         }
+    }
+
+    fun updateList(listClient: MutableList<Clients>){
+        this.clientlist = listClient
+        notifyDataSetChanged()
     }
 }

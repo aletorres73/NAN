@@ -18,5 +18,6 @@
     <string name="PayDay">Fecha de pago</string>
     <string name="FinishDay">Fecha de finalización</string>
     <string name="AmountClass">Cantidad de clases</string>
+    <string name="FindEditText">Buscar por id, nombre, apellido o estado… </string>
 
 </resources>

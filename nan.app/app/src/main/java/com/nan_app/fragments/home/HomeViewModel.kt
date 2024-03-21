@@ -63,6 +63,11 @@ class HomeViewModel : ViewModel() {
         clientSource.currentClient = clientSource.clientListFB[position]
     }
 
+    fun updateListeDB(listFiltered: MutableList<Clients>) {
+        clientSource.clientListFB = listFiltered
+
+    }
+
     companion object {
         const val STATE_ERROR   = "error"
         const val STATE_DONE    = "done"
