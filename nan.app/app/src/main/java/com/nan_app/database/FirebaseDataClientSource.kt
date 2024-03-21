@@ -52,7 +52,7 @@ class FirebaseDataClientSource: ClientSource {
                 } else {
                     throw IllegalStateException("No document found")
                 }
-                clientListFB = clientList
+                clientListFB = clientList.sortedBy { it.id }.toMutableList()
             }
         } else {
             clientListFB = clientList

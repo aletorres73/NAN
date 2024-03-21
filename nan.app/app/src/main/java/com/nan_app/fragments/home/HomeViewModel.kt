@@ -31,10 +31,11 @@ class HomeViewModel : ViewModel() {
         }
     }
     fun loadList() : MutableList<Clients> {
-        return if(clientSource.clientListFB.isEmpty())
+/*        return if(clientSource.clientListFB.isEmpty())
             clientSource.clientListFB.toMutableList()
         else
-            clientSource.clientListFB.sortedBy{it.id}.toMutableList()
+            clientSource.clientListFB.sortedBy{it.id}.toMutableList()*/
+        return clientSource.clientListFB
     }
     fun refresh(){
         viewState.value = STATE_INIT
