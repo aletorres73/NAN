@@ -15,24 +15,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.nan_app.R
+import com.nan_app.databinding.FragmentEditClientBinding
 import com.nan_app.entities.Clients
-import java.util.Currency
 
 class EditClientFragment : Fragment() {
 
-    private lateinit var v: View
+    private lateinit var binding: FragmentEditClientBinding
 
     private lateinit var viewModel: EditClientViewModel
 
@@ -41,20 +35,6 @@ class EditClientFragment : Fragment() {
         private val REQUEST_CAMERA = 1002
 
     }
-
-    private lateinit var editName: EditText
-    private lateinit var editLastName: EditText
-    private lateinit var editBirthday: EditText
-    private lateinit var editPhone: EditText
-    private lateinit var editEmail: EditText
-    private lateinit var editPayDay: EditText
-    private lateinit var editFinishDay: EditText
-    private lateinit var editAmount: EditText
-    private lateinit var imageClient: ImageView
-
-    private lateinit var btnUpdateClient: Button
-    private lateinit var btnEditImage: Button
-    private lateinit var btnDeleteImage: Button
 
     private var currentClient: Clients = Clients()
 
@@ -68,23 +48,21 @@ class EditClientFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        v = inflater.inflate(R.layout.fragment_edit_client, container, false)
-
+        binding = FragmentEditClientBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[EditClientViewModel::class.java]
 
-        inflateView(v)
         loadImage(imageDefect)
 
         currentClient = viewModel.getClient()
         loadClientInfo(currentClient)
 
         if (currentClient.ImageUri != "")
-            if(currentClient.ImageUri != "null")
+            if (currentClient.ImageUri != "null")
                 loadImage(currentClient.ImageUri)
-        else
-            loadImage(imageDefect)
+            else
+                loadImage(imageDefect)
 
-        return v
+        return binding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -97,34 +75,33 @@ class EditClientFragment : Fragment() {
             when (state) {
 
                 EditClientViewModel.STATE_INIT -> {
-                    btnUpdateClient.setOnClickListener {
+                    binding.btnUpdate.setOnClickListener {
                         viewModel.updatedClient(getEditedClient(currentClient), currentClient.id)
                     }
 
-                    btnDeleteImage.setOnClickListener {
+                    binding.btnEdDeleteImg.setOnClickListener {
                         if (currentClient.ImageUri == "") {
                             viewModel.loadState("emptyImage")
                         } else
                             viewModel.loadState("deleteImage")
                     }
-                    btnEditImage.setOnClickListener {
-                        if(currentClient.ImageName == "")
-                                showOptionsDialog()
-                        if(currentClient.ImageName == "null")
-                                showOptionsDialog()
+                    binding.btnEditImage.setOnClickListener {
+                        if (currentClient.ImageName == "")
+                            showOptionsDialog()
+                        if (currentClient.ImageName == "null")
+                            showOptionsDialog()
                         else
                             viewModel.loadState("init")
                     }
-                    editBirthday.setOnClickListener {
+                    binding.edTxtBirthday.setOnClickListener {
                         viewModel.loadState("selectBirthday")
                     }
-                    editPayDay.setOnClickListener {
+                    binding.edTxtDayPay.setOnClickListener {
                         viewModel.loadState("selectDayPay")
                     }
-                    editFinishDay.setOnClickListener {
+                    binding.edtxtFinishDay.setOnClickListener {
                         viewModel.loadState("selectFinishDay")
                     }
-
                 }
 
                 EditClientViewModel.STATE_ERROR_UPDATE_CLIENT -> {
@@ -135,7 +112,8 @@ class EditClientFragment : Fragment() {
                 EditClientViewModel.STATE_DONE_UPDATE_CLIENT -> {
                     Toast.makeText(requireContext(), "Datos actualizados", Toast.LENGTH_SHORT)
                         .show()
-                    val action = EditClientFragmentDirections.actionEditClientFragmentToHomeFragment()
+                    val action =
+                        EditClientFragmentDirections.actionEditClientFragmentToHomeFragment()
                     findNavController().navigate(action)
                     viewModel.loadState("init")
                 }
@@ -182,19 +160,38 @@ class EditClientFragment : Fragment() {
                     openCamera()
                     viewModel.loadState("init")
                 }
-                CreateClientViewModel.STATE_SELECT_BIRTHDAY->{
-                    val datePicker = DatePickerFragment { year, month, day -> onDateSelectedBirthday(year, month, day) }
-                    datePicker.show(parentFragmentManager,"datePicker")
+
+                CreateClientViewModel.STATE_SELECT_BIRTHDAY -> {
+                    val datePicker = DatePickerFragment { year, month, day ->
+                        onDateSelectedBirthday(
+                            year,
+                            month,
+                            day
+                        )
+                    }
+                    datePicker.show(parentFragmentManager, "datePicker")
                 }
 
-                CreateClientViewModel.STATE_SELECT_PAYDAY->{
-                    val datePicker = DatePickerFragment { year, month, day -> onDateSelectedDayPay(year, month, day) }
-                    datePicker.show(parentFragmentManager,"datePicker")
+                CreateClientViewModel.STATE_SELECT_PAYDAY -> {
+                    val datePicker = DatePickerFragment { year, month, day ->
+                        onDateSelectedDayPay(
+                            year,
+                            month,
+                            day
+                        )
+                    }
+                    datePicker.show(parentFragmentManager, "datePicker")
                 }
 
-                CreateClientViewModel.STATE_SELECT_FINISHDAY->{
-                    val datePicker = DatePickerFragment { year, month, day -> onDateSelectedFinshDay(year, month, day) }
-                    datePicker.show(parentFragmentManager,"datePicker")
+                CreateClientViewModel.STATE_SELECT_FINISHDAY -> {
+                    val datePicker = DatePickerFragment { year, month, day ->
+                        onDateSelectedFinshDay(
+                            year,
+                            month,
+                            day
+                        )
+                    }
+                    datePicker.show(parentFragmentManager, "datePicker")
                 }
             }
         }
@@ -202,67 +199,50 @@ class EditClientFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedFinshDay(year: Int, month: Int, day: Int) {
-        editFinishDay.setText("$day/$month/$year")
+        binding.edtxtFinishDay.setText("$day/$month/$year")
     }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedDayPay(year: Int, month: Int, day: Int) {
-        editPayDay.setText("$day/$month/$year")
+        binding.edTxtDayPay.setText("$day/$month/$year")
     }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedBirthday(year: Int, month: Int, day: Int) {
-        editBirthday.setText("$day/$month/$year")
-    }
-    private fun inflateView(v: View) {
-        editName        = v.findViewById(R.id.edTextName)
-        editLastName    = v.findViewById(R.id.edTxtLastName)
-        editBirthday    = v.findViewById(R.id.edTxtBirthday)
-        editPhone       = v.findViewById(R.id.edTxtPhone)
-        editEmail       = v.findViewById(R.id.edTxtEmail)
-        editPayDay      = v.findViewById(R.id.edTxtDayPay)
-        editFinishDay   = v.findViewById(R.id.edtxtFinishDay)
-        editAmount      = v.findViewById(R.id.edTxtAmount)
-
-        btnUpdateClient = v.findViewById(R.id.btnUpdate)
-        btnEditImage    = v.findViewById(R.id.btnEditImage)
-        btnDeleteImage  = v.findViewById(R.id.btnEdDeleteImg)
-
-        imageClient     = v.findViewById(R.id.imageEditedClient)
+        binding.edTxtBirthday.setText("$day/$month/$year")
     }
 
     private fun loadClientInfo(currentClient: Clients) {
         if (currentClient.Name != "")
-            editName.hint = currentClient.Name
+            binding.edTextName.hint = currentClient.Name
         if (currentClient.LastName != "")
-            editLastName.hint = currentClient.LastName
+            binding.edTxtLastName.hint = currentClient.LastName
         if (currentClient.Birthday != "")
-            editBirthday.hint = currentClient.Birthday
+            binding.edTxtBirthday.hint = currentClient.Birthday
         if (currentClient.Phone != "")
-            editPhone.hint = currentClient.Phone
+            binding.edTxtPhone.hint = currentClient.Phone
         if (currentClient.Email != "")
-            editEmail.hint = currentClient.Email
+            binding.edTxtEmail.hint = currentClient.Email
         if (currentClient.PayDay != "")
-            editPayDay.hint = currentClient.PayDay
+            binding.edTxtDayPay.hint = currentClient.PayDay
         if (currentClient.FinishDay != "")
-            editFinishDay.hint = currentClient.FinishDay
+            binding.edtxtFinishDay.hint = currentClient.FinishDay
         if (currentClient.AmountClass != "")
-            editAmount.hint = currentClient.AmountClass
+            binding.edTxtAmount.hint = currentClient.AmountClass
 
     }
 
     private fun getEditedClient(currentClient: Clients): Clients {
-        currentClient.Name          = editName.text.toString()
-        currentClient.LastName      = editLastName.text.toString()
-        currentClient.Birthday      = editBirthday.text.toString()
-        currentClient.Phone         = editPhone.text.toString()
-        currentClient.Email         = editEmail.text.toString()
-        currentClient.Phone         = editPhone.text.toString()
-        currentClient.PayDay        = editPayDay.text.toString()
-        currentClient.FinishDay     = editFinishDay.text.toString()
-        currentClient.AmountClass   = editAmount.text.toString()
-        currentClient.ImageUri      = viewModel.getUri()
-        currentClient.ImageName     = viewModel.getImageName()
+        currentClient.Name = binding.edTextName.text.toString()
+        currentClient.LastName = binding.edTxtLastName.text.toString()
+        currentClient.Birthday = binding.edTxtBirthday.text.toString()
+        currentClient.Phone = binding.edTxtPhone.text.toString()
+        currentClient.Email = binding.edTxtEmail.text.toString()
+        currentClient.PayDay = binding.edTxtDayPay.text.toString()
+        currentClient.FinishDay = binding.edtxtFinishDay.text.toString()
+        currentClient.AmountClass = binding.edTxtAmount.text.toString()
+        currentClient.ImageUri = viewModel.getUri()
+        currentClient.ImageName = viewModel.getImageName()
 
         return currentClient
     }
@@ -271,7 +251,7 @@ class EditClientFragment : Fragment() {
 
         Glide.with(this)
             .load(uri)
-            .into(imageClient)
+            .into(binding.imageEditedClient)
     }
 
     private fun showToast(msg: String) {
@@ -314,11 +294,12 @@ class EditClientFragment : Fragment() {
             startActivityForResult(intentGallery, REQUEST_GALLERY)
         } else requestPermissions(REQUEST_GALLERY)
     }
-    private fun getImageCamera(data: Uri?){
+
+    private fun getImageCamera(data: Uri?) {
         if (data != null) {
 
             viewModel.saveImage(data)
-            imageClient.setImageURI(data)
+            binding.imageEditedClient.setImageURI(data)
         }
     }
 
@@ -327,10 +308,11 @@ class EditClientFragment : Fragment() {
         if (imageUri != null) {
 
             viewModel.saveImage(imageUri!!)
-            imageClient.setImageURI(imageUri)
+            binding.imageEditedClient.setImageURI(imageUri)
         }
 
     }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -344,45 +326,65 @@ class EditClientFragment : Fragment() {
 
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode){
-            REQUEST_GALLERY ->{
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        when (requestCode) {
+            REQUEST_GALLERY -> {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         openGallery()
-                    }
-                    else
-                        Toast.makeText(requireContext(),"No tienes permiso a la galería",Toast.LENGTH_SHORT).show()
+                    } else
+                        Toast.makeText(
+                            requireContext(),
+                            "No tienes permiso a la galería",
+                            Toast.LENGTH_SHORT
+                        ).show()
             }
-            REQUEST_CAMERA ->{
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+
+            REQUEST_CAMERA -> {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     openCamera()
                 else
-                    Toast.makeText(requireContext(),"No tienes permiso a la cámara",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "No tienes permiso a la cámara",
+                        Toast.LENGTH_SHORT
+                    ).show()
             }
         }
     }
 
     private fun arePermissionsGrantedCamera(): Boolean {
-        return ContextCompat.checkSelfPermission(requireContext(),
-            Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED
-                ||  ContextCompat.checkSelfPermission(requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_DENIED
+                || ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_DENIED
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun arePermissionsGrantedGallery(): Boolean {
-        return ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_DENIED
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_MEDIA_IMAGES
+        ) == PackageManager.PERMISSION_DENIED
     }
 
-    private fun requestPermissions(request : Int) {
-        when(request){
-            REQUEST_CAMERA ->{
+    private fun requestPermissions(request: Int) {
+        when (request) {
+            REQUEST_CAMERA -> {
                 val permissions = arrayOf(Manifest.permission.CAMERA)
                 requestPermissions(permissions, request)
             }
-            REQUEST_GALLERY ->{
+
+            REQUEST_GALLERY -> {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 requestPermissions(permissions, request)
             }

@@ -15,17 +15,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
-import com.nan_app.R
 import com.nan_app.databinding.FragmentCreateClientBinding
-import com.nan_app.databinding.FragmentHomeBinding
 import com.nan_app.entities.Clients
 
 class CreateClientFragment : Fragment() {
@@ -323,6 +318,7 @@ class CreateClientFragment : Fragment() {
                 val permissions = arrayOf(Manifest.permission.CAMERA)
                 requestPermissions(permissions, request)
             }
+
             REQUEST_GALLERY -> {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 requestPermissions(permissions, request)
