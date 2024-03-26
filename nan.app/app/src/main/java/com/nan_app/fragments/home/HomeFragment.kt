@@ -24,12 +24,12 @@ import com.nan_app.entities.Clients
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var adapter            : ClientAdapter
+    private lateinit var adapter: ClientAdapter
 
     private lateinit var viewModel: HomeViewModel
-    private var deletePosition  = 0
-    private var adapterItemCount  = 0
-    private var listClient      = mutableListOf<Clients>()
+    private var deletePosition = 0
+    private var adapterItemCount = 0
+    private var listClient = mutableListOf<Clients>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,33 +40,36 @@ class HomeFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         viewModel.init()
 
-
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
             binding.swipeRefreshLayout.isRefreshing = false
         }
-
 
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 HomeViewModel.STATE_EMPTY -> {
                     Toast.makeText(requireContext(), "Lista vacía", Toast.LENGTH_SHORT).show()
                 }
+
                 HomeViewModel.STATE_LOADING -> {
                     listClient = viewModel.loadList()
                     filterList()
                     viewModel.viewState.value = HomeViewModel.STATE_DONE
                 }
+
                 HomeViewModel.STATE_DONE -> {
                     showDoneState()
                 }
+
                 HomeViewModel.STATE_ERROR -> {
                     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
+
                 HomeViewModel.STATE_INIT -> {
                     viewModel.getList()
                 }
-                HomeViewModel.STATE_DELETE->{
+
+                HomeViewModel.STATE_DELETE -> {
                     listClient.removeAt(deletePosition)
                     adapter.notifyItemRemoved(deletePosition)
                     adapter.notifyItemRangeChanged(deletePosition, adapterItemCount)
@@ -79,7 +82,7 @@ class HomeFragment : Fragment() {
 
     private fun filterList() {
 
-        binding.editTextFilter.addTextChangedListener {itemFiltered ->
+        binding.editTextFilter.addTextChangedListener { itemFiltered ->
             val listFilteredByName = listClient.filter {
                 it.Name
                     .lowercase()
@@ -117,32 +120,32 @@ class HomeFragment : Fragment() {
                     .contains(itemFiltered.toString().lowercase())
             }
 
-            if(listFilteredByName.isNotEmpty()){
+            if (listFilteredByName.isNotEmpty()) {
                 viewModel.updateListeDB(listFilteredByName.toMutableList())
                 adapter.updateList(listFilteredByName.toMutableList())
             }
-            if(listFilteredById.isNotEmpty()){
+            if (listFilteredById.isNotEmpty()) {
                 viewModel.updateListeDB(listFilteredById.toMutableList())
                 adapter.updateList(listFilteredById.toMutableList())
             }
-            if(listFilteredByLastName.isNotEmpty()){
+            if (listFilteredByLastName.isNotEmpty()) {
                 viewModel.updateListeDB(listFilteredByLastName.toMutableList())
                 adapter.updateList(listFilteredByLastName.toMutableList())
             }
 
-            if(listFilteredByPayDay.isNotEmpty()){
+            if (listFilteredByPayDay.isNotEmpty()) {
                 viewModel.updateListeDB(listFilteredByPayDay.toMutableList())
                 adapter.updateList(listFilteredByPayDay.toMutableList())
             }
-            if(listFilteredByFinishDay.isNotEmpty()){
+            if (listFilteredByFinishDay.isNotEmpty()) {
                 viewModel.updateListeDB(listFilteredByFinishDay.toMutableList())
                 adapter.updateList(listFilteredByFinishDay.toMutableList())
             }
-            if(listFilteredByState.isNotEmpty()){
+            if (listFilteredByState.isNotEmpty()) {
                 viewModel.updateListeDB(listFilteredByState.toMutableList())
                 adapter.updateList(listFilteredByState.toMutableList())
             }
-            if(listFilteredByAmountClass.isNotEmpty()){
+            if (listFilteredByAmountClass.isNotEmpty()) {
                 viewModel.updateListeDB(listFilteredByAmountClass.toMutableList())
                 adapter.updateList(listFilteredByAmountClass.toMutableList())
             }
@@ -155,7 +158,12 @@ class HomeFragment : Fragment() {
             object : ClientClickListener {
 
                 override fun onCardClick(position: Int) {
-                    Toast.makeText(requireContext(),"Hiciste click en un cliente..",Toast.LENGTH_SHORT).show()                }
+                    Toast.makeText(
+                        requireContext(),
+                        "Hiciste click en un cliente..",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
                 override fun onDeleteButtonClick(position: Int) {
                     showDeleteConfirmationDialog(position)
@@ -172,6 +180,7 @@ class HomeFragment : Fragment() {
         binding.rvClient.adapter = adapter
 
     }
+
     private fun showDeleteConfirmationDialog(position: Int) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
 
@@ -188,7 +197,8 @@ class HomeFragment : Fragment() {
         val alertDialog: AlertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
-    private fun goEditFragment(){
+
+    private fun goEditFragment() {
         val action = HomeFragmentDirections.actionHomeFragmentToEditClientFragment()
         findNavController().navigate(action)
     }
