@@ -100,7 +100,7 @@ class HomeFragment : Fragment() {
     private fun showDoneState() {
         adapter = ClientAdapter(
             listClient,
-            object : ClientClickListener {
+          /*  object : ClientClickListener {
 
                 override fun onCardClick(position: Int) {
                     Toast.makeText(
@@ -120,7 +120,8 @@ class HomeFragment : Fragment() {
                     viewModel.getCurrentClient(position)
                     goEditFragment()
                 }
-            })
+            }*/
+        )
         binding.rvClient.layoutManager = LinearLayoutManager(context)
         binding.rvClient.adapter = adapter
 

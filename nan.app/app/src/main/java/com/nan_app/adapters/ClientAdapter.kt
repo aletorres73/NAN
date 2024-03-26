@@ -15,46 +15,38 @@ import com.nan_app.databinding.ItemClientBinding
 import com.nan_app.entities.Clients
 
 class ClientAdapter(
-    private var clientlist: MutableList<Clients>,
-    private val clickListener: ClientClickListener
+    private var clientList: MutableList<Clients>,
+//    private val clickListener: ClientClickListener
 ) : RecyclerView.Adapter<ClientAdapter.ClientHolder>() {
 
-    class ClientHolder(v: View) : RecyclerView.ViewHolder(v) {
-        private var view: View
+    class ClientHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-//        private var binding = ItemClientBinding.bind(v)
-        init {
-            this.view = v
-        }
+        private var binding = ItemClientBinding.bind(view)
 
-        private fun setName(name: String) {
-            val txtName: TextView = view.findViewById(R.id.txtName)
-            txtName.text = name
-        }
+        fun render (client : Clients){
+            binding.txtId.text = client.id.toString()
+            binding.txtName.text = client.Name
+            binding.txtLastName.text= client.LastName
+            binding.txtState.text= client.State
+            binding.txtPayDay.text= client.PayDay
+            binding.txtFinishDay.text= client.FinishDay
 
-        private fun setLastName(lastname: String) {
-            val txtLastName: TextView = view.findViewById(R.id.txtLastName)
-            txtLastName.text = lastname
-        }
-
-        private fun setId(id: String) {
-            val txtId: TextView = view.findViewById(R.id.txtId)
-            txtId.text = id
+            setBirthday(client.Birthday)
+            setImageClient(client.ImageUri)
         }
 
         private fun setImageClient(uri: String) {
-            val imageClient: ImageView = view.findViewById(R.id.imageProductItem)
             if (uri != "null")
                 if (uri != "") {
-                    Glide.with(imageClient.context)
+                    Glide.with(binding.imageProductItem.context)
                         .load(uri)
-                        .into(imageClient)
+                        .into(binding.imageProductItem)
                 }
         }
 
         @SuppressLint("SetTextI18n")
         fun setBirthday(date: String) {
-            val dateBirthday: TextView = view.findViewById(R.id.textBirthday)
+            val dateBirthday = binding.txtBirthday
             if (date != "") {
                 val birthday = date.split("/").toMutableList()
                 when (birthday[1]) {
@@ -75,41 +67,9 @@ class ClientAdapter(
             } else
                 dateBirthday.text = date
         }
-
-        private fun setPayDay(date: String) {
-            val datePayDay: TextView = view.findViewById(R.id.txtPayDay)
-            datePayDay.text = date
-        }
-
-        private fun setFinishDay(date: String) {
-            val dateFinishDay: TextView = view.findViewById(R.id.txtFinishDay)
-            dateFinishDay.text = date
-        }
-
-        fun getCard(): CardView {
-            return view.findViewById(R.id.cardImage)
-        }
-
-        fun getButtonDelete(): Button {
-            return view.findViewById(R.id.btnDeleteClient)
-        }
-
-        fun getButtonEdit(): Button {
-            return view.findViewById(R.id.btnEditClient)
-        }
-
-        fun bind(client: Clients) {
-            setName(client.Name)
-            setLastName(client.LastName)
-            setId(client.id.toString())
-            setImageClient(client.ImageUri)
-            setBirthday(client.Birthday)
-            setPayDay(client.PayDay)
-            setFinishDay(client.FinishDay)
-        }
     }
 
-    override fun getItemCount() = clientlist.size
+    override fun getItemCount() = clientList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -118,20 +78,11 @@ class ClientAdapter(
     }
 
     override fun onBindViewHolder(holder: ClientHolder, position: Int) {
-        if (position < (itemCount + 1)) {
-            holder.bind(clientlist[position])
-//            holder.getCard().setOnClickListener{ clikListener.onCardClick(position)}
-            holder.getButtonDelete().setOnClickListener {
-                clickListener.onDeleteButtonClick(position)
-            }
-            holder.getButtonEdit().setOnClickListener {
-                clickListener.onEditButtonClick(position)
-            }
-        }
+        holder.render(clientList[position])
     }
 
     fun updateList(listClient: MutableList<Clients>) {
-        this.clientlist = listClient
+        this.clientList = listClient
         notifyDataSetChanged()
     }
 }

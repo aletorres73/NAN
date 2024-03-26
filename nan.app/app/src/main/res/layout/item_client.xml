@@ -25,49 +25,42 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
                 style="@style/item_text_details_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/item_Id" />
 
             <TextView
-                android:id="@+id/textView2"
                 style="@style/item_text_details_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/item_Name" />
 
             <TextView
-                android:id="@+id/textView3"
                 style="@style/item_text_details_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/item_LastName" />
 
             <TextView
-                android:id="@+id/textView4"
                 style="@style/item_text_details_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/item_State" />
 
             <TextView
-                android:id="@+id/textView5"
                 style="@style/item_text_details_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/item_PayDay" />
 
             <TextView
-                android:id="@+id/textView7"
                 style="@style/item_text_details_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/item_FinishDay" />
 
             <TextView
-                android:id="@+id/textView6"
                 style="@style/item_text_details_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -128,7 +121,7 @@
                 android:hint="@string/FinishDay" />
 
             <TextView
-                android:id="@+id/textBirthday"
+                android:id="@+id/txtBirthday"
                 style="@style/item_text_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -138,48 +131,19 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/imageProductItem"
-                android:layout_width="130dp"
-                android:layout_height="155dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/border_background"
                 android:padding="6dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/df" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btnEditClient"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="#7E60B3"
-                    app:icon="@android:drawable/ic_menu_edit"
-                    app:iconSize="20dp"
-                    app:iconTint="@color/white" />
-
-                <Button
-                    android:id="@+id/btnDeleteClient"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="#7E60B3"
-                    android:isScrollContainer="false"
-                    app:icon="@android:drawable/ic_menu_delete"
-                    app:iconSize="20dp"
-                    app:iconTint="@color/white" />
-
-            </LinearLayout>
-
+                android:src="@drawable/df"
+                android:layout_margin="4dp"/>
 
         </LinearLayout>
 
