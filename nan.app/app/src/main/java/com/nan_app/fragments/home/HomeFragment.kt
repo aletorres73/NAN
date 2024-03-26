@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,6 +14,7 @@ import com.nan_app.adapters.ClientAdapter
 import com.nan_app.adapters.ClientClickListener
 import com.nan_app.databinding.FragmentHomeBinding
 import com.nan_app.entities.Clients
+import androidx.appcompat.widget.SearchView
 
 class HomeFragment : Fragment() {
 
@@ -76,74 +76,24 @@ class HomeFragment : Fragment() {
     }
 
     private fun filterList() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchByName(query.orEmpty())
+                return false
+            }
+            override fun onQueryTextChange(newText: String?) = false
+        })
+    }
 
-        binding.editTextFilter.addTextChangedListener { itemFiltered ->
-            val listFilteredByName = listClient.filter {
-                it.Name
-                    .lowercase()
-                    .contains(itemFiltered.toString().lowercase())
-            }
-
-            val listFilteredById = listClient.filter {
-                it.id.toString() == itemFiltered.toString()
-            }
-
-            val listFilteredByLastName = listClient.filter {
-                it.LastName
-                    .lowercase()
-                    .contains(itemFiltered.toString().lowercase())
-            }
-
-            val listFilteredByPayDay = listClient.filter {
-                it.PayDay
-                    .lowercase()
-                    .contains(itemFiltered.toString().lowercase())
-            }
-            val listFilteredByFinishDay = listClient.filter {
-                it.FinishDay
-                    .lowercase()
-                    .contains(itemFiltered.toString().lowercase())
-            }
-            val listFilteredByState = listClient.filter {
-                it.State
-                    .lowercase()
-                    .contains(itemFiltered.toString().lowercase())
-            }
-            val listFilteredByAmountClass = listClient.filter {
-                it.AmountClass
-                    .lowercase()
-                    .contains(itemFiltered.toString().lowercase())
-            }
-
-            if (listFilteredByName.isNotEmpty()) {
-                viewModel.updateListeDB(listFilteredByName.toMutableList())
-                adapter.updateList(listFilteredByName.toMutableList())
-            }
-            if (listFilteredById.isNotEmpty()) {
-                viewModel.updateListeDB(listFilteredById.toMutableList())
-                adapter.updateList(listFilteredById.toMutableList())
-            }
-            if (listFilteredByLastName.isNotEmpty()) {
-                viewModel.updateListeDB(listFilteredByLastName.toMutableList())
-                adapter.updateList(listFilteredByLastName.toMutableList())
-            }
-
-            if (listFilteredByPayDay.isNotEmpty()) {
-                viewModel.updateListeDB(listFilteredByPayDay.toMutableList())
-                adapter.updateList(listFilteredByPayDay.toMutableList())
-            }
-            if (listFilteredByFinishDay.isNotEmpty()) {
-                viewModel.updateListeDB(listFilteredByFinishDay.toMutableList())
-                adapter.updateList(listFilteredByFinishDay.toMutableList())
-            }
-            if (listFilteredByState.isNotEmpty()) {
-                viewModel.updateListeDB(listFilteredByState.toMutableList())
-                adapter.updateList(listFilteredByState.toMutableList())
-            }
-            if (listFilteredByAmountClass.isNotEmpty()) {
-                viewModel.updateListeDB(listFilteredByAmountClass.toMutableList())
-                adapter.updateList(listFilteredByAmountClass.toMutableList())
-            }
+    private fun searchByName(query: String) {
+        val filteredByName = listClient.filter {
+            it.Name
+                .lowercase()
+                .contains(query)
+        }
+        if (filteredByName.isNotEmpty()) {
+            viewModel.updateListeDB(filteredByName.toMutableList())
+            adapter.updateList(filteredByName.toMutableList())
         }
     }
 
