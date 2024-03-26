@@ -7,12 +7,12 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-<!--    create client -->
+    <!--    create client -->
     <string name="createId">Id alumno*</string>
     <string name="createName">Nombre*</string>
     <string name="createLastName">Apellido*</string>
 
-<!--item_detail-->
+    <!--item_detail-->
     <string name="item_Id">Id alumno:</string>
     <string name="item_Name">Nombre:</string>
     <string name="item_LastName">Apellido:</string>
@@ -22,6 +22,7 @@
     <string name="item_PayDay">Fecha de pago:</string>
     <string name="item_FinishDay">Fin de período:</string>
     <string name="item_State">Estado:</string>
+    <string name="item_Amount">Cantidad de clases:</string>
 
     <string name="Id">Id alumno</string>
     <string name="Name">Nombre</string>
@@ -38,5 +39,12 @@
     <string name="State_Check">Por vencer</string>
     <string name="State_Bad">Vencido</string>
 
+    <!--    fragment text-->
+    <string name="edit_fragment_title">Datos del alumno</string>
+    <string name="upload_image_edit_fragment">Cargar foto de perfil</string>
+    <string name="delet_image_edit_fragment">Eliminar foto de perfil</string>
+    <string name="description_image_edit_fragment">Contenedor de foto de perfildel usuario</string>
+    <string name="delete_client_fragment_edit">Eliminar alumno</string>
+    <string name="boton_update_fragment_edit">Listo</string>
 
 </resources>

@@ -107,18 +107,18 @@
 
 
             <TextView
-                android:id="@+id/txtFinishDay"
-                style="@style/item_text_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/PayDay" />
-
-            <TextView
                 android:id="@+id/txtPayDay"
                 style="@style/item_text_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/FinishDay" />
+
+            <TextView
+                android:id="@+id/txtFinishDay"
+                style="@style/item_text_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/PayDay" />
 
             <TextView
                 android:id="@+id/txtBirthday"

@@ -1,224 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.clients.EditClientFragment">
 
-    <ImageView
-        android:id="@+id/imageEditedClient"
-        android:layout_width="180dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/border_background"
-        android:padding="10dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/df"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.994"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/edTextName"
-        android:layout_width="168dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:hint="Nombre"
-        android:inputType="text"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageEditedClient"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.100000024" />
-
-    <EditText
-        android:id="@+id/edTxtLastName"
-        android:layout_width="168dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:hint="Apellido"
-        android:inputType="text"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageEditedClient"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edTextName"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/edTxtBirthday"
-        android:layout_width="168dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="false"
-        android:focusable="false"
-        android:hint="Fecha de nacimiento"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageEditedClient"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edTxtLastName"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/edTxtPhone"
-        android:layout_width="168dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:hint="Teléfono"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageEditedClient"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edTxtBirthday"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/edTxtEmail"
+    <TextView
+        style="@style/title_fragments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:hint="Email"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edTxtPhone"
-        app:layout_constraintVertical_bias="0.0" />
+        android:text="@string/edit_fragment_title" />
 
-    <EditText
-        android:id="@+id/edTxtDayPay"
-        android:layout_width="168dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="false"
-        android:focusable="false"
-        android:hint="Fecha de pago"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageEditedClient"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edTxtEmail"
-        app:layout_constraintVertical_bias="0.0" />
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/edtxtFinishDay"
-        android:layout_width="168dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="false"
-        android:focusable="false"
-        android:hint="Fecha de finalización"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageEditedClient"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edTxtDayPay"
-        app:layout_constraintVertical_bias="0.0" />
+        <ImageView
+            android:id="@+id/imageEditedClient"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/border_background"
+            android:contentDescription="@string/description_image_edit_fragment"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/df" />
 
-    <EditText
-        android:id="@+id/edTxtAmount"
-        android:layout_width="168dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnEditImage"
+                style="@style/style_fragment_edit_boton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/upload_image_edit_fragment"
+                app:icon="@android:drawable/ic_menu_edit" />
+
+            <Button
+                android:id="@+id/btnEdDeleteImg"
+                style="@style/style_fragment_edit_boton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delet_image_edit_fragment"
+                app:icon="@android:drawable/ic_menu_delete" />
+
+            <Button
+                android:id="@+id/btnDeleteClient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/style_fragment_edit_boton"
+                app:icon="@android:drawable/ic_delete"
+                android:text="@string/delete_client_fragment_edit"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:hint="Cantidad de clases"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageEditedClient"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edtxtFinishDay"
-        app:layout_constraintVertical_bias="0.0" />
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/fragments_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_Name" />
+
+            <TextView
+                style="@style/fragments_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_LastName" />
+
+            <TextView
+                style="@style/fragments_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_Birthday" />
+
+            <TextView
+                style="@style/fragments_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_Phone" />
+
+            <TextView
+                style="@style/fragments_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_Email" />
+
+            <TextView
+                style="@style/fragments_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_PayDay" />
+
+            <TextView
+                style="@style/fragments_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_FinishDay" />
+
+            <TextView
+                style="@style/fragments_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_Amount" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="0.6"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edTextName"
+                style="@style/fragments_edit_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/edTxtLastName"
+                style="@style/fragments_edit_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Apellido"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/edTxtBirthday"
+                style="@style/fragments_edit_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:hint="Fecha de nacimiento" />
+
+            <EditText
+                android:id="@+id/edTxtPhone"
+                style="@style/fragments_edit_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Teléfono" />
+
+            <EditText
+                android:id="@+id/edTxtEmail"
+                style="@style/fragments_edit_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email" />
+
+            <EditText
+                android:id="@+id/edTxtDayPay"
+                style="@style/fragments_edit_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:hint="Fecha de pago" />
+
+            <EditText
+                android:id="@+id/edtxtFinishDay"
+                style="@style/fragments_edit_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:hint="Fecha de finalización" />
+
+            <EditText
+                android:id="@+id/edTxtAmount"
+                style="@style/fragments_edit_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cantidad de clases" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnUpdate"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="#7E60B3"
-        android:text="Listo"
-        android:textAlignment="center"
-        android:textSize="15sp"
-        android:typeface="normal"
+        android:layout_height="wrap_content"
+        style="@style/style_fragment_edit_boton"
+        android:text="@string/boton_update_fragment_edit"
         app:icon="?android:attr/textCheckMarkInverse"
         app:iconGravity="textEnd"
         app:iconSize="30dp"
-        app:iconTintMode="multiply"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edTxtAmount"
-        app:layout_constraintVertical_bias="0.100000024" />
+        app:iconTintMode="multiply" />
 
-    <Button
-        android:id="@+id/btnEditImage"
-        android:layout_width="180dp"
-        android:layout_height="55dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="60dp"
-        android:backgroundTint="#7E60B3"
-        android:text="Cargar foto de perfil"
-        app:icon="@android:drawable/ic_menu_edit"
-        app:layout_constraintBottom_toTopOf="@+id/btnUpdate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageEditedClient"
-        app:layout_constraintVertical_bias="0.478" />
-
-    <Button
-        android:id="@+id/btnEdDeleteImg"
-        android:layout_width="180dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="#7E60B3"
-        android:text="Eliminar foto de perfil"
-        app:icon="@android:drawable/ic_menu_delete"
-        app:layout_constraintBottom_toTopOf="@+id/btnUpdate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEditImage" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="Editar datos"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
 
 
 

@@ -181,6 +181,7 @@ class CreateClientFragment : Fragment() {
         newClient.Phone = binding.editTextPhone.text.toString()
         newClient.PayDay = binding.editTextDayPay.text.toString()
         newClient.FinishDay = binding.editTextFinishDay.text.toString()
+        newClient.AmountClass = binding.editTextAmount.text.toString()
         newClient.ImageName = viewModel.getImageName()
 
     }
