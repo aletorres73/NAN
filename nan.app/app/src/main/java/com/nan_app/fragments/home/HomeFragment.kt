@@ -81,6 +81,7 @@ class HomeFragment : Fragment() {
                 searchByName(query.orEmpty())
                 return false
             }
+
             override fun onQueryTextChange(newText: String?) = false
         })
     }
@@ -98,51 +99,42 @@ class HomeFragment : Fragment() {
     }
 
     private fun showDoneState() {
-        adapter = ClientAdapter(
-            listClient,
-          /*  object : ClientClickListener {
+        adapter = ClientAdapter(listClient) { position -> onItemSelected(position) }
+        /*  object : ClientClickListener {
 
-                override fun onCardClick(position: Int) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Hiciste click en un cliente..",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+              override fun onDeleteButtonClick(position: Int) {
+                  showDeleteConfirmationDialog(position)
+                  deletePosition = position
+                  adapterItemCount = adapter.itemCount
+              }
+          }*/
 
-                override fun onDeleteButtonClick(position: Int) {
-                    showDeleteConfirmationDialog(position)
-                    deletePosition = position
-                    adapterItemCount = adapter.itemCount
-                }
-
-                override fun onEditButtonClick(position: Int) {
-                    viewModel.getCurrentClient(position)
-                    goEditFragment()
-                }
-            }*/
-        )
         binding.rvClient.layoutManager = LinearLayoutManager(context)
         binding.rvClient.adapter = adapter
 
     }
 
-    private fun showDeleteConfirmationDialog(position: Int) {
-        val alertDialogBuilder = AlertDialog.Builder(requireContext())
-
-        alertDialogBuilder.setTitle("Eliminar cliente")
-        alertDialogBuilder.setMessage("¿Estás seguro de que deseas eliminar este cliente?")
-
-        alertDialogBuilder.setPositiveButton("Sí") { _, _ ->
-            viewModel.deleteClient(position)
-        }
-
-        alertDialogBuilder.setNegativeButton("No") { _, _ ->
-        }
-
-        val alertDialog: AlertDialog = alertDialogBuilder.create()
-        alertDialog.show()
+    private fun onItemSelected(position: Int) {
+        viewModel.getCurrentClient(position)
+        goEditFragment()
     }
+
+    /*    private fun showDeleteConfirmationDialog(position: Int) {
+            val alertDialogBuilder = AlertDialog.Builder(requireContext())
+
+            alertDialogBuilder.setTitle("Eliminar cliente")
+            alertDialogBuilder.setMessage("¿Estás seguro de que deseas eliminar este cliente?")
+
+            alertDialogBuilder.setPositiveButton("Sí") { _, _ ->
+                viewModel.deleteClient(position)
+            }
+
+            alertDialogBuilder.setNegativeButton("No") { _, _ ->
+            }
+
+            val alertDialog: AlertDialog = alertDialogBuilder.create()
+            alertDialog.show()
+        }*/
 
     private fun goEditFragment() {
         val action = HomeFragmentDirections.actionHomeFragmentToEditClientFragment()

@@ -4,10 +4,6 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nan_app.R
@@ -16,14 +12,14 @@ import com.nan_app.entities.Clients
 
 class ClientAdapter(
     private var clientList: MutableList<Clients>,
-//    private val clickListener: ClientClickListener
+    private var onItemeSelected: (Int) ->Unit
 ) : RecyclerView.Adapter<ClientAdapter.ClientHolder>() {
 
     class ClientHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private var binding = ItemClientBinding.bind(view)
 
-        fun render (client : Clients){
+        fun render (client: Clients, onItemeSelected: (Int) -> Unit){
             binding.txtId.text = client.id.toString()
             binding.txtName.text = client.Name
             binding.txtLastName.text= client.LastName
@@ -33,6 +29,8 @@ class ClientAdapter(
 
             setBirthday(client.Birthday)
             setImageClient(client.ImageUri)
+
+            itemView.setOnClickListener { onItemeSelected(layoutPosition) }
         }
 
         private fun setImageClient(uri: String) {
@@ -78,7 +76,7 @@ class ClientAdapter(
     }
 
     override fun onBindViewHolder(holder: ClientHolder, position: Int) {
-        holder.render(clientList[position])
+        holder.render(clientList[position], onItemeSelected)
     }
 
     fun updateList(listClient: MutableList<Clients>) {
