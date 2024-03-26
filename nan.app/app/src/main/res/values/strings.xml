@@ -7,17 +7,36 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+<!--    create client -->
     <string name="createId">Id alumno*</string>
     <string name="createName">Nombre*</string>
-    <string name="Name">Nombre</string>
     <string name="createLastName">Apellido*</string>
+
+<!--item_detail-->
+    <string name="item_Id">Id alumno:</string>
+    <string name="item_Name">Nombre:</string>
+    <string name="item_LastName">Apellido:</string>
+    <string name="item_Birthday">Cumpleaños:</string>
+    <string name="item_Phone">Teléfono:</string>
+    <string name="item_Email">Email:</string>
+    <string name="item_PayDay">Fecha de pago:</string>
+    <string name="item_FinishDay">Fin de período:</string>
+    <string name="item_State">Estado:</string>
+
+    <string name="Id">Id alumno</string>
+    <string name="Name">Nombre</string>
     <string name="LastName">Apellido</string>
-    <string name="Birthday">Fecha de nacimiento</string>
+    <string name="Birthday">Cumpleaños</string>
     <string name="Phone">Teléfono</string>
     <string name="Email">Email</string>
-    <string name="PayDay">Fecha de pago</string>
-    <string name="FinishDay">Fecha de finalización</string>
+    <string name="PayDay">Fecha</string>
+    <string name="FinishDay">Fecha</string>
     <string name="AmountClass">Cantidad de clases</string>
-    <string name="FindEditText">Buscar por id, nombre, apellido o estado… </string>
+
+    <string name="State">Estado</string>
+    <string name="State_ok">Al día</string>
+    <string name="State_Check">Por vencer</string>
+    <string name="State_Bad">Vencido</string>
+
 
 </resources>
