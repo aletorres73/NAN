@@ -17,15 +17,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.nan_app.R
 import com.nan_app.adapters.ClientAdapter
 import com.nan_app.adapters.ClientClickListener
+import com.nan_app.databinding.ActivityMainBinding
+import com.nan_app.databinding.FragmentHomeBinding
 import com.nan_app.entities.Clients
 
 class HomeFragment : Fragment() {
 
-    private lateinit var v                  : View
-    private lateinit var recClient          : RecyclerView
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter            : ClientAdapter
-    private lateinit var swipeRefreshLayout : SwipeRefreshLayout
-    private lateinit var editTextFilter     : EditText
 
     private lateinit var viewModel: HomeViewModel
     private var deletePosition  = 0
@@ -36,19 +35,15 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        v = inflater.inflate(R.layout.fragment_home, container, false)
-
-        recClient           = v.findViewById(R.id.rvClient)
-        swipeRefreshLayout  = v.findViewById(R.id.swipeRefreshLayout)
-        editTextFilter      = v.findViewById(R.id.editTextFilter)
+        binding = FragmentHomeBinding.inflate(layoutInflater)
 
         viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         viewModel.init()
 
 
-        swipeRefreshLayout.setOnRefreshListener {
+        binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
-            swipeRefreshLayout.isRefreshing = false
+            binding.swipeRefreshLayout.isRefreshing = false
         }
 
 
@@ -79,12 +74,12 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        return v
+        return binding.root
     }
 
     private fun filterList() {
 
-        editTextFilter.addTextChangedListener {itemFiltered ->
+        binding.editTextFilter.addTextChangedListener {itemFiltered ->
             val listFilteredByName = listClient.filter {
                 it.Name
                     .lowercase()
@@ -101,25 +96,6 @@ class HomeFragment : Fragment() {
                     .contains(itemFiltered.toString().lowercase())
             }
 
-/*            val listFilteredByBirthday = listClient.filter {
-                var month = ""
-                when(itemFiltered.toString().lowercase()){
-                    "enero"     ->{month = "1"}
-                    "febrero"   ->{month = "2"}
-                    "marzo"     ->{month = "3"}
-                    "abril"     ->{month = "4"}
-                    "mayo"      ->{month = "5"}
-                    "junio"     ->{month = "6"}
-                    "julio"     ->{month = "7"}
-                    "agosto"    ->{month = "8"}
-                    "septiembre"->{month = "9"}
-                    "octubre"   ->{month = "10"}
-                    "noviembre" ->{month = "11"}
-                    "diciembre" ->{month = "12"}
-                }
-                it.Birthday.split() == month
-
-            }*/
             val listFilteredByPayDay = listClient.filter {
                 it.PayDay
                     .lowercase()
@@ -153,10 +129,7 @@ class HomeFragment : Fragment() {
                 viewModel.updateListeDB(listFilteredByLastName.toMutableList())
                 adapter.updateList(listFilteredByLastName.toMutableList())
             }
-/*            if(listFilteredByBirthday.isNotEmpty()){
-                viewModel.updateListeDB(listFilteredByBirthday.toMutableList())
-                adapter.updateList(listFilteredByBirthday.toMutableList())
-            }*/
+
             if(listFilteredByPayDay.isNotEmpty()){
                 viewModel.updateListeDB(listFilteredByPayDay.toMutableList())
                 adapter.updateList(listFilteredByPayDay.toMutableList())
@@ -173,10 +146,8 @@ class HomeFragment : Fragment() {
                 viewModel.updateListeDB(listFilteredByAmountClass.toMutableList())
                 adapter.updateList(listFilteredByAmountClass.toMutableList())
             }
-
-
-
-        }    }
+        }
+    }
 
     private fun showDoneState() {
         adapter = ClientAdapter(
@@ -197,8 +168,8 @@ class HomeFragment : Fragment() {
                     goEditFragment()
                 }
             })
-        recClient.layoutManager = LinearLayoutManager(context)
-        recClient.adapter = adapter
+        binding.rvClient.layoutManager = LinearLayoutManager(context)
+        binding.rvClient.adapter = adapter
 
     }
     private fun showDeleteConfirmationDialog(position: Int) {
