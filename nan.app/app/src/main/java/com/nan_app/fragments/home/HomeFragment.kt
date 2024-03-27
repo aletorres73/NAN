@@ -18,7 +18,8 @@ import androidx.appcompat.widget.SearchView
 
 class HomeFragment : Fragment() {
 
-    private lateinit var binding: FragmentHomeBinding
+    private  var _binding: FragmentHomeBinding? = null
+    private val  binding get() = _binding!!
     private lateinit var adapter: ClientAdapter
 
     private lateinit var viewModel: HomeViewModel
@@ -30,7 +31,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(layoutInflater)
+        _binding = FragmentHomeBinding.inflate(layoutInflater)
 
         viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         viewModel.init()
@@ -39,7 +40,11 @@ class HomeFragment : Fragment() {
             viewModel.refresh()
             binding.swipeRefreshLayout.isRefreshing = false
         }
+        ui()
 
+        return binding.root
+    }
+    private fun ui() {
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 HomeViewModel.STATE_EMPTY -> {
@@ -72,7 +77,6 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        return binding.root
     }
 
     private fun filterList() {
@@ -100,15 +104,6 @@ class HomeFragment : Fragment() {
 
     private fun showDoneState() {
         adapter = ClientAdapter(listClient) { position -> onItemSelected(position) }
-        /*  object : ClientClickListener {
-
-              override fun onDeleteButtonClick(position: Int) {
-                  showDeleteConfirmationDialog(position)
-                  deletePosition = position
-                  adapterItemCount = adapter.itemCount
-              }
-          }*/
-
         binding.rvClient.layoutManager = LinearLayoutManager(context)
         binding.rvClient.adapter = adapter
 
@@ -118,23 +113,6 @@ class HomeFragment : Fragment() {
         viewModel.getCurrentClient(position)
         goEditFragment()
     }
-
-    /*    private fun showDeleteConfirmationDialog(position: Int) {
-            val alertDialogBuilder = AlertDialog.Builder(requireContext())
-
-            alertDialogBuilder.setTitle("Eliminar cliente")
-            alertDialogBuilder.setMessage("¿Estás seguro de que deseas eliminar este cliente?")
-
-            alertDialogBuilder.setPositiveButton("Sí") { _, _ ->
-                viewModel.deleteClient(position)
-            }
-
-            alertDialogBuilder.setNegativeButton("No") { _, _ ->
-            }
-
-            val alertDialog: AlertDialog = alertDialogBuilder.create()
-            alertDialog.show()
-        }*/
 
     private fun goEditFragment() {
         val action = HomeFragmentDirections.actionHomeFragmentToEditClientFragment()

@@ -1,6 +1,8 @@
 package com.nan_app.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
     }
+
 
 }

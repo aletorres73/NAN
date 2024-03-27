@@ -1,6 +1,7 @@
 package com.nan_app.database
 
 import android.net.Uri
+import android.text.BoringLayout
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -59,20 +60,22 @@ class FirebaseDataClientSource: ClientSource {
         }
     }
 
-    override suspend fun deleteClient(id: Int) {
-        try {
+    override suspend fun deleteClient(id: Int): Boolean {
+        return try {
             val querySnapshot = collection
                 .whereEqualTo("id", id)
                 .get()
                 .await()
-            val documentRef = querySnapshot
+            querySnapshot
                 .first()
                 .reference
                 .delete()
                 .await()
+            true
 
         } catch (e: Exception) {
-            throw IllegalStateException("Failed to remove product into Firestore: ${e.message}")
+            Log.e("Delete client","Failed to remove product into Firestore: ${e.message}")
+            false
         }
     }
 

@@ -26,41 +26,40 @@ import com.nan_app.entities.Clients
 
 class EditClientFragment : Fragment() {
 
-    private lateinit var binding: FragmentEditClientBinding
-
-    private lateinit var viewModel: EditClientViewModel
+    private var _binding: FragmentEditClientBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var vm: EditClientViewModel
 
     companion object {
-        private val REQUEST_GALLERY = 1001
-        private val REQUEST_CAMERA = 1002
+        private const val REQUEST_GALLERY = 1001
+        private const val REQUEST_CAMERA = 1002
+        private const val DATE_PICKER = "datePicker"
 
     }
 
     private var currentClient: Clients = Clients()
 
-    val imageDefect =
+    private val imageDefect =
         "https://png.pngtree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
 
     //la imagen por defecto quizá debería estar cargada en el drive.
     private var imageUri: Uri? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentEditClientBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[EditClientViewModel::class.java]
+        _binding = FragmentEditClientBinding.inflate(layoutInflater)
+        vm = ViewModelProvider(this)[EditClientViewModel::class.java]
 
         loadImage(imageDefect)
 
-        currentClient = viewModel.getClient()
+        currentClient = vm.getClient()
         loadClientInfo(currentClient)
 
-        if (currentClient.ImageUri != "")
-            if (currentClient.ImageUri != "null")
-                loadImage(currentClient.ImageUri)
-            else
-                loadImage(imageDefect)
+        if (currentClient.ImageUri != "") if (currentClient.ImageUri != "null") loadImage(
+            currentClient.ImageUri
+        )
+        else loadImage(imageDefect)
 
         return binding.root
     }
@@ -69,64 +68,72 @@ class EditClientFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        viewModel.loadState("init")
+        vm.loadState(EditClientViewModel.STATE_INIT)
 
-        viewModel.viewState.observe(viewLifecycleOwner) { state ->
+        vm.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
 
                 EditClientViewModel.STATE_INIT -> {
                     binding.btnUpdate.setOnClickListener {
-                        viewModel.updatedClient(getEditedClient(currentClient), currentClient.id)
+                        if (!checkInput()) {
+                            binding.btnUpdate.isClickable = false
+                            vm.updatedClient(
+                                getEditedClient(currentClient),
+                                currentClient.id
+                            )
+                        } else
+                            vm.loadState(EditClientViewModel.STATE_ERROR_UPDATE_CLIENT)
+                    }
+                    binding.btnDeleteClient.setOnClickListener {
+                        showDeleteConfirmationDialog(currentClient.id)
                     }
 
                     binding.btnEdDeleteImg.setOnClickListener {
                         if (currentClient.ImageUri == "") {
-                            viewModel.loadState("emptyImage")
-                        } else
-                            viewModel.loadState("deleteImage")
+                            vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
+                        } else vm.loadState(EditClientViewModel.STATE_DELETE_IMAGE)
                     }
+
                     binding.btnEditImage.setOnClickListener {
-                        if (currentClient.ImageName == "")
-                            showOptionsDialog()
-                        if (currentClient.ImageName == "null")
-                            showOptionsDialog()
-                        else
-                            viewModel.loadState("init")
+                        if (currentClient.ImageName == "") showOptionsDialog()
+                        if (currentClient.ImageName == "null") showOptionsDialog()
+                        else vm.loadState(EditClientViewModel.STATE_INIT)
                     }
+
                     binding.edTxtBirthday.setOnClickListener {
-                        viewModel.loadState("selectBirthday")
+                        vm.loadState(EditClientViewModel.STATE_SELECT_BIRTHDAY)
                     }
+
                     binding.edTxtDayPay.setOnClickListener {
-                        viewModel.loadState("selectDayPay")
+                        vm.loadState(EditClientViewModel.STATE_SELECT_PAYDAY)
                     }
+
                     binding.edtxtFinishDay.setOnClickListener {
-                        viewModel.loadState("selectFinishDay")
+                        vm.loadState(EditClientViewModel.STATE_SELECT_FINISHDAY)
                     }
                 }
 
                 EditClientViewModel.STATE_ERROR_UPDATE_CLIENT -> {
-                    showToast("No se pudieron actualizar los datos")
-                    viewModel.loadState("init")
+                    showToast("No se actualizaron los datos")
+                    vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
                 EditClientViewModel.STATE_DONE_UPDATE_CLIENT -> {
-                    Toast.makeText(requireContext(), "Datos actualizados", Toast.LENGTH_SHORT)
-                        .show()
                     val action =
                         EditClientFragmentDirections.actionEditClientFragmentToHomeFragment()
                     findNavController().navigate(action)
-                    viewModel.loadState("init")
+                    vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
                 EditClientViewModel.STATE_DELETE_IMAGE -> {
                     if (currentClient.ImageUri == "") {
-                        viewModel.loadState("emptyImage")
-                        viewModel.loadState("init")
+                        vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
+                        vm.loadState(EditClientViewModel.STATE_INIT)
 
                     } else {
-                        viewModel.deleteImage(currentClient.ImageName)
+                        vm.deleteImage(currentClient.ImageName)
                         currentClient.ImageName = ""
-                        viewModel.loadState("init")
+                        vm.loadState(EditClientViewModel.STATE_INIT)
                     }
                 }
 
@@ -136,65 +143,98 @@ class EditClientFragment : Fragment() {
                     loadImage(imageDefect)
                     showToast("Imagen borrada")
 
-                    viewModel.updateClientByImage(currentClient, currentClient.id)
+                    vm.updateClientByImage(currentClient, currentClient.id)
 
-                    viewModel.loadState("init")
+                    vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
                 EditClientViewModel.STATE_ERROR_IMAGE_DELETE -> {
                     showToast("Error al borrar la imagen")
-                    viewModel.loadState("init")
+                    vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
                 EditClientViewModel.STATE_IMAGE_EMPTY -> {
                     showToast("No hay imagen cargada")
-                    viewModel.loadState("init")
+                    vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
-                CreateClientViewModel.STATE_GALLERY -> {
+                EditClientViewModel.STATE_GALLERY -> {
                     openGallery()
-                    viewModel.loadState("init")
+                    vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
-                CreateClientViewModel.STATE_CAMERA -> {
+                EditClientViewModel.STATE_CAMERA -> {
                     openCamera()
-                    viewModel.loadState("init")
+                    vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
-                CreateClientViewModel.STATE_SELECT_BIRTHDAY -> {
+                EditClientViewModel.STATE_SELECT_BIRTHDAY -> {
                     val datePicker = DatePickerFragment { year, month, day ->
                         onDateSelectedBirthday(
-                            year,
-                            month,
-                            day
+                            year, month, day
                         )
                     }
-                    datePicker.show(parentFragmentManager, "datePicker")
+                    datePicker.show(parentFragmentManager, DATE_PICKER)
                 }
 
-                CreateClientViewModel.STATE_SELECT_PAYDAY -> {
+                EditClientViewModel.STATE_SELECT_PAYDAY -> {
                     val datePicker = DatePickerFragment { year, month, day ->
                         onDateSelectedDayPay(
-                            year,
-                            month,
-                            day
+                            year, month, day
                         )
                     }
-                    datePicker.show(parentFragmentManager, "datePicker")
+                    datePicker.show(parentFragmentManager, DATE_PICKER)
                 }
 
-                CreateClientViewModel.STATE_SELECT_FINISHDAY -> {
+                EditClientViewModel.STATE_SELECT_FINISHDAY -> {
                     val datePicker = DatePickerFragment { year, month, day ->
                         onDateSelectedFinshDay(
-                            year,
-                            month,
-                            day
+                            year, month, day
                         )
                     }
-                    datePicker.show(parentFragmentManager, "datePicker")
+                    datePicker.show(parentFragmentManager, DATE_PICKER)
+                }
+
+                EditClientViewModel.STATE_CLIENT_DELETED->{
+                    showToast("Alumno eliminado")
+                    findNavController().popBackStack()
+                    vm.loadState(EditClientViewModel.STATE_INIT)
+                }
+
+                EditClientViewModel.STATE_ERROR_DELETE_CLIENT->{
+                    showToast("Error al eliminar alumno")
+                    vm.loadState(EditClientViewModel.STATE_INIT)
                 }
             }
         }
+    }
+
+    private fun showDeleteConfirmationDialog(id: Int) {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Eliminar cliente")
+        alertDialogBuilder.setMessage("¿Deseas eliminar este cliente?")
+
+        alertDialogBuilder.setPositiveButton("Sí") { _, _ ->
+            vm.deleteClient(id)
+        }
+
+        alertDialogBuilder.setNegativeButton("No") { _, _ ->
+        }
+
+        val alertDialog: AlertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+    private fun checkInput(): Boolean {
+        if (binding.edTextName.text.isEmpty())
+            if (binding.edTxtLastName.text.isEmpty())
+                if (binding.edTxtBirthday.text.isEmpty())
+                    if (binding.edTxtPhone.text.isEmpty())
+                        if (binding.edTxtEmail.text.isEmpty())
+                            if (binding.edTxtDayPay.text.isEmpty())
+                                if (binding.edtxtFinishDay.text.isEmpty())
+                                    if (binding.edTxtAmount.text.isEmpty()) return true
+        return false
     }
 
     @SuppressLint("SetTextI18n")
@@ -213,22 +253,14 @@ class EditClientFragment : Fragment() {
     }
 
     private fun loadClientInfo(currentClient: Clients) {
-        if (currentClient.Name != "")
-            binding.edTextName.hint = currentClient.Name
-        if (currentClient.LastName != "")
-            binding.edTxtLastName.hint = currentClient.LastName
-        if (currentClient.Birthday != "")
-            binding.edTxtBirthday.hint = currentClient.Birthday
-        if (currentClient.Phone != "")
-            binding.edTxtPhone.hint = currentClient.Phone
-        if (currentClient.Email != "")
-            binding.edTxtEmail.hint = currentClient.Email
-        if (currentClient.PayDay != "")
-            binding.edTxtDayPay.hint = currentClient.PayDay
-        if (currentClient.FinishDay != "")
-            binding.edtxtFinishDay.hint = currentClient.FinishDay
-        if (currentClient.AmountClass != "")
-            binding.edTxtAmount.hint = currentClient.AmountClass
+        if (currentClient.Name != "") binding.edTextName.hint = currentClient.Name
+        if (currentClient.LastName != "") binding.edTxtLastName.hint = currentClient.LastName
+        if (currentClient.Birthday != "") binding.edTxtBirthday.hint = currentClient.Birthday
+        if (currentClient.Phone != "") binding.edTxtPhone.hint = currentClient.Phone
+        if (currentClient.Email != "") binding.edTxtEmail.hint = currentClient.Email
+        if (currentClient.PayDay != "") binding.edTxtDayPay.hint = currentClient.PayDay
+        if (currentClient.FinishDay != "") binding.edtxtFinishDay.hint = currentClient.FinishDay
+        if (currentClient.AmountClass != "") binding.edTxtAmount.hint = currentClient.AmountClass
 
     }
 
@@ -241,17 +273,15 @@ class EditClientFragment : Fragment() {
         currentClient.PayDay = binding.edTxtDayPay.text.toString()
         currentClient.FinishDay = binding.edtxtFinishDay.text.toString()
         currentClient.AmountClass = binding.edTxtAmount.text.toString()
-        currentClient.ImageUri = viewModel.getUri()
-        currentClient.ImageName = viewModel.getImageName()
+        currentClient.ImageUri = vm.getUri()
+        currentClient.ImageName = vm.getImageName()
 
         return currentClient
     }
 
     private fun loadImage(uri: String) {
 
-        Glide.with(this)
-            .load(uri)
-            .into(binding.imageEditedClient)
+        Glide.with(this).load(uri).into(binding.imageEditedClient)
     }
 
     private fun showToast(msg: String) {
@@ -265,8 +295,8 @@ class EditClientFragment : Fragment() {
         builder.setTitle("Selecciona una opción")
         builder.setItems(options) { dialog, which ->
             when (which) {
-                0 -> viewModel.loadState("openGallery")
-                1 -> viewModel.loadState("openCamera")
+                0 -> vm.loadState(EditClientViewModel.STATE_GALLERY)
+                1 -> vm.loadState(EditClientViewModel.STATE_CAMERA)
             }
         }
         builder.show()
@@ -277,8 +307,7 @@ class EditClientFragment : Fragment() {
             val value = ContentValues()
             value.put(MediaStore.Images.Media.TITLE, "New Image")
             imageUri = requireActivity().contentResolver.insert(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                value
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value
             )
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
@@ -298,7 +327,7 @@ class EditClientFragment : Fragment() {
     private fun getImageCamera(data: Uri?) {
         if (data != null) {
 
-            viewModel.saveImage(data)
+            vm.saveImage(data)
             binding.imageEditedClient.setImageURI(data)
         }
     }
@@ -307,7 +336,7 @@ class EditClientFragment : Fragment() {
         imageUri = data?.data
         if (imageUri != null) {
 
-            viewModel.saveImage(imageUri!!)
+            vm.saveImage(imageUri!!)
             binding.imageEditedClient.setImageURI(imageUri)
         }
 
@@ -327,53 +356,39 @@ class EditClientFragment : Fragment() {
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_GALLERY -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        openGallery()
-                    } else
-                        Toast.makeText(
-                            requireContext(),
-                            "No tienes permiso a la galería",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    openGallery()
+                } else Toast.makeText(
+                    requireContext(), "No tienes permiso a la galería", Toast.LENGTH_SHORT
+                ).show()
             }
 
             REQUEST_CAMERA -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    openCamera()
-                else
-                    Toast.makeText(
-                        requireContext(),
-                        "No tienes permiso a la cámara",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) openCamera()
+                else Toast.makeText(
+                    requireContext(), "No tienes permiso a la cámara", Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
     private fun arePermissionsGrantedCamera(): Boolean {
         return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_DENIED
-                || ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            requireContext(), Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_DENIED
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun arePermissionsGrantedGallery(): Boolean {
         return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_MEDIA_IMAGES
+            requireContext(), Manifest.permission.READ_MEDIA_IMAGES
         ) == PackageManager.PERMISSION_DENIED
     }
 

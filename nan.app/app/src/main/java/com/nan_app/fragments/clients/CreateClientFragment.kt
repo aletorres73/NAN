@@ -25,8 +25,8 @@ import com.nan_app.entities.Clients
 
 class CreateClientFragment : Fragment() {
 
-    private lateinit var binding: FragmentCreateClientBinding
-
+    private  var _binding: FragmentCreateClientBinding? = null
+    private val binding get() = _binding!!
     companion object {
         private const val REQUEST_GALLERY = 1001
         private const val REQUEST_CAMERA = 1002
@@ -43,7 +43,7 @@ class CreateClientFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCreateClientBinding.inflate(layoutInflater)
+        _binding = FragmentCreateClientBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity())[CreateClientViewModel::class.java]
 
         viewModel.loadState("init")
@@ -64,10 +64,14 @@ class CreateClientFragment : Fragment() {
                             viewModel.loadState("errorClientLoad")
                         else {
                             getInputs()
-                            if (newClient.ImageName != "")
+                            if (newClient.ImageName != ""){
+                                binding.btnMakeClient.isClickable = false
                                 viewModel.loadState("loadNewImage")
-                            else
+                            }
+                            else{
+                                binding.btnMakeClient.isClickable = false
                                 viewModel.loadState("newClient")
+                            }
                         }
                     }
                     binding.btnLoadImageClient.setOnClickListener {
