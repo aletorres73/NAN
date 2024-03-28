@@ -52,15 +52,16 @@ class MainActivity : AppCompatActivity() {
         val currentDestinationId = navController.currentDestination?.id
         if (currentDestinationId == R.id.homeFragment) {
             if (navController.previousBackStackEntry == null) {
-                super.onBackPressed() // Llama al comportamiento predeterminado si estás en el fragmento de inicio y no hay más elementos en la pila de retroceso
+                super.onBackPressed()
+                finish()
+                finishAffinity()
             } else {
-                finish() // Regresa al fragmento anterior en la pila de retroceso
+                finishAffinity()
             }
         } else {
             Toast.makeText(this, "Presione una vez más para salir", Toast.LENGTH_SHORT).show()
-            navController.navigate(R.id.homeFragment) // Navega al fragmento de inicio si no estás ya allí
+            navController.navigate(R.id.homeFragment)
         }
     }
-
 
 }

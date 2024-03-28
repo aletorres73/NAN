@@ -7,15 +7,18 @@ import com.nan_app.entities.clientModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext
 
-class StartActivity: AppCompatActivity() {
+class StartActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        GlobalContext.startKoin {
-            androidContext(this@StartActivity)
-            modules(clientModule)
+        if (GlobalContext.getOrNull() == null) {
+            GlobalContext.startKoin {
+                androidContext(this@StartActivity)
+                modules(clientModule)
+            }
         }
+
         supportActionBar?.hide()
     }
 
@@ -24,5 +27,6 @@ class StartActivity: AppCompatActivity() {
         val contextActivity = this
         val intent = Intent(contextActivity, MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }

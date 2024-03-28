@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -70,12 +71,12 @@ class EditClientFragment : Fragment() {
 
         vm.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
-
                 EditClientViewModel.STATE_INIT -> {
                     vm.currentClient.observe(viewLifecycleOwner) { currentClient ->
 
                         binding.btnUpdate.setOnClickListener {
-                            if (!checkInput()) {
+                            if (checkInput()) {
+                                binding.edProgressBar.isVisible = true
                                 binding.btnUpdate.isClickable = false
                                 vm.updatedClient(
                                     getEditedClient(currentClient),
@@ -89,6 +90,7 @@ class EditClientFragment : Fragment() {
                         }
 
                         binding.btnEdDeleteImg.setOnClickListener {
+                            binding.edProgressBar.isVisible = true
                             if (currentClient.ImageUri == "") vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
                             else vm.loadState(EditClientViewModel.STATE_BUTTON_DELETE_IMAGE)
                         }
@@ -123,6 +125,7 @@ class EditClientFragment : Fragment() {
                     val action =
                         EditClientFragmentDirections.actionEditClientFragmentToHomeFragment()
                     findNavController().navigate(action)
+                    binding.edProgressBar.isVisible = false
                     vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
@@ -156,6 +159,7 @@ class EditClientFragment : Fragment() {
                         showToast("Imagen borrada")
 
                         vm.updateClientByImage(currentClient, currentClient.id)
+                        binding.edProgressBar.isVisible = false
                         vm.loadState(EditClientViewModel.STATE_INIT)
 
                     }
@@ -163,11 +167,13 @@ class EditClientFragment : Fragment() {
 
                 EditClientViewModel.STATE_ERROR_IMAGE_DELETE -> {
                     showToast("Error al borrar la imagen")
+                    binding.edProgressBar.isVisible = false
                     vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
                 EditClientViewModel.STATE_IMAGE_EMPTY -> {
                     showToast("No hay imagen cargada")
+                    binding.edProgressBar.isVisible = false
                     vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
@@ -211,11 +217,14 @@ class EditClientFragment : Fragment() {
                 EditClientViewModel.STATE_CLIENT_DELETED -> {
                     showToast("Alumno eliminado")
                     findNavController().popBackStack()
+                    binding.edProgressBar.isVisible = false
                     vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
                 EditClientViewModel.STATE_ERROR_DELETE_CLIENT -> {
                     showToast("Error al eliminar alumno")
+                    binding.edProgressBar.isVisible = true
+                    binding.btnUpdate.isClickable = true
                     vm.loadState(EditClientViewModel.STATE_INIT)
                 }
             }
@@ -228,6 +237,7 @@ class EditClientFragment : Fragment() {
         alertDialogBuilder.setMessage("¿Deseas eliminar este cliente?")
 
         alertDialogBuilder.setPositiveButton("Sí") { _, _ ->
+            binding.edProgressBar.isVisible = true
             vm.deleteClient(id, imageName)
         }
 
@@ -277,8 +287,14 @@ class EditClientFragment : Fragment() {
             if (it.PayDay != "") binding.edTxtDayPay.hint = it.PayDay
             if (it.FinishDay != "") binding.edtxtFinishDay.hint = it.FinishDay
             if (it.AmountClass != "") binding.edTxtAmount.hint = it.AmountClass
-            if (it.ImageUri != "")
-                loadImage(it.ImageUri)
+            if (it.ImageUri == "" || it.ImageUri == "null")
+                binding.imageEditedClient.setImageDrawable(
+                    getDrawable(
+                        binding.imageEditedClient.context,
+                        R.drawable.df
+                    )
+                )
+            else loadImage(it.ImageUri)
 
         }
 
@@ -347,7 +363,6 @@ class EditClientFragment : Fragment() {
 
     private fun getImageCamera(data: Uri?) {
         if (data != null) {
-
             vm.saveImage(data)
             binding.imageEditedClient.setImageURI(data)
         }
@@ -356,7 +371,6 @@ class EditClientFragment : Fragment() {
     private fun getImageGallery(data: Intent?) {
         imageUri = data?.data
         if (imageUri != null) {
-
             vm.saveImage(imageUri!!)
             binding.imageEditedClient.setImageURI(imageUri)
         }

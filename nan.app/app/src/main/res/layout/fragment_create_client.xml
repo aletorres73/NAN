@@ -8,6 +8,16 @@
     tools:layout_editor_absoluteX="-163dp"
     tools:layout_editor_absoluteY="0dp">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageView
         android:id="@+id/imageCreateClient"
@@ -15,16 +25,16 @@
         android:layout_height="250dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="15dp"
-        android:scaleType="centerCrop"
         android:background="@drawable/border_background"
         android:padding="11dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/df"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0"/>
+        app:layout_constraintVertical_bias="0" />
 
     <Button
         android:id="@+id/btnMakeClient"

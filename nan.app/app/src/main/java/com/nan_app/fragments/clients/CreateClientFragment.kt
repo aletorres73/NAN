@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.ViewModelProvider
@@ -70,6 +71,7 @@ class CreateClientFragment : Fragment() {
 
                 CreateClientViewModel.STATE_INIT -> {
                     binding.btnMakeClient.setOnClickListener {
+                        binding.progressBar.isVisible = true
                         if (!checkInput())
                             viewModel.loadState(CreateClientViewModel.STATE_ERROR_NEW_CLIENT)
                         else {
@@ -115,6 +117,7 @@ class CreateClientFragment : Fragment() {
                         CreateClientFragmentDirections.actionCreateClientFragmentToHomeFragment()
                     findNavController().navigate(action)
                     showToast("Alumno agregado")
+                    binding.progressBar.isVisible = false
                     viewModel.loadState(CreateClientViewModel.STATE_WAIT)
                 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,209 +7,231 @@
     android:orientation="vertical"
     tools:context=".fragments.clients.EditClientFragment">
 
-    <TextView
-        style="@style/title_fragments"
+    <ProgressBar
+        android:id="@+id/edProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/edit_fragment_title" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imageEditedClient"
-            android:layout_width="150dp"
-            android:layout_height="200dp"
-            android:layout_margin="8dp"
-            android:background="@drawable/border_background"
-            android:contentDescription="@string/description_image_edit_fragment"
-            android:padding="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/df" />
+        <TextView
+            style="@style/title_fragments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_fragment_title" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnEditImage"
-                style="@style/style_fragment_edit_boton"
+            <ImageView
+                android:id="@+id/imageEditedClient"
+                android:layout_width="150dp"
+                android:layout_height="200dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/border_background"
+                android:contentDescription="@string/description_image_edit_fragment"
+                android:padding="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/df" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/upload_image_edit_fragment"
-                app:icon="@android:drawable/ic_menu_edit" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnEdDeleteImg"
-                style="@style/style_fragment_edit_boton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/delet_image_edit_fragment"
-                app:icon="@android:drawable/ic_menu_delete" />
+                <Button
+                    android:id="@+id/btnEditImage"
+                    style="@style/style_fragment_edit_boton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/upload_image_edit_fragment"
+                    app:icon="@android:drawable/ic_menu_edit" />
 
-            <Button
-                android:id="@+id/btnDeleteClient"
-                style="@style/style_fragment_edit_boton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/delete_client_fragment_edit"
-                app:icon="@android:drawable/ic_delete" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btnEdDeleteImg"
+                    style="@style/style_fragment_edit_boton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delet_image_edit_fragment"
+                    app:icon="@android:drawable/ic_menu_delete" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.4"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/fragments_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/item_Name" />
-
-            <TextView
-                style="@style/fragments_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/item_LastName" />
-
-            <TextView
-                style="@style/fragments_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/item_Birthday" />
-
-            <TextView
-                style="@style/fragments_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/item_Phone" />
-
-            <TextView
-                style="@style/fragments_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/item_Email" />
-
-            <TextView
-                style="@style/fragments_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/item_PayDay" />
-
-            <TextView
-                style="@style/fragments_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/item_FinishDay" />
-
-            <TextView
-                style="@style/fragments_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/item_Amount" />
-
+                <Button
+                    android:id="@+id/btnDeleteClient"
+                    style="@style/style_fragment_edit_boton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delete_client_fragment_edit"
+                    app:icon="@android:drawable/ic_delete" />
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:layout_weight="0.6"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/edTextName"
-                style="@style/fragments_edit_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/Name"
-                android:inputType="text" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/edTxtLastName"
-                style="@style/fragments_edit_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/LastName"
-                android:inputType="text" />
+                <TextView
+                    style="@style/fragments_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_Name" />
 
-            <EditText
-                android:id="@+id/edTxtBirthday"
-                style="@style/fragments_edit_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:focusable="false"
-                android:hint="@string/Birthday" />
+                <TextView
+                    style="@style/fragments_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_LastName" />
 
-            <EditText
-                android:id="@+id/edTxtPhone"
-                style="@style/fragments_edit_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/Phone" />
+                <TextView
+                    style="@style/fragments_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_Birthday" />
 
-            <EditText
-                android:id="@+id/edTxtEmail"
-                style="@style/fragments_edit_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/Email" />
+                <TextView
+                    style="@style/fragments_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_Phone" />
 
-            <EditText
-                android:id="@+id/edTxtDayPay"
-                style="@style/fragments_edit_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:focusable="false"
-                android:hint="@string/PayDay" />
+                <TextView
+                    style="@style/fragments_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_Email" />
 
-            <EditText
-                android:id="@+id/edtxtFinishDay"
-                style="@style/fragments_edit_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:focusable="false"
-                android:hint="@string/FinishDay" />
+                <TextView
+                    style="@style/fragments_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_PayDay" />
 
-            <EditText
-                android:id="@+id/edTxtAmount"
-                style="@style/fragments_edit_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/AmountClass" />
+                <TextView
+                    style="@style/fragments_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_FinishDay" />
+
+                <TextView
+                    style="@style/fragments_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_Amount" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:layout_weight="0.6"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/edTextName"
+                    style="@style/fragments_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Name"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/edTxtLastName"
+                    style="@style/fragments_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/LastName"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/edTxtBirthday"
+                    style="@style/fragments_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:hint="@string/Birthday" />
+
+                <EditText
+                    android:id="@+id/edTxtPhone"
+                    style="@style/fragments_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Phone" />
+
+                <EditText
+                    android:id="@+id/edTxtEmail"
+                    style="@style/fragments_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Email" />
+
+                <EditText
+                    android:id="@+id/edTxtDayPay"
+                    style="@style/fragments_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:hint="@string/PayDay" />
+
+                <EditText
+                    android:id="@+id/edtxtFinishDay"
+                    style="@style/fragments_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:hint="@string/FinishDay" />
+
+                <EditText
+                    android:id="@+id/edTxtAmount"
+                    style="@style/fragments_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/AmountClass" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btnUpdate"
+            style="@style/style_fragment_edit_boton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/boton_update_fragment_edit"
+            app:icon="?android:attr/textCheckMarkInverse"
+            app:iconGravity="textEnd"
+            app:iconSize="30dp"
+            app:iconTintMode="multiply" />
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnUpdate"
-        style="@style/style_fragment_edit_boton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/boton_update_fragment_edit"
-        app:icon="?android:attr/textCheckMarkInverse"
-        app:iconGravity="textEnd"
-        app:iconSize="30dp"
-        app:iconTintMode="multiply" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

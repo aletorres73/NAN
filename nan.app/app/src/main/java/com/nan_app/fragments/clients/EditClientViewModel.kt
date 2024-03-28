@@ -153,7 +153,6 @@ class EditClientViewModel : ViewModel() {
                 if (editedClient.ImageName != "") if (editedClient.ImageUri != "null") clientSource.updateClientById(
                     id, "imageName", editedClient.ImageName, referenceClient
                 )
-
                 loadState(STATE_DONE_UPDATE_CLIENT)
             } else loadState(STATE_ERROR_UPDATE_CLIENT)
         }
@@ -194,14 +193,13 @@ class EditClientViewModel : ViewModel() {
     fun deleteClient(id: Int, imageName: String) {
         viewModelScope.launch {
             if (clientSource.deleteClient(id)) {
-                if(imageName != "")
+                if (imageName != "")
                     if (clientSource.deleteImage(imageName))
                         loadState(STATE_CLIENT_DELETED)
                     else
                         loadState(STATE_ERROR_IMAGE_DELETE)
                 loadState(STATE_CLIENT_DELETED)
-            }
-            else
+            } else
                 loadState(STATE_ERROR_DELETE_CLIENT)
         }
     }
