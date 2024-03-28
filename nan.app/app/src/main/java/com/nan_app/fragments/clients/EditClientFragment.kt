@@ -58,6 +58,11 @@ class EditClientFragment : Fragment() {
         initUI()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun initUI() {
         super.onStart()
@@ -80,13 +85,12 @@ class EditClientFragment : Fragment() {
                                 vm.loadState(EditClientViewModel.STATE_ERROR_UPDATE_CLIENT)
                         }
                         binding.btnDeleteClient.setOnClickListener {
-                            showDeleteConfirmationDialog(currentClient.id)
+                            showDeleteConfirmationDialog(currentClient.id, currentClient.ImageName)
                         }
 
                         binding.btnEdDeleteImg.setOnClickListener {
-                            if (currentClient.ImageUri == "") {
-                                vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
-                            } else vm.loadState(EditClientViewModel.STATE_DELETE_IMAGE)
+                            if (currentClient.ImageUri == "") vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
+                            else vm.loadState(EditClientViewModel.STATE_BUTTON_DELETE_IMAGE)
                         }
 
                         binding.btnEditImage.setOnClickListener {
@@ -122,7 +126,7 @@ class EditClientFragment : Fragment() {
                     vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
-                EditClientViewModel.STATE_DELETE_IMAGE -> {
+                EditClientViewModel.STATE_BUTTON_DELETE_IMAGE -> {
                     vm.currentClient.observe(viewLifecycleOwner) { currentClient ->
 
                         if (currentClient.ImageUri == "") {
@@ -218,13 +222,13 @@ class EditClientFragment : Fragment() {
         }
     }
 
-    private fun showDeleteConfirmationDialog(id: Int) {
+    private fun showDeleteConfirmationDialog(id: Int, imageName: String) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setTitle("Eliminar cliente")
         alertDialogBuilder.setMessage("¿Deseas eliminar este cliente?")
 
         alertDialogBuilder.setPositiveButton("Sí") { _, _ ->
-            vm.deleteClient(id)
+            vm.deleteClient(id, imageName)
         }
 
         alertDialogBuilder.setNegativeButton("No") { _, _ ->

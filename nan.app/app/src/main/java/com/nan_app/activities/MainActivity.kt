@@ -1,49 +1,64 @@
 package com.nan_app.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.window.OnBackInvokedDispatcher
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.NavController
+import androidx.navigation.NavHost
 import com.nan_app.R
-import com.nan_app.database.FirebaseDataClientSource
-import com.nan_app.fragments.clients.CreateClientViewModel
-import org.koin.java.KoinJavaComponent
+import com.nan_app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-
-    lateinit var bottomBar : BottomNavigationView
-    lateinit var navHostFragment: NavHostFragment
-
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var navHost: NavHost
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        navHost = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHost
+        navController = navHost.navController
         supportActionBar?.hide()
 
-        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
-        bottomBar       = findViewById(R.id.bottom_bar)
 
-        NavigationUI.setupWithNavController(bottomBar,navHostFragment.navController)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        bottomBar.setOnNavigationItemSelectedListener { item ->
+        binding.bottomBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeButton -> {
-                    navHostFragment.navController.navigate(R.id.homeFragment)
+                    navController.navigate(R.id.homeFragment)
                     true
                 }
-                R.id.createClient ->{
-                    navHostFragment.navController.navigate((R.id.createClientFragment))
+
+                R.id.createClient -> {
+                    navController.navigate(R.id.createClientFragment)
                     true
                 }
+
                 else -> false
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        val currentDestinationId = navController.currentDestination?.id
+        if (currentDestinationId == R.id.homeFragment) {
+            if (navController.previousBackStackEntry == null) {
+                super.onBackPressed() // Llama al comportamiento predeterminado si estás en el fragmento de inicio y no hay más elementos en la pila de retroceso
+            } else {
+                finish() // Regresa al fragmento anterior en la pila de retroceso
+            }
+        } else {
+            Toast.makeText(this, "Presione una vez más para salir", Toast.LENGTH_SHORT).show()
+            navController.navigate(R.id.homeFragment) // Navega al fragmento de inicio si no estás ya allí
         }
     }
 

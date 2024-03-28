@@ -26,6 +26,7 @@ class EditClientViewModel : ViewModel() {
         const val STATE_LOAD_NEW_IMAGE = "state_load_new_image"
         const val STATE_GALLERY = "state_galery"
         const val STATE_CAMERA = "state_camera"
+        const val STATE_BUTTON_DELETE_IMAGE = "state_boton_delete_image"
         const val STATE_DELETE_IMAGE = "state_delete_image"
         const val STATE_IMAGE_EMPTY = "state_image_empty"
         const val STATE_DONE_IMAGE_DELETE = "state_done_image_delete"
@@ -62,6 +63,10 @@ class EditClientViewModel : ViewModel() {
 
             STATE_CAMERA -> {
                 viewState.value = STATE_CAMERA
+            }
+
+            STATE_BUTTON_DELETE_IMAGE -> {
+                viewState.value = STATE_BUTTON_DELETE_IMAGE
             }
 
             STATE_DELETE_IMAGE -> {
@@ -149,7 +154,6 @@ class EditClientViewModel : ViewModel() {
                     id, "imageName", editedClient.ImageName, referenceClient
                 )
 
-
                 loadState(STATE_DONE_UPDATE_CLIENT)
             } else loadState(STATE_ERROR_UPDATE_CLIENT)
         }
@@ -187,13 +191,18 @@ class EditClientViewModel : ViewModel() {
         return viewImageName.value.toString()
     }
 
-    fun deleteClient(id: Int) {
+    fun deleteClient(id: Int, imageName: String) {
         viewModelScope.launch {
-            if (clientSource.deleteClient(id))
+            if (clientSource.deleteClient(id)) {
+                if(imageName != "")
+                    if (clientSource.deleteImage(imageName))
+                        loadState(STATE_CLIENT_DELETED)
+                    else
+                        loadState(STATE_ERROR_IMAGE_DELETE)
                 loadState(STATE_CLIENT_DELETED)
+            }
             else
                 loadState(STATE_ERROR_DELETE_CLIENT)
         }
-
     }
 }

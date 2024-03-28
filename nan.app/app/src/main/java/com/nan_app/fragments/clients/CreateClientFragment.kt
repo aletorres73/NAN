@@ -58,6 +58,11 @@ class CreateClientFragment : Fragment() {
         iniUI()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun iniUI() {
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
