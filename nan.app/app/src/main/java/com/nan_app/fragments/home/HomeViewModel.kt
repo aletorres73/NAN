@@ -7,76 +7,60 @@ import com.nan_app.database.FirebaseDataClientSource
 import com.nan_app.entities.Clients
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
-import java.text.FieldPosition
 
 class HomeViewModel : ViewModel() {
 
-    //    var ClientListDb    : MutableLiveData<MutableList<Clients>> = MutableLiveData()
-    var viewState       : MutableLiveData<String> = MutableLiveData()
+    var listClients: MutableLiveData<MutableList<Clients>> = MutableLiveData()
+    var viewState: MutableLiveData<String> = MutableLiveData()
 
     private val clientSource: FirebaseDataClientSource by inject(FirebaseDataClientSource::class.java)
 
-    fun init(){
+    fun init() {
         viewState.value = STATE_INIT
     }
 
-    fun getList(){
+    fun getList() {
         viewModelScope.launch {
             clientSource.clientFb.let { clientSource.loadAllClients() }
-            if(clientSource.clientListFB.isEmpty()){
+            if (clientSource.clientListFB.isEmpty()) {
                 viewState.value = STATE_EMPTY
-            }else{
+            } else {
+                listClients.value = clientSource.clientListFB
                 viewState.value = STATE_LOADING
             }
         }
     }
-    fun loadList() : MutableList<Clients> {
-/*        return if(clientSource.clientListFB.isEmpty())
-            clientSource.clientListFB.toMutableList()
-        else
-            clientSource.clientListFB.sortedBy{it.id}.toMutableList()*/
-        return clientSource.clientListFB
-    }
-    fun refresh(){
+
+    fun refresh() {
         viewState.value = STATE_INIT
     }
-    fun doneState(){
-        viewState.value = STATE_DONE
-    }
 
-    fun deleteClient( position: Int){
-        val client = clientSource.clientListFB
-        viewModelScope.launch {
-            if(clientSource.loadClientById(client[position].id)){
-                if(client[position].ImageName != "" || client[position].ImageName != "null")
-                    clientSource.deleteImage(client[position].ImageName)
-                clientSource.deleteClient(client[position].id)
-                /*                client.removeAt(position)
-                                ClientListDb.value = client*/
-                viewState.value = STATE_DELETE
-            }
-            else viewState.value = STATE_ERROR
-        }
-
-    }
-    fun getCurrentClient(position: Int){
+    fun getCurrentClient(position: Int) {
         clientSource.currentClient = clientSource.clientListFB[position]
     }
 
-    fun updateListeDB(listFiltered: MutableList<Clients>) {
-        clientSource.clientListFB = listFiltered
+    fun searchByName(query: String) {
 
+        val filteredByName = listClients.value!!.filter {
+            it.Name
+                .lowercase()
+                .contains(query)
+        }
+        if (filteredByName.isNotEmpty()) {
+            listClients.value = filteredByName.toMutableList()
+            viewState.value = STATE_LOADING
+        } else
+            listClients.value = clientSource.clientListFB
+        viewState.value = STATE_LOADING
     }
 
     companion object {
-        const val STATE_ERROR   = "error"
-        const val STATE_DONE    = "done"
+        const val STATE_ERROR = "error"
+        const val STATE_DONE = "done"
         const val STATE_LOADING = "loading"
-        const val STATE_EMPTY   = "empty"
-        const val STATE_INIT    = "init"
-        const val STATE_REMOVING= "removing"
-        const val STATE_LAST    = "last"
-        const val STATE_DELETE  = "delete"
+        const val STATE_EMPTY = "empty"
+        const val STATE_INIT = "init"
+        const val STATE_DELETE = "delete"
     }
 
 
