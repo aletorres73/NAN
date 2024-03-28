@@ -23,79 +23,85 @@ class CreateClientViewModel : ViewModel() {
     )
 
     companion object {
-        const val STATE_LOAD_NEW_CLIENT = "STATE_LOAD_NEW_CLIENT"
-        const val STATE_ERROR_NEW_CLIENT = "STATE_ERROR_NEW_CLIENT"
-        const val STATE_DONE_NEW_CLIENT = "STATE_DONE_NEW_CLIENT"
-        const val STATE_LOAD_NEW_IMAGE = "STATE_LOAD_NEW_IMAGE"
-        const val STATE_GALLERY = "STATE_GALLERY"
-        const val STATE_CAMERA = "STATE_CAMERA"
-        const val STATE_DELETE_IMAGE = "STATE_DELETE_IMAGE"
-        const val STATE_IMAGE_EMPTY = "STATE_IMAGE_EMPTY"
-        const val STATE_DONE_IMAGE_DELETE = "STATE_DONE_IMAGE_DELETE"
-        const val STATE_ERROR_IMAGE_DELETE = "STATE_ERROR_IMAGE_DELETE"
-        const val STATE_INIT = "STATE_INIT"
-        const val STATE_SELECT_BIRTHDAY = "STATE_SELECT_BIRTHDAY"
-        const val STATE_SELECT_PAYDAY = "STATE_SELECT_PAYDAY"
-        const val STATE_SELECT_FINISHDAY = "STATE_SELECT_FINISHDAY"
+        const val STATE_LOAD_NEW_CLIENT = "state_load_new_client"
+        const val STATE_ERROR_NEW_CLIENT = "state_error_new_client"
+        const val STATE_DONE_NEW_CLIENT = "state_done_new_client"
+        const val STATE_LOAD_NEW_IMAGE = "state_load_new_image"
+        const val STATE_GALLERY = "state_gallery"
+        const val STATE_CAMERA = "state_camera"
+        const val STATE_DELETE_IMAGE = "state_delete_image"
+        const val STATE_IMAGE_EMPTY = "state_image_empty"
+        const val STATE_DONE_IMAGE_DELETE = "state_done_image_delete"
+        const val STATE_ERROR_IMAGE_DELETE = "state_error_image_delete"
+        const val STATE_INIT = "state_init"
+        const val STATE_SELECT_BIRTHDAY = "state_select_birthday"
+        const val STATE_SELECT_PAYDAY = "state_select_payday"
+        const val STATE_SELECT_FINISHDAY = "state_select_finish_day"
+        const val STATE_WAIT = "state_wait"
     }
 
     fun loadState(state: String) {
         when (state) {
-            "init" -> {
+            STATE_INIT -> {
                 viewState.value = STATE_INIT
             }
 
-            "newClient" -> {
+            STATE_LOAD_NEW_CLIENT -> {
                 viewState.value = STATE_LOAD_NEW_CLIENT
             }
 
-            "errorClientLoad" -> {
+            STATE_ERROR_NEW_CLIENT -> {
                 viewState.value = STATE_ERROR_NEW_CLIENT
             }
 
-            "newClientLoaded" -> {
+            STATE_DONE_NEW_CLIENT -> {
                 viewState.value = STATE_DONE_NEW_CLIENT
             }
 
-            "loadNewImage" -> {
+            STATE_LOAD_NEW_IMAGE -> {
                 viewState.value = STATE_LOAD_NEW_IMAGE
             }
 
-            "openGallery" -> {
+            STATE_GALLERY -> {
                 viewState.value = STATE_GALLERY
             }
 
-            "openCamera" -> {
+            STATE_CAMERA -> {
                 viewState.value = STATE_CAMERA
             }
 
-            "deleteImage" -> {
+            STATE_DELETE_IMAGE -> {
                 viewState.value = STATE_DELETE_IMAGE
             }
 
-            "emptyImage" -> {
+            STATE_IMAGE_EMPTY -> {
                 viewState.value = STATE_IMAGE_EMPTY
             }
 
-            "imageDeleted" -> {
+            STATE_DONE_IMAGE_DELETE -> {
                 viewState.value = STATE_DONE_IMAGE_DELETE
             }
 
-            "errorImageDelete" -> {
+            STATE_ERROR_IMAGE_DELETE -> {
                 viewState.value = STATE_ERROR_IMAGE_DELETE
             }
 
-            "selectBirthday" -> {
+            STATE_SELECT_BIRTHDAY -> {
                 viewState.value = STATE_SELECT_BIRTHDAY
             }
 
-            "selectDayPay" -> {
+            STATE_SELECT_PAYDAY -> {
                 viewState.value = STATE_SELECT_PAYDAY
             }
 
-            "selectFinishDay" -> {
+            STATE_SELECT_FINISHDAY -> {
                 viewState.value = STATE_SELECT_FINISHDAY
             }
+
+            STATE_WAIT -> {
+                viewState.value = STATE_WAIT
+            }
+
         }
 
     }
@@ -103,35 +109,16 @@ class CreateClientViewModel : ViewModel() {
     fun loadNewClient(newClient: Clients) {
         viewModelScope.launch {
             if (clientSource.insertClient(newClient))
-                loadState("newClientLoaded")
+                loadState(STATE_DONE_NEW_CLIENT)
             else
-                loadState("errorClientLoad")
+                loadState(STATE_ERROR_NEW_CLIENT)
         }
     }
-
-    fun uploadImage(data: Uri) {
-        clientSource.deleteImageName = data.lastPathSegment.toString()
-        viewImageName.value = data.lastPathSegment.toString()
-
-        viewModelScope.launch {
-            viewUrl.value = clientSource.loadImageUri(data)
-        }
-    }
-
     fun getImageName(): String {
         return if (viewImageName.value != null)
             viewImageName.value!!
         else
             ""
-    }
-
-    fun deleteImage(imageName: String) {
-        viewModelScope.launch {
-            if (clientSource.deleteImage(imageName))
-                loadState("imageDeleted")
-            else
-                loadState("errorImageDelete")
-        }
     }
 
     fun saveImage(image: Uri) {
@@ -161,7 +148,7 @@ class CreateClientViewModel : ViewModel() {
             viewImageName.value = ""
             viewUrl.value = ""
 
-            loadState("newClient")
+            loadState(STATE_LOAD_NEW_CLIENT)
 
         }
     }

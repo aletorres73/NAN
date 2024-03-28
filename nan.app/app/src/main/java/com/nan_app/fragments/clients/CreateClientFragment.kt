@@ -8,10 +8,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,14 +17,18 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.createViewModelLazy
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.nan_app.databinding.FragmentCreateClientBinding
 import com.nan_app.entities.Clients
 
 class CreateClientFragment : Fragment() {
 
-    private  var _binding: FragmentCreateClientBinding? = null
+    private var _binding: FragmentCreateClientBinding? = null
     private val binding get() = _binding!!
+
     companion object {
         private const val REQUEST_GALLERY = 1001
         private const val REQUEST_CAMERA = 1002
@@ -34,9 +36,7 @@ class CreateClientFragment : Fragment() {
     }
 
     private var newClient: Clients = Clients()
-
     private lateinit var viewModel: CreateClientViewModel
-
     private var imageUri: Uri? = null
 
     override fun onCreateView(
@@ -46,31 +46,34 @@ class CreateClientFragment : Fragment() {
         _binding = FragmentCreateClientBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity())[CreateClientViewModel::class.java]
 
-        viewModel.loadState("init")
+        viewModel.loadState(CreateClientViewModel.STATE_INIT)
 
         return binding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        iniUI()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun iniUI() {
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
 
                 CreateClientViewModel.STATE_INIT -> {
                     binding.btnMakeClient.setOnClickListener {
                         if (!checkInput())
-                            viewModel.loadState("errorClientLoad")
+                            viewModel.loadState(CreateClientViewModel.STATE_ERROR_NEW_CLIENT)
                         else {
+                            binding.btnMakeClient.isClickable = false
                             getInputs()
-                            if (newClient.ImageName != ""){
-                                binding.btnMakeClient.isClickable = false
-                                viewModel.loadState("loadNewImage")
-                            }
-                            else{
-                                binding.btnMakeClient.isClickable = false
-                                viewModel.loadState("newClient")
+                            if (newClient.ImageName != "") {
+                                viewModel.loadState(CreateClientViewModel.STATE_LOAD_NEW_IMAGE)
+                            } else {
+                                viewModel.loadState(CreateClientViewModel.STATE_LOAD_NEW_CLIENT)
                             }
                         }
                     }
@@ -78,13 +81,13 @@ class CreateClientFragment : Fragment() {
                         showOptionsDialog()
                     }
                     binding.editTextBirthday.setOnClickListener {
-                        viewModel.loadState("selectBirthday")
+                        viewModel.loadState(CreateClientViewModel.STATE_SELECT_BIRTHDAY)
                     }
                     binding.editTextDayPay.setOnClickListener {
-                        viewModel.loadState("selectDayPay")
+                        viewModel.loadState(CreateClientViewModel.STATE_SELECT_PAYDAY)
                     }
                     binding.editTextFinishDay.setOnClickListener {
-                        viewModel.loadState("selectFinishDay")
+                        viewModel.loadState(CreateClientViewModel.STATE_SELECT_FINISHDAY)
                     }
                 }
 
@@ -94,12 +97,12 @@ class CreateClientFragment : Fragment() {
 
                 CreateClientViewModel.STATE_LOAD_NEW_IMAGE -> {
                     viewModel.loadImage(newClient)
-                    viewModel.loadState("init")
+                    viewModel.loadState(CreateClientViewModel.STATE_WAIT)
                 }
 
                 CreateClientViewModel.STATE_ERROR_NEW_CLIENT -> {
                     showToast("No se pudo cargar alumno nuevo")
-                    viewModel.loadState("init")
+                    viewModel.loadState(CreateClientViewModel.STATE_WAIT)
                 }
 
                 CreateClientViewModel.STATE_DONE_NEW_CLIENT -> {
@@ -107,17 +110,17 @@ class CreateClientFragment : Fragment() {
                         CreateClientFragmentDirections.actionCreateClientFragmentToHomeFragment()
                     findNavController().navigate(action)
                     showToast("Alumno agregado")
-                    viewModel.loadState("init")
+                    viewModel.loadState(CreateClientViewModel.STATE_WAIT)
                 }
 
                 CreateClientViewModel.STATE_GALLERY -> {
                     openGallery()
-                    viewModel.loadState("init")
+                    viewModel.loadState(CreateClientViewModel.STATE_WAIT)
                 }
 
                 CreateClientViewModel.STATE_CAMERA -> {
                     openCamera()
-                    viewModel.loadState("init")
+                    viewModel.loadState(CreateClientViewModel.STATE_WAIT)
                 }
 
                 CreateClientViewModel.STATE_SELECT_BIRTHDAY -> {
@@ -152,6 +155,8 @@ class CreateClientFragment : Fragment() {
                     }
                     datePicker.show(parentFragmentManager, "datePicker")
                 }
+
+                CreateClientViewModel.STATE_WAIT -> {}
             }
         }
     }
@@ -338,8 +343,8 @@ class CreateClientFragment : Fragment() {
         builder.setTitle("Selecciona una opción")
         builder.setItems(options) { dialog, which ->
             when (which) {
-                0 -> viewModel.loadState("openGallery")
-                1 -> viewModel.loadState("openCamera")
+                0 -> viewModel.loadState(CreateClientViewModel.STATE_GALLERY)
+                1 -> viewModel.loadState(CreateClientViewModel.STATE_CAMERA)
             }
         }
         builder.show()
