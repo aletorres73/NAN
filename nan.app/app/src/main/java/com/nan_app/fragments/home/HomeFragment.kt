@@ -18,8 +18,8 @@ import androidx.appcompat.widget.SearchView
 
 class HomeFragment : Fragment() {
 
-    private  var _binding: FragmentHomeBinding? = null
-    private val  binding get() = _binding!!
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     private lateinit var adapter: ClientAdapter
 
     private lateinit var viewModel: HomeViewModel
@@ -40,10 +40,15 @@ class HomeFragment : Fragment() {
             viewModel.refresh()
             binding.swipeRefreshLayout.isRefreshing = false
         }
-        ui()
-
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        ui()
+    }
+
     private fun ui() {
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
