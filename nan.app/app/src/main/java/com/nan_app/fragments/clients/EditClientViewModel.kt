@@ -12,9 +12,11 @@ import org.koin.java.KoinJavaComponent
 class EditClientViewModel : ViewModel() {
 
     var viewState: MutableLiveData<String> = MutableLiveData()
+    var currentClient: MutableLiveData<Clients> = MutableLiveData()
+
     private var viewUrl: MutableLiveData<String> = MutableLiveData()
     private var viewImageName: MutableLiveData<String> = MutableLiveData()
-    private var viewImageuri: MutableLiveData<Uri> = MutableLiveData()
+    private var viewImageUrl: MutableLiveData<Uri> = MutableLiveData()
 
 
     companion object {
@@ -32,7 +34,7 @@ class EditClientViewModel : ViewModel() {
         const val STATE_SELECT_BIRTHDAY = "state_select_birthday"
         const val STATE_SELECT_PAYDAY = "state_select_payday"
         const val STATE_SELECT_FINISHDAY = "state_select_finishday"
-        const val STATE_ERROR_DELETE_CLIENT= "state_error_delete_client"
+        const val STATE_ERROR_DELETE_CLIENT = "state_error_delete_client"
         const val STATE_CLIENT_DELETED = "state_client_deleted"
     }
 
@@ -90,11 +92,11 @@ class EditClientViewModel : ViewModel() {
                 viewState.value = STATE_SELECT_FINISHDAY
             }
 
-            STATE_CLIENT_DELETED->{
+            STATE_CLIENT_DELETED -> {
                 viewState.value = STATE_CLIENT_DELETED
             }
 
-            STATE_ERROR_DELETE_CLIENT->{
+            STATE_ERROR_DELETE_CLIENT -> {
                 viewState.value = STATE_ERROR_DELETE_CLIENT
             }
 
@@ -105,8 +107,8 @@ class EditClientViewModel : ViewModel() {
         FirebaseDataClientSource::class.java
     )
 
-    fun getClient(): Clients {
-        return clientSource.currentClient
+    fun getClient() {
+        currentClient.value = clientSource.currentClient
     }
 
     fun updatedClient(editedClient: Clients, id: Int) {
@@ -137,8 +139,8 @@ class EditClientViewModel : ViewModel() {
                 if (editedClient.AmountClass != "") clientSource.updateClientById(
                     id, "amountClass", editedClient.AmountClass, referenceClient
                 )
-                if (editedClient.ImageUri != "") if (viewImageuri.value != null) {
-                    viewUrl.value = clientSource.loadImageUri(viewImageuri.value!!)
+                if (editedClient.ImageUri != "") if (viewImageUrl.value != null) {
+                    viewUrl.value = clientSource.loadImageUri(viewImageUrl.value!!)
                     clientSource.updateClientById(
                         id, "imageUri", viewUrl.value!!, referenceClient
                     )
@@ -172,13 +174,13 @@ class EditClientViewModel : ViewModel() {
 
     fun saveImage(image: Uri) {
         clientSource.deleteImageName = image.lastPathSegment.toString()
-        viewImageuri.value = image
+        viewImageUrl.value = image
         viewImageName.value = image.lastPathSegment.toString()
 
     }
 
     fun getUri(): String {
-        return viewImageuri.value.toString()
+        return viewImageUrl.value.toString()
     }
 
     fun getImageName(): String {
@@ -187,8 +189,8 @@ class EditClientViewModel : ViewModel() {
 
     fun deleteClient(id: Int) {
         viewModelScope.launch {
-            if(clientSource.deleteClient(id))
-               loadState(STATE_CLIENT_DELETED)
+            if (clientSource.deleteClient(id))
+                loadState(STATE_CLIENT_DELETED)
             else
                 loadState(STATE_ERROR_DELETE_CLIENT)
         }

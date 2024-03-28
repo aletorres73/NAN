@@ -8,19 +8,20 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.*
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.nan_app.R
 import com.nan_app.databinding.FragmentEditClientBinding
 import com.nan_app.entities.Clients
 
@@ -37,12 +38,6 @@ class EditClientFragment : Fragment() {
 
     }
 
-    private var currentClient: Clients = Clients()
-
-    private val imageDefect =
-        "https://png.pngtree.com/png-clipart/20230824/original/pngtree-upload-users-user-arrow-tray-picture-image_8325109.png"
-
-    //la imagen por defecto quizá debería estar cargada en el drive.
     private var imageUri: Uri? = null
 
     override fun onCreateView(
@@ -51,53 +46,55 @@ class EditClientFragment : Fragment() {
         _binding = FragmentEditClientBinding.inflate(layoutInflater)
         vm = ViewModelProvider(this)[EditClientViewModel::class.java]
 
-        loadImage(imageDefect)
-
-        currentClient = vm.getClient()
-        loadClientInfo(currentClient)
-
-        if (currentClient.ImageUri != "") if (currentClient.ImageUri != "null") loadImage(
-            currentClient.ImageUri
-        )
-        else loadImage(imageDefect)
+        loadClientInfo()
 
         return binding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        initUI()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun initUI() {
+        super.onStart()
         vm.loadState(EditClientViewModel.STATE_INIT)
 
         vm.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
 
                 EditClientViewModel.STATE_INIT -> {
-                    binding.btnUpdate.setOnClickListener {
-                        if (!checkInput()) {
-                            binding.btnUpdate.isClickable = false
-                            vm.updatedClient(
-                                getEditedClient(currentClient),
-                                currentClient.id
-                            )
-                        } else
-                            vm.loadState(EditClientViewModel.STATE_ERROR_UPDATE_CLIENT)
-                    }
-                    binding.btnDeleteClient.setOnClickListener {
-                        showDeleteConfirmationDialog(currentClient.id)
-                    }
+                    vm.currentClient.observe(viewLifecycleOwner) { currentClient ->
 
-                    binding.btnEdDeleteImg.setOnClickListener {
-                        if (currentClient.ImageUri == "") {
-                            vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
-                        } else vm.loadState(EditClientViewModel.STATE_DELETE_IMAGE)
-                    }
+                        binding.btnUpdate.setOnClickListener {
+                            if (!checkInput()) {
+                                binding.btnUpdate.isClickable = false
+                                vm.updatedClient(
+                                    getEditedClient(currentClient),
+                                    currentClient.id
+                                )
+                            } else
+                                vm.loadState(EditClientViewModel.STATE_ERROR_UPDATE_CLIENT)
+                        }
+                        binding.btnDeleteClient.setOnClickListener {
+                            showDeleteConfirmationDialog(currentClient.id)
+                        }
 
-                    binding.btnEditImage.setOnClickListener {
-                        if (currentClient.ImageName == "") showOptionsDialog()
-                        if (currentClient.ImageName == "null") showOptionsDialog()
-                        else vm.loadState(EditClientViewModel.STATE_INIT)
+                        binding.btnEdDeleteImg.setOnClickListener {
+                            if (currentClient.ImageUri == "") {
+                                vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
+                            } else vm.loadState(EditClientViewModel.STATE_DELETE_IMAGE)
+                        }
+
+                        binding.btnEditImage.setOnClickListener {
+                            if (currentClient.ImageName == "") showOptionsDialog()
+                            if (currentClient.ImageName == "null") showOptionsDialog()
+                            else vm.loadState(EditClientViewModel.STATE_INIT)
+                        }
+
                     }
 
                     binding.edTxtBirthday.setOnClickListener {
@@ -126,26 +123,38 @@ class EditClientFragment : Fragment() {
                 }
 
                 EditClientViewModel.STATE_DELETE_IMAGE -> {
-                    if (currentClient.ImageUri == "") {
-                        vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
-                        vm.loadState(EditClientViewModel.STATE_INIT)
+                    vm.currentClient.observe(viewLifecycleOwner) { currentClient ->
 
-                    } else {
-                        vm.deleteImage(currentClient.ImageName)
-                        currentClient.ImageName = ""
-                        vm.loadState(EditClientViewModel.STATE_INIT)
+                        if (currentClient.ImageUri == "") {
+                            vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
+                            vm.loadState(EditClientViewModel.STATE_INIT)
+
+                        } else {
+                            vm.deleteImage(currentClient.ImageName)
+                            currentClient.ImageName = ""
+                            vm.loadState(EditClientViewModel.STATE_INIT)
+                        }
                     }
+
                 }
 
                 EditClientViewModel.STATE_DONE_IMAGE_DELETE -> {
-                    currentClient.ImageUri = ""
-                    currentClient.ImageName = ""
-                    loadImage(imageDefect)
-                    showToast("Imagen borrada")
+                    vm.currentClient.observe(viewLifecycleOwner) { currentClient ->
 
-                    vm.updateClientByImage(currentClient, currentClient.id)
+                        currentClient.ImageUri = ""
+                        currentClient.ImageName = ""
+                        binding.imageEditedClient.setImageDrawable(
+                            getDrawable(
+                                binding.imageEditedClient.context,
+                                R.drawable.df
+                            )
+                        )
+                        showToast("Imagen borrada")
 
-                    vm.loadState(EditClientViewModel.STATE_INIT)
+                        vm.updateClientByImage(currentClient, currentClient.id)
+                        vm.loadState(EditClientViewModel.STATE_INIT)
+
+                    }
                 }
 
                 EditClientViewModel.STATE_ERROR_IMAGE_DELETE -> {
@@ -195,13 +204,13 @@ class EditClientFragment : Fragment() {
                     datePicker.show(parentFragmentManager, DATE_PICKER)
                 }
 
-                EditClientViewModel.STATE_CLIENT_DELETED->{
+                EditClientViewModel.STATE_CLIENT_DELETED -> {
                     showToast("Alumno eliminado")
                     findNavController().popBackStack()
                     vm.loadState(EditClientViewModel.STATE_INIT)
                 }
 
-                EditClientViewModel.STATE_ERROR_DELETE_CLIENT->{
+                EditClientViewModel.STATE_ERROR_DELETE_CLIENT -> {
                     showToast("Error al eliminar alumno")
                     vm.loadState(EditClientViewModel.STATE_INIT)
                 }
@@ -252,15 +261,23 @@ class EditClientFragment : Fragment() {
         binding.edTxtBirthday.setText("$day/$month/$year")
     }
 
-    private fun loadClientInfo(currentClient: Clients) {
-        if (currentClient.Name != "") binding.edTextName.hint = currentClient.Name
-        if (currentClient.LastName != "") binding.edTxtLastName.hint = currentClient.LastName
-        if (currentClient.Birthday != "") binding.edTxtBirthday.hint = currentClient.Birthday
-        if (currentClient.Phone != "") binding.edTxtPhone.hint = currentClient.Phone
-        if (currentClient.Email != "") binding.edTxtEmail.hint = currentClient.Email
-        if (currentClient.PayDay != "") binding.edTxtDayPay.hint = currentClient.PayDay
-        if (currentClient.FinishDay != "") binding.edtxtFinishDay.hint = currentClient.FinishDay
-        if (currentClient.AmountClass != "") binding.edTxtAmount.hint = currentClient.AmountClass
+    private fun loadClientInfo() {
+        vm.getClient()
+        vm.currentClient.observe(viewLifecycleOwner) {
+
+            if (it.Name != "") binding.edTextName.hint = it.Name
+            if (it.LastName != "") binding.edTxtLastName.hint = it.LastName
+            if (it.Birthday != "") binding.edTxtBirthday.hint = it.Birthday
+            if (it.Phone != "") binding.edTxtPhone.hint = it.Phone
+            if (it.Email != "") binding.edTxtEmail.hint = it.Email
+            if (it.PayDay != "") binding.edTxtDayPay.hint = it.PayDay
+            if (it.FinishDay != "") binding.edtxtFinishDay.hint = it.FinishDay
+            if (it.AmountClass != "") binding.edTxtAmount.hint = it.AmountClass
+            if (it.ImageUri != "")
+                loadImage(it.ImageUri)
+
+        }
+
 
     }
 
@@ -378,16 +395,16 @@ class EditClientFragment : Fragment() {
     }
 
     private fun arePermissionsGrantedCamera(): Boolean {
-        return ContextCompat.checkSelfPermission(
+        return checkSelfPermission(
             requireContext(), Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(
+        ) == PackageManager.PERMISSION_DENIED || checkSelfPermission(
             requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_DENIED
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun arePermissionsGrantedGallery(): Boolean {
-        return ContextCompat.checkSelfPermission(
+        return checkSelfPermission(
             requireContext(), Manifest.permission.READ_MEDIA_IMAGES
         ) == PackageManager.PERMISSION_DENIED
     }
