@@ -22,7 +22,7 @@
     <string name="item_PayDay">Fecha de pago:</string>
     <string name="item_FinishDay">Fin de período:</string>
     <string name="item_State">Estado:</string>
-    <string name="item_Amount">Cantidad de clases:</string>
+    <string name="item_Amount">Cantidad clases:</string>
 
     <string name="Id">Id alumno</string>
     <string name="Name">Nombre</string>

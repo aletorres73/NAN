@@ -88,7 +88,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.4"
+                android:layout_weight="0.35"
                 android:orientation="vertical">
 
                 <TextView
@@ -146,7 +146,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="8dp"
-                android:layout_weight="0.6"
+                android:layout_weight="0.65"
                 android:orientation="vertical">
 
                 <EditText

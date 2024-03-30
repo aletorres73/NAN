@@ -13,7 +13,7 @@
         <item name="android:textSize">15sp</item>
         <item name="android:layout_marginHorizontal">4dp</item>
         <item name="android:textStyle">bold</item>
-<!--        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>-->
+        <!--        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>-->
     </style>
 
     <style name="item_text_details">
@@ -30,16 +30,16 @@
     </style>
 
     <style name="fragments_text_style">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginTop">21dp</item>
         <item name="android:textAlignment">textEnd</item>
     </style>
 
     <style name="fragments_edit_text_style">
-        <item name="android:textSize">14sp</item>
-        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_marginTop">1dp</item>
 
     </style>
 
@@ -47,9 +47,18 @@
         <item name="android:layout_marginHorizontal">8dp</item>
         <item name="android:layout_marginVertical">10dp</item>
         <item name="android:backgroundTint">@color/color_bottons</item>
-
-
     </style>
 
+    <style name="edText_create_fragment">
+        <item name="layout_constraintEnd_toStartOf">@id/imageCreateClient</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name= "android:layout_marginTop">10dp</item>
+
+    </style>
 
 </resources>

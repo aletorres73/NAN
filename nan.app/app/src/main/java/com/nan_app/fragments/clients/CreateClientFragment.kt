@@ -75,7 +75,7 @@ class CreateClientFragment : Fragment() {
                         if (!checkInput())
                             viewModel.loadState(CreateClientViewModel.STATE_ERROR_NEW_CLIENT)
                         else {
-                            binding.btnMakeClient.isClickable = false
+//                            binding.btnMakeClient.isClickable = false
                             getInputs()
                             if (newClient.ImageName != "") {
                                 viewModel.loadState(CreateClientViewModel.STATE_LOAD_NEW_IMAGE)
@@ -108,7 +108,8 @@ class CreateClientFragment : Fragment() {
                 }
 
                 CreateClientViewModel.STATE_ERROR_NEW_CLIENT -> {
-                    showToast("No se pudo cargar alumno nuevo")
+                    binding.progressBar.isVisible = false
+//                    showToast("No se pudo cargar alumno nuevo")
                     viewModel.loadState(CreateClientViewModel.STATE_WAIT)
                 }
 
