@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.clients.CreateClientFragment"
+    tools:context=".fragments.clients.create.CreateClientFragment"
     tools:layout_editor_absoluteX="-163dp"
     tools:layout_editor_absoluteY="0dp">
 

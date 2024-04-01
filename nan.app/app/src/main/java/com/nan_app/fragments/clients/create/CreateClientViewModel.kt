@@ -1,4 +1,4 @@
-package com.nan_app.fragments.clients
+package com.nan_app.fragments.clients.create
 
 
 import android.net.Uri

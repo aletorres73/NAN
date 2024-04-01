@@ -14,4 +14,11 @@
         android:orderInCategory="100"
         android:title="Nuevo"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/calendarClient"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:orderInCategory="100"
+        android:title="Calendario"
+        app:showAsAction="never"
+        />
 </menu>

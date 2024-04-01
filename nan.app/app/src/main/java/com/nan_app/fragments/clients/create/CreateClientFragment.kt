@@ -1,4 +1,4 @@
-package com.nan_app.fragments.clients
+package com.nan_app.fragments.clients.create
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -19,11 +19,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.nan_app.databinding.FragmentCreateClientBinding
 import com.nan_app.entities.Clients
+import com.nan_app.fragments.datePicker.DatePickerFragment
 
 class CreateClientFragment : Fragment() {
 

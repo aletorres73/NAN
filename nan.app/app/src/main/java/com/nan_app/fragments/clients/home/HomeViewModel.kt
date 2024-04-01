@@ -1,4 +1,4 @@
-package com.nan_app.fragments.home
+package com.nan_app.fragments.clients.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

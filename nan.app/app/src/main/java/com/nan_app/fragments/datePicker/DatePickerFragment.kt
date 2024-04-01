@@ -1,4 +1,4 @@
-package com.nan_app.fragments.clients
+package com.nan_app.fragments.datePicker
 
 import android.app.DatePickerDialog
 import android.app.Dialog

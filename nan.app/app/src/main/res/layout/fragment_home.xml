@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#DDD0EA"
     android:orientation="vertical"
-    tools:context=".fragments.home.HomeFragment">
+    tools:context=".fragments.clients.home.HomeFragment">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"

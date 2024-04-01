@@ -1,4 +1,4 @@
-package com.nan_app.fragments.clients
+package com.nan_app.fragments.clients.edit
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
@@ -144,15 +144,23 @@ class EditClientViewModel : ViewModel() {
                 if (editedClient.AmountClass != "") clientSource.updateClientById(
                     id, "amountClass", editedClient.AmountClass, referenceClient
                 )
-                if (editedClient.ImageUri != "") if (viewImageUrl.value != null) {
-                    viewUrl.value = clientSource.loadImageUri(viewImageUrl.value!!)
-                    clientSource.updateClientById(
-                        id, "imageUri", viewUrl.value!!, referenceClient
-                    )
-                }
-                if (editedClient.ImageName != "") if (editedClient.ImageUri != "null") clientSource.updateClientById(
-                    id, "imageName", editedClient.ImageName, referenceClient
-                )
+                if (editedClient.ImageUri != "null") {
+                    if (viewImageUrl.value != null) {
+                        viewUrl.value = clientSource.loadImageUri(viewImageUrl.value!!)
+                        clientSource.updateClientById(
+                            id, "imageUri", viewUrl.value!!, referenceClient
+                        )
+                    }
+                } else
+                    clientSource.updateClientById(id, "imageUri", "", referenceClient)
+
+                if (editedClient.ImageName != "")
+                    if (editedClient.ImageUri != "null")
+                        clientSource.updateClientById(
+                            id, "imageName", editedClient.ImageName, referenceClient
+                        )
+                    else
+                        clientSource.updateClientById(id, "imageName", "", referenceClient)
                 loadState(STATE_DONE_UPDATE_CLIENT)
             } else loadState(STATE_ERROR_UPDATE_CLIENT)
         }
@@ -170,8 +178,13 @@ class EditClientViewModel : ViewModel() {
 
     fun deleteImage(imageName: String) {
         viewModelScope.launch {
-            if (clientSource.deleteImage(imageName)) loadState(STATE_DONE_IMAGE_DELETE)
-            else loadState(STATE_ERROR_IMAGE_DELETE)
+            if (clientSource.deleteImage(imageName))
+                loadState(STATE_DONE_IMAGE_DELETE)
+            else {
+                viewImageName.value = ""
+                viewUrl.value = ""
+                loadState(STATE_ERROR_IMAGE_DELETE)
+            }
         }
     }
 

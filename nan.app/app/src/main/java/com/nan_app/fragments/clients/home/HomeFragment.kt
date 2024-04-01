@@ -1,4 +1,4 @@
-package com.nan_app.fragments.home
+package com.nan_app.fragments.clients.home
 
 import android.os.Bundle
 import android.view.LayoutInflater

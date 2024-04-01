@@ -36,6 +36,10 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.createClientFragment)
                     true
                 }
+                R.id.calendarClient->{
+                    navController.navigate(R.id.calendarFragment)
+                    true
+                }
 
                 else -> false
             }

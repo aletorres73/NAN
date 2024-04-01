@@ -6,7 +6,7 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.nan_app.fragments.home.HomeFragment"
+        android:name="com.nan_app.fragments.clients.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/createClientFragment"
-        android:name="com.nan_app.fragments.clients.CreateClientFragment"
+        android:name="com.nan_app.fragments.clients.create.CreateClientFragment"
         android:label="fragment_create_client"
         tools:layout="@layout/fragment_create_client">
         <action
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/editClientFragment"
-        android:name="com.nan_app.fragments.clients.EditClientFragment"
+        android:name="com.nan_app.fragments.clients.edit.EditClientFragment"
         android:label="fragment_edit_client"
         tools:layout="@layout/fragment_edit_client">
         <action
@@ -42,4 +42,10 @@
             app:exitAnim="@android:anim/fade_out"
             app:popUpTo="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.nan_app.fragments.calendar.CalendarFragment"
+        android:label="fragment_calendar"
+        tools:layout="@layout/fragment_calendar" />
+
 </navigation>
