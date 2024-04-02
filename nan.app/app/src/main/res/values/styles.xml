@@ -46,7 +46,7 @@
     <style name="style_fragment_edit_boton">
         <item name="android:layout_marginHorizontal">8dp</item>
         <item name="android:layout_marginVertical">10dp</item>
-        <item name="android:backgroundTint">@color/color_bottons</item>
+        <item name="android:backgroundTint">@color/color_buttons</item>
     </style>
 
     <style name="edText_create_fragment">
@@ -58,6 +58,35 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name= "android:layout_marginTop">10dp</item>
+
+    </style>
+
+    <style name="text_view_calendar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginEnd">16dp</item>
+
+    </style>
+
+    <style name="edit_text_view_calendar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginTop">4dp</item>
+
+    </style>
+
+    <style name="calendar_dialog_title">
+        <item name="android:layout_marginVertical">8dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
 
     </style>
 

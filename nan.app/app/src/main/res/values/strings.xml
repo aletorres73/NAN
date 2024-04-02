@@ -47,4 +47,23 @@
     <string name="delete_client_fragment_edit">Eliminar alumno</string>
     <string name="boton_update_fragment_edit">Listo</string>
 
+    <!--    calendar view-->
+    <string name="bed1">Cama 1:</string>
+    <string name="bed2">Cama 2:</string>
+    <string name="bed3">Cama 3:</string>
+    <string name="bed4">Cama 4:</string>
+    <string name="bed5">Cama 5:</string>
+<!--    calendar dialog-->
+    <string name="dialog_bed1">Cama 1</string>
+    <string name="dialog_bed2">Cama 2</string>
+    <string name="dialog_bed3">Cama 3</string>
+    <string name="dialog_bed4">Cama 4</string>
+    <string name="dialog_bed5">Cama 5</string>
+
+    <string name="select_client_dialog">Seleccionar alumno</string>
+    <string name="select_bed_dialog">Seleccionar espacio</string>
+    <string name="select_time_dialog">Seleccionar horario</string>
+
+    <string name="button_add_dialog">Agregar</string>
+    <string name="button_remove_dialog">Eliminar</string>
 </resources>

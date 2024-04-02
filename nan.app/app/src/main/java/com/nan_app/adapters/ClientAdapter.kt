@@ -12,14 +12,14 @@ import com.nan_app.entities.Clients
 
 class ClientAdapter(
     private var clientList: MutableList<Clients>,
-    private var onItemeSelected: (Int) ->Unit
+    private var onItemsSelected: (Int) ->Unit
 ) : RecyclerView.Adapter<ClientAdapter.ClientHolder>() {
 
     class ClientHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private var binding = ItemClientBinding.bind(view)
 
-        fun render (client: Clients, onItemeSelected: (Int) -> Unit){
+        fun render (client: Clients, onItemSelected: (Int) -> Unit){
             binding.txtId.text = client.id.toString()
             binding.txtName.text = client.Name
             binding.txtLastName.text= client.LastName
@@ -30,7 +30,7 @@ class ClientAdapter(
             setBirthday(client.Birthday)
             setImageClient(client.ImageUri)
 
-            itemView.setOnClickListener { onItemeSelected(layoutPosition) }
+            itemView.setOnClickListener { onItemSelected(layoutPosition) }
         }
 
         private fun setImageClient(uri: String) {
@@ -76,7 +76,7 @@ class ClientAdapter(
     }
 
     override fun onBindViewHolder(holder: ClientHolder, position: Int) {
-        holder.render(clientList[position], onItemeSelected)
+        holder.render(clientList[position], onItemsSelected)
     }
 
     fun updateList(listClient: MutableList<Clients>) {

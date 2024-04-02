@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="22dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/itemTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Horario" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/text_view_calendar"
+                    android:text="@string/bed1" />
+
+                <TextView
+                    style="@style/text_view_calendar"
+                    android:text="@string/bed2" />
+
+                <TextView
+                    style="@style/text_view_calendar"
+                    android:text="@string/bed3" />
+
+                <TextView
+                    style="@style/text_view_calendar"
+                    android:text="@string/bed4" />
+
+                <TextView
+                    style="@style/text_view_calendar"
+                    android:text="@string/bed5"
+                    android:layout_marginBottom="8dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_bed1"
+                    style="@style/edit_text_view_calendar"
+                    tools:hint="Cama" />
+
+                <TextView
+                    android:id="@+id/text_bed2"
+                    style="@style/edit_text_view_calendar"
+                    tools:hint="Cama" />
+
+                <TextView
+                    android:id="@+id/text_bed3"
+                    style="@style/edit_text_view_calendar"
+                    tools:hint="Cama" />
+
+                <TextView
+                    android:id="@+id/text_bed4"
+                    style="@style/edit_text_view_calendar"
+                    tools:hint="Cama" />
+
+                <TextView
+                    android:id="@+id/text_bed5"
+                    style="@style/edit_text_view_calendar"
+                    tools:hint="Cama" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

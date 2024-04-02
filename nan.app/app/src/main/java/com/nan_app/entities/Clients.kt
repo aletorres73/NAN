@@ -1,6 +1,7 @@
 package com.nan_app.entities
 
 import android.provider.ContactsContract.CommonDataKinds.Phone
+import java.util.Dictionary
 
 class Clients() {
 
@@ -16,6 +17,7 @@ class Clients() {
     var Email       : String  =""
     var Phone       : String  =""
     var ImageName   : String  =""
+    var dates       = mutableMapOf<String,String>()
     constructor (
         id         : Int,
         Name       : String,
@@ -43,5 +45,6 @@ class Clients() {
         this.Email       = Email
         this.Phone       = Phone
         this.ImageName   = ImageName
+        this.dates       = mutableMapOf("" to "")
     }
 }
