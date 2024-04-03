@@ -1,6 +1,7 @@
 package com.nan_app.fragments.clients.create
 
 import android.Manifest
+import android.R
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
@@ -13,6 +14,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -191,6 +193,9 @@ class CreateClientFragment : Fragment() {
     }
 
     private fun getInputs() {
+
+        val selectedString = binding.spinnerAmount.selectedItem
+
         newClient.id = binding.editTextId.text.toString().toInt()
         newClient.Name = binding.editTextName.text.toString()
         newClient.LastName = binding.editTextLastName.text.toString()
@@ -199,7 +204,7 @@ class CreateClientFragment : Fragment() {
         newClient.Phone = binding.editTextPhone.text.toString()
         newClient.PayDay = binding.editTextDayPay.text.toString()
         newClient.FinishDay = binding.editTextFinishDay.text.toString()
-        newClient.AmountClass = binding.editTextAmount.text.toString()
+        newClient.AmountClass = selectedString.toString()
         newClient.ImageName = viewModel.getImageName()
 
     }

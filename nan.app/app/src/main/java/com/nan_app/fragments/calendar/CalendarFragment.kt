@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -105,9 +106,10 @@ class CalendarFragment : Fragment() {
             val time: String = getTime(position)
             val day = dayOfWeekStr
 
-            viewModel.setClientOnCalendar(clientId, time, day)
-            viewModel.loadState(CalendarViewModel.STATE_WAIT)
-
+            if(viewModel.setClientOnCalendar(clientId, time, day))
+                viewModel.loadState(CalendarViewModel.STATE_WAIT)
+            else
+                Toast.makeText(dialog.context, "Se excede en número de clases asignadas", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
     }

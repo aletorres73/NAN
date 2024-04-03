@@ -55,19 +55,35 @@ class CalendarViewModel : ViewModel() {
         return clientSource.clientListFB[position].id
     }
 
-    fun setClientOnCalendar(clientId: Int, time: String, day: String) {
+    fun setClientOnCalendar(clientId: Int, time: String, day: String): Boolean {
 
         val client = clientSource.clientListFB.filter { it.id == clientId }
         if (client.isNotEmpty()) {
             val dateClient = client[0].dates
-            dateClient[day] = time
-            viewModelScope.launch {
-                val referenceClient = clientSource.getClientReference(clientId)
-                clientSource.updateClientById(clientId, "dates", dateClient, referenceClient)
-                loadState(STATE_LOAD_LIST)
-            }
-        }
+            val amountClass = client[0].AmountClass
 
+            if(checkSizeDateClient(dateClient, amountClass)){
+                dateClient[day] = time
+                viewModelScope.launch {
+                    val referenceClient = clientSource.getClientReference(clientId)
+                    clientSource.updateClientById(clientId, "dates", dateClient, referenceClient)
+                    loadState(STATE_LOAD_LIST)
+                }
+            }
+            else
+                return false
+        }
+        return true
+    }
+
+    private fun checkSizeDateClient(dateClient: HashMap<String, String>, amountClass: String): Boolean {
+        var index = 0
+        val numberValid = amountClass.toInt()/4
+        for (date in dateClient){
+            if(date.value.isNotEmpty())
+                index ++
+        }
+        return index != numberValid
 
     }
 }
