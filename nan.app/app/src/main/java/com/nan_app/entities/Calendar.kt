@@ -12,11 +12,11 @@ class Calendar {
         "18pm",
         "19pm"
     )
-/*    val Days = listOf(
-        "Lunes",
-        "Martes",
-        "Miercoles",
-        "Jueves",
-        "Viernes"
-    )*/
+    val spacesList = mapOf(
+        "Cama1" to "",
+        "Cama2" to "",
+        "Cama3" to "",
+        "Cama4" to "",
+        "Cama5" to "",
+    )
 }

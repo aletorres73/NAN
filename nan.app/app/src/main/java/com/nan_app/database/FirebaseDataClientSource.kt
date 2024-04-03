@@ -101,7 +101,7 @@ class FirebaseDataClientSource : ClientSource {
     override suspend fun updateClientById(
         id: Int,
         field: String,
-        value: String,
+        value: Any,
         reference: String
     ) {
         collection

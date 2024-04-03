@@ -10,8 +10,8 @@
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
-        android:layout_weight="0.45"/>
+        android:layout_margin="2dp"
+        android:layout_weight="0.48"/>
 
 <!--    <TextView-->
 <!--        android:id="@+id/title_calendar"-->
@@ -27,6 +27,7 @@
         android:id="@+id/rvCalendar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
-        android:layout_weight="1"/>
+        android:layout_marginBottom="80dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_weight="0.52"/>
 </LinearLayout>

@@ -7,16 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nan_app.R
 import com.nan_app.adapters.CalendarAdapter
-import com.nan_app.databinding.DialogCalendarBinding
 import com.nan_app.databinding.FragmentCalendarBinding
 
 class CalendarFragment : Fragment() {
+
+    companion object {
+        const val SABADO = "Sábado"
+        const val DOMINGO = "Domingo"
+    }
 
     private lateinit var viewModel: CalendarViewModel
     private lateinit var adapter: CalendarAdapter
@@ -53,29 +59,34 @@ class CalendarFragment : Fragment() {
                 }
 
                 CalendarViewModel.STATE_LOAD_LIST -> {
-                    viewModel.loadListCalendar()
-                    viewModel.calendarList.observe(viewLifecycleOwner) {
+                    if (dayOfWeekStr == DOMINGO || dayOfWeekStr == SABADO)
+                        binding.rvCalendar.isVisible = false
+                    else {
+                        binding.rvCalendar.isVisible = true
                         adapter = CalendarAdapter(
-                            it,
                             viewModel.getLisClient(),
                             dayOfWeekStr
-                        ) { position ->
-                            onItemSelected(position)
-                        }
+                        ) { onItemSelected(it) }
 
                         binding.rvCalendar.layoutManager = LinearLayoutManager(context)
                         binding.rvCalendar.adapter = adapter
+
+                        viewModel.loadState(CalendarViewModel.STATE_WAIT)
                     }
                 }
+
+                CalendarViewModel.STATE_WAIT -> {}
             }
         }
     }
 
+
     private fun onItemSelected(position: Int) {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.dialog_calendar)
+        dialog.show()
 
-        val spinnerName : Spinner = dialog.findViewById(R.id.spinnerClient)
+        val spinnerName: Spinner = dialog.findViewById(R.id.spinnerClient)
 
         val listClientSpinner = viewModel.getListNameClient()
         val listNameAdapter = ArrayAdapter(
@@ -83,11 +94,62 @@ class CalendarFragment : Fragment() {
             android.R.layout.simple_gallery_item,
             listClientSpinner
         )
+
         listNameAdapter.setDropDownViewResource(android.R.layout.simple_gallery_item)
         spinnerName.adapter = listNameAdapter
 
-       dialog.show()
+        val buttonAdd = dialog.findViewById<Button>(R.id.dialogButtonAdd)
+        buttonAdd.setOnClickListener {
 
+            val clientId = viewModel.getClientId(spinnerName.selectedItemId.toInt())
+            val time: String = getTime(position)
+            val day = dayOfWeekStr
+
+            viewModel.setClientOnCalendar(clientId, time, day)
+            viewModel.loadState(CalendarViewModel.STATE_WAIT)
+
+            dialog.dismiss()
+        }
+    }
+
+    private fun getTime(position: Int): String {
+        return when (position) {
+            0 -> {
+                "8am"
+            }
+
+            1 -> {
+                "9am"
+            }
+
+            2 -> {
+                "10am"
+            }
+
+            3 -> {
+                "11am"
+            }
+
+            4 -> {
+                "16pm"
+            }
+
+            5 -> {
+                "17pm"
+            }
+
+            6 -> {
+                "18pm"
+            }
+
+            7 -> {
+                "19pm"
+            }
+
+            else -> {
+                ""
+            }
+        }
     }
 
     private fun initUI() {
@@ -104,9 +166,7 @@ class CalendarFragment : Fragment() {
                 arrayOf("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado")
             dayOfWeekStr = days[dayOfWeek - 1]
 
-//            binding.titleCalendar.text = "$dayOfMonth/${month + 1}/$year, $dayOfWeekStr"
             viewModel.loadState(CalendarViewModel.STATE_LOAD_LIST)
         }
-
     }
 }

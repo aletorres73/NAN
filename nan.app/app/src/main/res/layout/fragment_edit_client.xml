@@ -55,7 +55,7 @@
 
                 <Button
                     android:id="@+id/btnEditImage"
-                    style="@style/style_fragment_edit_boton"
+                    style="@style/style_fragment_edit_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/upload_image_edit_fragment"
@@ -63,7 +63,7 @@
 
                 <Button
                     android:id="@+id/btnEdDeleteImg"
-                    style="@style/style_fragment_edit_boton"
+                    style="@style/style_fragment_edit_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/delet_image_edit_fragment"
@@ -71,7 +71,7 @@
 
                 <Button
                     android:id="@+id/btnDeleteClient"
-                    style="@style/style_fragment_edit_boton"
+                    style="@style/style_fragment_edit_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/delete_client_fragment_edit"
@@ -219,7 +219,7 @@
 
         <Button
             android:id="@+id/btnUpdate"
-            style="@style/style_fragment_edit_boton"
+            style="@style/style_fragment_edit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/boton_update_fragment_edit"
