@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nan_app.R
 import com.nan_app.databinding.ItemClientBinding
 import com.nan_app.entities.Clients
+import com.nan_app.fragments.calendar.CalendarViewModel
 
 class ClientAdapter(
     private var clientList: MutableList<Clients>,
@@ -18,7 +20,6 @@ class ClientAdapter(
     class ClientHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private var binding = ItemClientBinding.bind(view)
-
         fun render (client: Clients, onItemSelected: (Int) -> Unit){
             binding.txtId.text = client.id.toString()
             binding.txtName.text = client.Name

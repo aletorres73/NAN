@@ -30,28 +30,27 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:gravity="center"
+                android:layout_weight="0.1"
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/text_view_calendar"
+                    style="@style/text_calendar_bed"
                     android:text="@string/bed1" />
 
                 <TextView
-                    style="@style/text_view_calendar"
+                    style="@style/text_calendar_bed"
                     android:text="@string/bed2" />
 
                 <TextView
-                    style="@style/text_view_calendar"
+                    style="@style/text_calendar_bed"
                     android:text="@string/bed3" />
 
                 <TextView
-                    style="@style/text_view_calendar"
+                    style="@style/text_calendar_bed"
                     android:text="@string/bed4" />
 
                 <TextView
-                    style="@style/text_view_calendar"
+                    style="@style/text_calendar_bed"
                     android:layout_marginBottom="8dp"
                     android:text="@string/bed5" />
 
@@ -60,7 +59,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.6"
+                android:layout_weight="0.9"
                 android:orientation="vertical">
 
                 <TextView

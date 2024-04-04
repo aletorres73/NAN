@@ -67,7 +67,7 @@ class CalendarFragment : Fragment() {
                         adapter = CalendarAdapter(
                             viewModel.getLisClient(),
                             dayOfWeekStr
-                        ) { onItemSelected(it) }
+                        ) { position, spaceFull -> onItemSelected(position, spaceFull) }
 
                         binding.rvCalendar.layoutManager = LinearLayoutManager(context)
                         binding.rvCalendar.adapter = adapter
@@ -82,7 +82,7 @@ class CalendarFragment : Fragment() {
     }
 
 
-    private fun onItemSelected(position: Int) {
+    private fun onItemSelected(position: Int, spaceFull: Boolean) {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.dialog_calendar)
         dialog.show()
@@ -99,20 +99,53 @@ class CalendarFragment : Fragment() {
         listNameAdapter.setDropDownViewResource(android.R.layout.simple_gallery_item)
         spinnerName.adapter = listNameAdapter
 
-        val buttonAdd = dialog.findViewById<Button>(R.id.dialogButtonAdd)
-        buttonAdd.setOnClickListener {
 
-            val clientId = viewModel.getClientId(spinnerName.selectedItemId.toInt())
-            val time: String = getTime(position)
-            val day = dayOfWeekStr
 
-            if(viewModel.setClientOnCalendar(clientId, time, day))
-                viewModel.loadState(CalendarViewModel.STATE_WAIT)
-            else
-                Toast.makeText(dialog.context, "Se excede en número de clases asignadas", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
-        }
+        dialog.findViewById<Button>(R.id.dialogButtonAdd)
+            .setOnClickListener {
+
+                if (!spaceFull) {
+                    val clientId = viewModel.getClientId(spinnerName.selectedItemId.toInt())
+                    val time = getTime(position)
+
+                    if (viewModel.setClientOnCalendar(clientId, time, dayOfWeekStr, "add"))
+                        viewModel.loadState(CalendarViewModel.STATE_WAIT)
+                    else
+                        Toast.makeText(
+                            dialog.context,
+                            "Se excede en número de clases asignadas",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    dialog.dismiss()
+                }
+                else
+                    Toast.makeText(dialog.context,
+                        "Turno completo",
+                        Toast.LENGTH_SHORT)
+                        .show()
+                dialog.dismiss()
+            }
+
+
+
+
+        dialog.findViewById<Button>(R.id.dialogButtonRemove)
+            .setOnClickListener {
+                val clientId = viewModel.getClientId(spinnerName.selectedItemId.toInt())
+                val time = getTime(position)
+
+                if (viewModel.setClientOnCalendar(clientId, time, dayOfWeekStr, "remove"))
+                    viewModel.loadState(CalendarViewModel.STATE_WAIT)
+                else
+                    Toast.makeText(
+                        dialog.context,
+                        "Alumno sin clases asignadas",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                dialog.dismiss()
+            }
     }
+
 
     private fun getTime(position: Int): String {
         return when (position) {

@@ -76,24 +76,29 @@ class EditClientFragment : Fragment() {
                     vm.currentClient.observe(viewLifecycleOwner) { currentClient ->
 
                         binding.btnUpdate.setOnClickListener {
-                            if (checkInput()) {
+//                            if (checkInput()) {
                                 binding.edProgressBar.isVisible = true
                                 binding.btnUpdate.isClickable = false
                                 vm.updatedClient(
                                     getEditedClient(currentClient),
                                     currentClient.id
                                 )
-                            } else
-                                vm.loadState(EditClientViewModel.STATE_ERROR_UPDATE_CLIENT)
+//                            } else
+//                                vm.loadState(EditClientViewModel.STATE_ERROR_UPDATE_CLIENT)
                         }
                         binding.btnDeleteClient.setOnClickListener {
-                            showDeleteConfirmationDialog(currentClient.id, currentClient.ImageName)
+                            showDeleteConfirmationDialog(
+                                currentClient.id,
+                                currentClient.ImageName,
+                                currentClient.Name,
+                                currentClient.LastName
+                            )
                         }
 
                         binding.btnEdDeleteImg.setOnClickListener {
                             binding.edProgressBar.isVisible = true
-                            if (currentClient.ImageUri == "") vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
-                            else vm.loadState(EditClientViewModel.STATE_BUTTON_DELETE_IMAGE)
+//                            if (currentClient.ImageUri == "") vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
+                            vm.loadState(EditClientViewModel.STATE_BUTTON_DELETE_IMAGE)
                         }
 
                         binding.btnEditImage.setOnClickListener {
@@ -133,17 +138,25 @@ class EditClientFragment : Fragment() {
                 EditClientViewModel.STATE_BUTTON_DELETE_IMAGE -> {
                     vm.currentClient.observe(viewLifecycleOwner) { currentClient ->
 
-                        if (currentClient.ImageUri == "") {
-                            vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
-                            vm.loadState(EditClientViewModel.STATE_INIT)
-
+                        if (!vm.imageSaved) {
+                            if (currentClient.ImageUri == "")
+                                vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
+                            else {
+                                vm.deleteImage(currentClient.ImageName)
+                                currentClient.ImageName = ""
+                                vm.loadState(EditClientViewModel.STATE_INIT)
+                            }
                         } else {
-                            vm.deleteImage(currentClient.ImageName)
-                            currentClient.ImageName = ""
+                            binding.imageEditedClient.setImageDrawable(
+                                getDrawable(
+                                    binding.imageEditedClient.context,
+                                    R.drawable.df
+                                )
+                            )
+                            binding.edProgressBar.isVisible = false
                             vm.loadState(EditClientViewModel.STATE_INIT)
                         }
                     }
-
                 }
 
                 EditClientViewModel.STATE_DONE_IMAGE_DELETE -> {
@@ -235,10 +248,16 @@ class EditClientFragment : Fragment() {
         }
     }
 
-    private fun showDeleteConfirmationDialog(id: Int, imageName: String) {
+    private fun showDeleteConfirmationDialog(
+        id: Int,
+        imageName: String,
+        name: String,
+        lastName: String
+    ) {
+        val fullName = "$name $lastName"
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setTitle("Eliminar cliente")
-        alertDialogBuilder.setMessage("¿Deseas eliminar este cliente?")
+        alertDialogBuilder.setTitle("Eliminar Alumno")
+        alertDialogBuilder.setMessage("¿Deseas a $fullName de la lista de alumnos?")
 
         alertDialogBuilder.setPositiveButton("Sí") { _, _ ->
             binding.edProgressBar.isVisible = true
@@ -260,8 +279,11 @@ class EditClientFragment : Fragment() {
                         if (binding.edTxtEmail.text.isEmpty())
                             if (binding.edTxtDayPay.text.isEmpty())
                                 if (binding.edtxtFinishDay.text.isEmpty())
-                                    if (binding.edTxtAmount.text.isEmpty()) return true
-        return false
+                                    return false
+//                                    if (binding.edTxtAmount.text.isEmpty())
+
+
+        return true
     }
 
     @SuppressLint("SetTextI18n")
@@ -290,7 +312,21 @@ class EditClientFragment : Fragment() {
             if (it.Email != "") binding.edTxtEmail.hint = it.Email
             if (it.PayDay != "") binding.edTxtDayPay.hint = it.PayDay
             if (it.FinishDay != "") binding.edtxtFinishDay.hint = it.FinishDay
-            if (it.AmountClass != "") binding.edTxtAmount.hint = it.AmountClass
+            if (it.AmountClass != "")
+                when (it.AmountClass) {
+                    "4" -> {
+                        binding.edSpinnerAmount.setSelection(0)
+                    }
+
+                    "8" -> {
+                        binding.edSpinnerAmount.setSelection(1)
+                    }
+
+                    "12" -> {
+                        binding.edSpinnerAmount.setSelection(2)
+                    }
+                }
+
             if (it.ImageUri == "" || it.ImageUri == "null")
                 binding.imageEditedClient.setImageDrawable(
                     getDrawable(
@@ -299,10 +335,7 @@ class EditClientFragment : Fragment() {
                     )
                 )
             else loadImage(it.ImageUri)
-
         }
-
-
     }
 
     private fun getEditedClient(currentClient: Clients): Clients {
@@ -313,7 +346,7 @@ class EditClientFragment : Fragment() {
         currentClient.Email = binding.edTxtEmail.text.toString()
         currentClient.PayDay = binding.edTxtDayPay.text.toString()
         currentClient.FinishDay = binding.edtxtFinishDay.text.toString()
-        currentClient.AmountClass = binding.edTxtAmount.text.toString()
+        currentClient.AmountClass = binding.edSpinnerAmount.selectedItem.toString()
         currentClient.ImageUri = vm.getUri()
         currentClient.ImageName = vm.getImageName()
 

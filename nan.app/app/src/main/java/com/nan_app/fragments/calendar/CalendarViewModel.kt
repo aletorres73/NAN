@@ -18,6 +18,8 @@ class CalendarViewModel : ViewModel() {
         const val STATE_INIT = "init"
         const val STATE_LOAD_LIST = "load_list"
         const val STATE_WAIT = "wait"
+        const val ADD_TO_CALENDAR = "add"
+        const val REMOVE_TO_CALENDAR = "remove"
     }
 
     var viewState: MutableLiveData<String> = MutableLiveData()
@@ -55,33 +57,67 @@ class CalendarViewModel : ViewModel() {
         return clientSource.clientListFB[position].id
     }
 
-    fun setClientOnCalendar(clientId: Int, time: String, day: String): Boolean {
-
+    fun setClientOnCalendar(clientId: Int, time: String, day: String, flag: String): Boolean {
         val client = clientSource.clientListFB.filter { it.id == clientId }
-        if (client.isNotEmpty()) {
-            val dateClient = client[0].dates
-            val amountClass = client[0].AmountClass
+        val dateClient = client[0].dates
+        val amountClass = client[0].AmountClass
 
-            if(checkSizeDateClient(dateClient, amountClass)){
-                dateClient[day] = time
-                viewModelScope.launch {
-                    val referenceClient = clientSource.getClientReference(clientId)
-                    clientSource.updateClientById(clientId, "dates", dateClient, referenceClient)
-                    loadState(STATE_LOAD_LIST)
+        when (flag) {
+            ADD_TO_CALENDAR -> {
+                if (client.isNotEmpty()) {
+                    if (checkSizeDateClient(dateClient, amountClass)) {
+                        dateClient[day] = time
+                        viewModelScope.launch {
+                            val referenceClient = clientSource.getClientReference(clientId)
+                            clientSource.updateClientById(
+                                clientId,
+                                "dates",
+                                dateClient,
+                                referenceClient
+                            )
+                            loadState(STATE_LOAD_LIST)
+                        }
+                    } else
+                        return false
                 }
+                return true
             }
-            else
-                return false
+
+            REMOVE_TO_CALENDAR -> {
+                if (client.isNotEmpty()) {
+                    if (dateClient[day] != "") {
+                        dateClient[day] = ""
+                        viewModelScope.launch {
+                            val referenceClient = clientSource.getClientReference(clientId)
+                            clientSource.updateClientById(
+                                clientId,
+                                "dates",
+                                dateClient,
+                                referenceClient
+                            )
+                            loadState(STATE_LOAD_LIST)
+                        }
+                    } else
+                        return false
+                }
+                return true
+            }
         }
-        return true
+        return false
     }
 
-    private fun checkSizeDateClient(dateClient: HashMap<String, String>, amountClass: String): Boolean {
+    private fun checkSizeDateClient(
+        dateClient: HashMap<String, String>,
+        amountClass: String
+    ): Boolean {
+        if (amountClass == "")
+            return false
+
         var index = 0
-        val numberValid = amountClass.toInt()/4
-        for (date in dateClient){
-            if(date.value.isNotEmpty())
-                index ++
+        val numberValid = amountClass.toInt() / 4
+        for (date in dateClient) {
+            if (date.value.isNotEmpty())
+                index++
         }
         return index != numberValid
 

@@ -17,6 +17,7 @@ class EditClientViewModel : ViewModel() {
     private var viewUrl: MutableLiveData<String> = MutableLiveData()
     private var viewImageName: MutableLiveData<String> = MutableLiveData()
     private var viewImageUrl: MutableLiveData<Uri> = MutableLiveData()
+    var imageSaved = false
 
 
     companion object {
@@ -151,16 +152,17 @@ class EditClientViewModel : ViewModel() {
                             id, "imageUri", viewUrl.value!!, referenceClient
                         )
                     }
-                } else
-                    clientSource.updateClientById(id, "imageUri", "", referenceClient)
+                }/*
+                if (!imageSaved)
+                    clientSource.updateClientById(id, "imageUri", "", referenceClient)*/
 
                 if (editedClient.ImageName != "")
                     if (editedClient.ImageUri != "null")
                         clientSource.updateClientById(
                             id, "imageName", editedClient.ImageName, referenceClient
                         )
-                    else
-                        clientSource.updateClientById(id, "imageName", "", referenceClient)
+/*                if (!imageSaved)
+                    clientSource.updateClientById(id, "imageName", "", referenceClient)*/
                 loadState(STATE_DONE_UPDATE_CLIENT)
             } else loadState(STATE_ERROR_UPDATE_CLIENT)
         }
@@ -184,6 +186,7 @@ class EditClientViewModel : ViewModel() {
                 viewImageName.value = ""
                 viewUrl.value = ""
                 loadState(STATE_ERROR_IMAGE_DELETE)
+                imageSaved = true
             }
         }
     }
@@ -192,6 +195,7 @@ class EditClientViewModel : ViewModel() {
         clientSource.deleteImageName = image.lastPathSegment.toString()
         viewImageUrl.value = image
         viewImageName.value = image.lastPathSegment.toString()
+        imageSaved = true
 
     }
 
