@@ -60,20 +60,25 @@ class CalendarFragment : Fragment() {
                 }
 
                 CalendarViewModel.STATE_LOAD_LIST -> {
-                    if (dayOfWeekStr == DOMINGO || dayOfWeekStr == SABADO)
-                        binding.rvCalendar.isVisible = false
-                    else {
-                        binding.rvCalendar.isVisible = true
-                        adapter = CalendarAdapter(
-                            viewModel.getLisClient(),
-                            dayOfWeekStr
-                        ) { position, spaceFull -> onItemSelected(position, spaceFull) }
+                    viewModel.getLisClient()
+                    viewModel.listClient.observe(viewLifecycleOwner) {
 
-                        binding.rvCalendar.layoutManager = LinearLayoutManager(context)
-                        binding.rvCalendar.adapter = adapter
+                        if (dayOfWeekStr == DOMINGO || dayOfWeekStr == SABADO)
+                            binding.rvCalendar.isVisible = false
+                        else {
+                            binding.rvCalendar.isVisible = true
+                            adapter = CalendarAdapter(
+                                it,
+                                dayOfWeekStr
+                            ) { position, spaceFull -> onItemSelected(position, spaceFull) }
 
-                        viewModel.loadState(CalendarViewModel.STATE_WAIT)
+                            binding.rvCalendar.layoutManager = LinearLayoutManager(context)
+                            binding.rvCalendar.adapter = adapter
+
+                            viewModel.loadState(CalendarViewModel.STATE_WAIT)
+                        }
                     }
+
                 }
 
                 CalendarViewModel.STATE_WAIT -> {}
@@ -83,23 +88,25 @@ class CalendarFragment : Fragment() {
 
 
     private fun onItemSelected(position: Int, spaceFull: Boolean) {
+        viewModel.getListNameClient()
+
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.dialog_calendar)
         dialog.show()
 
         val spinnerName: Spinner = dialog.findViewById(R.id.spinnerClient)
 
-        val listClientSpinner = viewModel.getListNameClient()
-        val listNameAdapter = ArrayAdapter(
-            dialog.layoutInflater.context,
-            android.R.layout.simple_gallery_item,
-            listClientSpinner
-        )
+        viewModel.getListNameClient()
+        viewModel.listNameClient.observe(viewLifecycleOwner) {
+            val listNameAdapter = ArrayAdapter(
+                dialog.layoutInflater.context,
+                android.R.layout.simple_gallery_item,
+                it
+            )
 
-        listNameAdapter.setDropDownViewResource(android.R.layout.simple_gallery_item)
-        spinnerName.adapter = listNameAdapter
-
-
+            listNameAdapter.setDropDownViewResource(android.R.layout.simple_gallery_item)
+            spinnerName.adapter = listNameAdapter
+        }
 
         dialog.findViewById<Button>(R.id.dialogButtonAdd)
             .setOnClickListener {
@@ -117,11 +124,12 @@ class CalendarFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                     dialog.dismiss()
-                }
-                else
-                    Toast.makeText(dialog.context,
+                } else
+                    Toast.makeText(
+                        dialog.context,
                         "Turno completo",
-                        Toast.LENGTH_SHORT)
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 dialog.dismiss()
             }

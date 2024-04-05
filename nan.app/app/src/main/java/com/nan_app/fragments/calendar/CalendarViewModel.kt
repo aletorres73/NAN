@@ -13,6 +13,8 @@ class CalendarViewModel : ViewModel() {
     private val clientSource: FirebaseDataClientSource by KoinJavaComponent.inject(
         FirebaseDataClientSource::class.java
     )
+    var listNameClient = MutableLiveData<List<String>>()
+    var listClient = MutableLiveData<List<Clients>>()
 
     companion object {
         const val STATE_INIT = "init"
@@ -39,18 +41,16 @@ class CalendarViewModel : ViewModel() {
             }
         }
     }
-
-    fun getLisClient(): List<Clients> {
-        return clientSource.clientListFB
-
+    fun getLisClient() {
+        listClient.postValue(clientSource.clientListFB)
     }
 
-    fun getListNameClient(): List<String> {
+    fun getListNameClient() {
         val listName = emptyList<String>().toMutableList()
         for (client in clientSource.clientListFB) {
             listName.add("${client.Name} ${client.LastName}")
         }
-        return listName.toList()
+        listNameClient.postValue(listName.toList())
     }
 
     fun getClientId(position: Int): Int {
