@@ -26,8 +26,8 @@ class ClientAdapter(
             binding.txtId.text = client.id.toString()
             binding.txtName.text = client.Name
             binding.txtLastName.text = client.LastName
-            binding.txtPayDay.text = client.PayDay
-            binding.txtFinishDay.text = client.FinishDay
+/*            binding.txtPayDay.text = client.PayDay
+            binding.txtFinishDay.text = client.FinishDay*/
 
             setClientStateValue(client.FinishDay)
             setBirthday(client.Birthday)

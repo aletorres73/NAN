@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:layout_marginHorizontal="8dp"
+    android:layout_marginHorizontal="12dp"
     android:layout_marginTop="8dp"
     app:cardBackgroundColor="#E8E9EF"
     app:cardCornerRadius="16dp"
@@ -26,43 +26,31 @@
 
             <TextView
                 style="@style/item_text_details_bold"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/item_Id" />
 
             <TextView
                 style="@style/item_text_details_bold"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/item_Name" />
 
             <TextView
                 style="@style/item_text_details_bold"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/item_LastName" />
 
             <TextView
                 style="@style/item_text_details_bold"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/item_State" />
 
             <TextView
                 style="@style/item_text_details_bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/item_PayDay" />
-
-            <TextView
-                style="@style/item_text_details_bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/item_FinishDay" />
-
-            <TextView
-                style="@style/item_text_details_bold"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/item_Birthday" />
 
@@ -107,20 +95,6 @@
 
 
             <TextView
-                android:id="@+id/txtPayDay"
-                style="@style/item_text_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/FinishDay" />
-
-            <TextView
-                android:id="@+id/txtFinishDay"
-                style="@style/item_text_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/PayDay" />
-
-            <TextView
                 android:id="@+id/txtBirthday"
                 style="@style/item_text_details"
                 android:layout_width="match_parent"
@@ -139,11 +113,11 @@
                 android:id="@+id/imageProductItem"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="4dp"
                 android:background="@drawable/border_background"
                 android:padding="6dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/df"
-                android:layout_margin="4dp"/>
+                android:src="@drawable/df" />
 
         </LinearLayout>
 

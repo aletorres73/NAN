@@ -203,7 +203,7 @@ class CalendarFragment : Fragment() {
             val days =
                 arrayOf("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado")
             dayOfWeekStr = days[dayOfWeek - 1]
-
+            binding.titleCalendar.text = dayOfWeekStr
             viewModel.loadState(CalendarViewModel.STATE_LOAD_LIST)
         }
     }

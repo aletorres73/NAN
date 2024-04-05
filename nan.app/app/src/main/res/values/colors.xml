@@ -3,6 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="primaryColor">#EDE7F6</color>
+
     <color name="color_buttons">#7E60B3</color>
     <color name="text_state_out_of_day">#E57373</color>
     <color name="text_state_day_ok">#81C784</color>
