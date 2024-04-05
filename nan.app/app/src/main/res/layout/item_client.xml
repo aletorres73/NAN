@@ -78,7 +78,7 @@
             <TextView
                 android:id="@+id/txtId"
                 style="@style/item_text_details"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/Id" />
 
@@ -86,7 +86,7 @@
             <TextView
                 android:id="@+id/txtName"
                 style="@style/item_text_details"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/Name" />
 
@@ -94,14 +94,14 @@
             <TextView
                 android:id="@+id/txtLastName"
                 style="@style/item_text_details"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/LastName" />
 
             <TextView
                 android:id="@+id/txtState"
                 style="@style/item_text_details"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/State" />
 
@@ -109,21 +109,21 @@
             <TextView
                 android:id="@+id/txtPayDay"
                 style="@style/item_text_details"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/FinishDay" />
 
             <TextView
                 android:id="@+id/txtFinishDay"
                 style="@style/item_text_details"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/PayDay" />
 
             <TextView
                 android:id="@+id/txtBirthday"
                 style="@style/item_text_details"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/Birthday" />
 

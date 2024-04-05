@@ -271,34 +271,34 @@ class EditClientFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun checkInput(): Boolean {
-        if (binding.edTextName.text.isEmpty())
-            if (binding.edTxtLastName.text.isEmpty())
-                if (binding.edTxtBirthday.text.isEmpty())
-                    if (binding.edTxtPhone.text.isEmpty())
-                        if (binding.edTxtEmail.text.isEmpty())
-                            if (binding.edTxtDayPay.text.isEmpty())
-                                if (binding.edtxtFinishDay.text.isEmpty())
-                                    return false
-//                                    if (binding.edTxtAmount.text.isEmpty())
-
-
-        return true
-    }
+//    private fun checkInput(): Boolean {
+//        if (binding.edTextName.text.isEmpty())
+//            if (binding.edTxtLastName.text.isEmpty())
+//                if (binding.edTxtBirthday.text.isEmpty())
+//                    if (binding.edTxtPhone.text.isEmpty())
+//                        if (binding.edTxtEmail.text.isEmpty())
+//                            if (binding.edTxtDayPay.text.isEmpty())
+//                                if (binding.edtxtFinishDay.text.isEmpty())
+//                                    return false
+////                                    if (binding.edTxtAmount.text.isEmpty())
+//
+//
+//        return true
+//    }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedFinshDay(year: Int, month: Int, day: Int) {
-        binding.edtxtFinishDay.setText("$day/$month/$year")
+        binding.edtxtFinishDay.setText("$day/${month+1}/$year")
     }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedDayPay(year: Int, month: Int, day: Int) {
-        binding.edTxtDayPay.setText("$day/$month/$year")
+        binding.edTxtDayPay.setText("$day/${month+1}/$year")
     }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedBirthday(year: Int, month: Int, day: Int) {
-        binding.edTxtBirthday.setText("$day/$month/$year")
+        binding.edTxtBirthday.setText("$day/${month+1}/$year")
     }
 
     private fun loadClientInfo() {

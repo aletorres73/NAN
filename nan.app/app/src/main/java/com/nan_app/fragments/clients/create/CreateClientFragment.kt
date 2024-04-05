@@ -174,17 +174,17 @@ class CreateClientFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedFinshDay(year: Int, month: Int, day: Int) {
-        binding.editTextFinishDay.setText("$day/$month/$year")
+        binding.editTextFinishDay.setText("$day/${month+1})/$year")
     }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedDayPay(year: Int, month: Int, day: Int) {
-        binding.editTextDayPay.setText("$day/$month/$year")
+        binding.editTextDayPay.setText("$day/${month+1}/$year")
     }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedBirthday(year: Int, month: Int, day: Int) {
-        binding.editTextBirthday.setText("$day/$month/$year")
+        binding.editTextBirthday.setText("$day/${month+1}/$year")
     }
 
 

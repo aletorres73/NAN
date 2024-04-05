@@ -34,6 +34,10 @@
     <string name="FinishDay">Fecha</string>
     <string name="AmountClass">Cantidad de clases</string>
 
+    <string name="state_out_of_day">Vencido</string>
+    <string name="state_next_day_out" >Por vencer</string>
+    <string name="state_day_ok" >Al día</string>
+
     <string name="State">Estado</string>
     <string name="State_ok">Al día</string>
     <string name="State_Check">Por vencer</string>

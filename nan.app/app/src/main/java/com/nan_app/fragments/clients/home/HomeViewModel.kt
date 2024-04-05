@@ -40,7 +40,6 @@ class HomeViewModel : ViewModel() {
     }
 
     fun searchByName(query: String) {
-
         val filteredByName = listClients.value!!.filter {
             it.Name
                 .lowercase()

@@ -81,7 +81,7 @@ class FirebaseDataClientSource : ClientSource {
             "birthday" to newClient.Birthday,
             "email" to newClient.Email,
             "phone" to newClient.Phone,
-            "state" to newClient.State,
+//            "state" to newClient.State,
             "payDay" to newClient.PayDay,
             "finishDay" to newClient.FinishDay,
             "amountClass" to newClient.AmountClass,

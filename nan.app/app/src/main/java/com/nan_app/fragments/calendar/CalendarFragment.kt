@@ -78,7 +78,6 @@ class CalendarFragment : Fragment() {
                             viewModel.loadState(CalendarViewModel.STATE_WAIT)
                         }
                     }
-
                 }
 
                 CalendarViewModel.STATE_WAIT -> {}
@@ -103,7 +102,6 @@ class CalendarFragment : Fragment() {
                 android.R.layout.simple_gallery_item,
                 it
             )
-
             listNameAdapter.setDropDownViewResource(android.R.layout.simple_gallery_item)
             spinnerName.adapter = listNameAdapter
         }
@@ -133,9 +131,6 @@ class CalendarFragment : Fragment() {
                         .show()
                 dialog.dismiss()
             }
-
-
-
 
         dialog.findViewById<Button>(R.id.dialogButtonRemove)
             .setOnClickListener {
@@ -201,7 +196,7 @@ class CalendarFragment : Fragment() {
 
     private fun getDate() {
 
-        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+        binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val calendar = Calendar.getInstance()
             calendar.set(year, month, dayOfMonth)
             val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)

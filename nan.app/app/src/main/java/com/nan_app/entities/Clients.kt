@@ -11,7 +11,7 @@ class Clients() {
     var Birthday: String = ""
     var PayDay: String = ""
     var FinishDay: String = ""
-    var State: String = ""
+//    var State: String = ""
     var AmountClass: String = ""
     var ImageUri: String = ""
     var Email: String = ""
