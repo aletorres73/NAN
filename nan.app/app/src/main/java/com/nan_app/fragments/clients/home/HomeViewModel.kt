@@ -7,6 +7,9 @@ import com.nan_app.database.FirebaseDataClientSource
 import com.nan_app.entities.Clients
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 class HomeViewModel : ViewModel() {
 
@@ -26,7 +29,7 @@ class HomeViewModel : ViewModel() {
                 viewState.value = STATE_EMPTY
             } else {
                 listClients.value = clientSource.clientListFB
-                viewState.value = STATE_LOADING
+                setClientStateValue(clientSource.clientListFB)
             }
         }
     }
@@ -36,7 +39,60 @@ class HomeViewModel : ViewModel() {
     }
 
     fun getCurrentClient(position: Int) {
-        clientSource.currentClient = clientSource.clientListFB[position]
+        clientSource.setCurrentClient(position)
+    }
+
+    private suspend fun setClientStateValue(list: List<Clients>) {
+        viewModelScope.launch {
+            var state: String
+
+            list.forEachIndexed { index, client ->
+                val finishDay = client.FinishDay
+                if (finishDay != "") {
+
+                    val formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy")
+                    val formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+                    val finishDate: LocalDate = try {
+                        LocalDate.parse(finishDay, formatter1)
+                    } catch (e: DateTimeParseException) {
+                        LocalDate.parse(finishDay, formatter2)
+                    }
+
+                    val currentDate = LocalDate.now()
+                    val daysUntilFinish = currentDate.until(finishDate).days
+                    state = when {
+                        daysUntilFinish < 0 -> {
+                            "Vencido"
+                        }
+
+                        daysUntilFinish in 0..5 -> {
+                            "Por Vencer"
+                        }
+
+                        else -> {
+                            "Al día"
+                        }
+                    }
+
+                    val flag = when (client.State) {
+                        state -> true
+                        else -> {
+                            false
+                        }
+                    }
+                    if (!flag) {
+                        listClients.value!![index].State = state
+                        clientSource.updateClientById(
+                            client.id,
+                            "state",
+                            state,
+                        )
+                    }
+                }
+            }
+            viewState.value = STATE_LOADING
+        }
     }
 
     fun searchByName(query: String) {
@@ -55,11 +111,11 @@ class HomeViewModel : ViewModel() {
 
     companion object {
         const val STATE_ERROR = "error"
-        const val STATE_DONE = "done"
         const val STATE_LOADING = "loading"
         const val STATE_EMPTY = "empty"
         const val STATE_INIT = "init"
         const val STATE_DELETE = "delete"
+        const val STATE_WAIT = "wait"
     }
 
 

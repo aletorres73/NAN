@@ -10,9 +10,6 @@ import com.bumptech.glide.Glide
 import com.nan_app.R
 import com.nan_app.databinding.ItemClientBinding
 import com.nan_app.entities.Clients
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 
 class ClientAdapter(
     private var clientList: MutableList<Clients>,
@@ -27,70 +24,43 @@ class ClientAdapter(
             binding.txtName.text = client.Name
             binding.txtLastName.text = client.LastName
 
-            setClientStateValue(client.FinishDay)
+            setClientStateValue(client.State)
             setBirthday(client.Birthday)
             setImageClient(client.ImageUri)
 
             itemView.setOnClickListener { onItemSelected(layoutPosition) }
         }
 
-        private fun setClientStateValue(finishDay: String) {
-            if (finishDay != "") {
-                val formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy")
-                val formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-
-                val finishDate: LocalDate = try {
-                    LocalDate.parse(finishDay, formatter1)
-                } catch (e: DateTimeParseException) {
-                    LocalDate.parse(finishDay, formatter2)
+        private fun setClientStateValue(state: String) {
+            binding.txtState.text = state
+            when (state) {
+                "Al día" -> {
+                    binding.txtState.setBackgroundColor(
+                        ContextCompat.getColor(
+                            binding.txtState.context,
+                            R.color.text_state_day_ok
+                        )
+                    )
                 }
 
-                val currentDate = LocalDate.now()
-                val daysUntilFinish = currentDate.until(finishDate).days
-
-                when {
-                    daysUntilFinish < 0 -> {
-                        binding.txtState.text = ContextCompat.getString(
+                "Por Vencer" -> {
+                    binding.txtState.setBackgroundColor(
+                        ContextCompat.getColor(
                             binding.txtState.context,
-                            R.string.state_out_of_day
+                            R.color.text_state_next_out
                         )
-                        binding.txtState.setBackgroundColor(
-                            ContextCompat.getColor(
-                                binding.txtState.context,
-                                R.color.text_state_out_of_day
-                            )
-                        )
-                    }
-
-                    daysUntilFinish in 0..5 -> {
-                        binding.txtState.text = ContextCompat.getString(
-                            binding.txtState.context,
-                            R.string.state_next_day_out
-                        )
-                        binding.txtState.setBackgroundColor(
-                            ContextCompat.getColor(
-                                binding.txtState.context,
-                                R.color.text_state_next_out
-                            )
-                        )
-                    }
-
-                    else -> {
-                        binding.txtState.text = ContextCompat.getString(
-                            binding.txtState.context,
-                            R.string.state_day_ok
-                        )
-                        binding.txtState.setBackgroundColor(
-                            ContextCompat.getColor(
-                                binding.txtState.context,
-                                R.color.text_state_day_ok
-                            )
-                        )
-                    }
+                    )
                 }
 
-            } else
-                binding.txtState.text = ""
+                "Vencido" -> {
+                    binding.txtState.setBackgroundColor(
+                        ContextCompat.getColor(
+                            binding.txtState.context,
+                            R.color.text_state_out_of_day
+                        )
+                    )
+                }
+            }
         }
 
         private fun setImageClient(uri: String) {

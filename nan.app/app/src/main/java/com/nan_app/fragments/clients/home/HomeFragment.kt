@@ -64,6 +64,7 @@ class HomeFragment : Fragment() {
                     viewModel.listClients.observe(viewLifecycleOwner) {
 
                         adapter = ClientAdapter(it) { position -> onItemSelected(position) }
+
                         binding.rvClient.layoutManager = LinearLayoutManager(context)
                         binding.rvClient.adapter = adapter
 
@@ -81,6 +82,8 @@ class HomeFragment : Fragment() {
                     adapter.notifyItemRangeChanged(deletePosition, adapterItemCount)
                     Toast.makeText(requireContext(), "Cliente eliminado", Toast.LENGTH_SHORT).show()
                 }
+
+                HomeViewModel.STATE_WAIT -> {}
             }
         }
     }
@@ -91,6 +94,7 @@ class HomeFragment : Fragment() {
                 viewModel.searchByName(query.orEmpty())
                 return false
             }
+
             override fun onQueryTextChange(newText: String?) = false
         })
     }

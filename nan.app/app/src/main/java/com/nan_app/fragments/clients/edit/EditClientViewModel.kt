@@ -119,37 +119,36 @@ class EditClientViewModel : ViewModel() {
 
     fun updatedClient(editedClient: Clients, id: Int) {
         viewModelScope.launch {
-            val referenceClient = clientSource.getClientReference(id)
             if (clientSource.loadClientById(id)) {
                 if (editedClient.Name != "") clientSource.updateClientById(
-                    id, "name", editedClient.Name, referenceClient
+                    id, "name", editedClient.Name
                 )
                 if (editedClient.LastName != "") clientSource.updateClientById(
-                    id, "lastName", editedClient.LastName, referenceClient
+                    id, "lastName", editedClient.LastName
                 )
                 if (editedClient.Birthday != "") clientSource.updateClientById(
-                    id, "birthday", editedClient.Birthday, referenceClient
+                    id, "birthday", editedClient.Birthday
                 )
                 if (editedClient.Phone != "") clientSource.updateClientById(
-                    id, "phone", editedClient.Phone, referenceClient
+                    id, "phone", editedClient.Phone
                 )
                 if (editedClient.Email != "") clientSource.updateClientById(
-                    id, "email", editedClient.Email, referenceClient
+                    id, "email", editedClient.Email
                 )
                 if (editedClient.PayDay != "") clientSource.updateClientById(
-                    id, "payDay", editedClient.PayDay, referenceClient
+                    id, "payDay", editedClient.PayDay
                 )
                 if (editedClient.FinishDay != "") clientSource.updateClientById(
-                    id, "finishDay", editedClient.FinishDay, referenceClient
+                    id, "finishDay", editedClient.FinishDay
                 )
                 if (editedClient.AmountClass != "") clientSource.updateClientById(
-                    id, "amountClass", editedClient.AmountClass, referenceClient
+                    id, "amountClass", editedClient.AmountClass
                 )
                 if (editedClient.ImageUri != "null") {
                     if (viewImageUrl.value != null) {
                         viewUrl.value = clientSource.loadImageUri(viewImageUrl.value!!)
                         clientSource.updateClientById(
-                            id, "imageUri", viewUrl.value!!, referenceClient
+                            id, "imageUri", viewUrl.value!!
                         )
                     }
                 }/*
@@ -159,7 +158,7 @@ class EditClientViewModel : ViewModel() {
                 if (editedClient.ImageName != "")
                     if (editedClient.ImageUri != "null")
                         clientSource.updateClientById(
-                            id, "imageName", editedClient.ImageName, referenceClient
+                            id, "imageName", editedClient.ImageName
                         )
 /*                if (!imageSaved)
                     clientSource.updateClientById(id, "imageName", "", referenceClient)*/
@@ -172,8 +171,8 @@ class EditClientViewModel : ViewModel() {
         viewModelScope.launch {
             val referenceClient = clientSource.getClientReference(id)
             if (clientSource.loadClientById(id)) {
-                clientSource.updateClientById(id, "imageName", client.ImageName, referenceClient)
-                clientSource.updateClientById(id, "imageUri", client.ImageUri, referenceClient)
+                clientSource.updateClientById(id, "imageName", client.ImageName)
+                clientSource.updateClientById(id, "imageUri", client.ImageUri)
             }
         }
     }

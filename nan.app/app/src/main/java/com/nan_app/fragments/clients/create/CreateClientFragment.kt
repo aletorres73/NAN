@@ -1,7 +1,6 @@
 package com.nan_app.fragments.clients.create
 
 import android.Manifest
-import android.R
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
@@ -14,7 +13,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -111,7 +109,6 @@ class CreateClientFragment : Fragment() {
 
                 CreateClientViewModel.STATE_ERROR_NEW_CLIENT -> {
                     binding.progressBar.isVisible = false
-//                    showToast("No se pudo cargar alumno nuevo")
                     viewModel.loadState(CreateClientViewModel.STATE_WAIT)
                 }
 
@@ -174,17 +171,17 @@ class CreateClientFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedFinshDay(year: Int, month: Int, day: Int) {
-        binding.editTextFinishDay.setText("$day/${month+1})/$year")
+        binding.editTextFinishDay.setText("$day/${month + 1}/$year")
     }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedDayPay(year: Int, month: Int, day: Int) {
-        binding.editTextDayPay.setText("$day/${month+1}/$year")
+        binding.editTextDayPay.setText("$day/${month + 1}/$year")
     }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedBirthday(year: Int, month: Int, day: Int) {
-        binding.editTextBirthday.setText("$day/${month+1}/$year")
+        binding.editTextBirthday.setText("$day/${month + 1}/$year")
     }
 
 

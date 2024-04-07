@@ -102,14 +102,28 @@ class FirebaseDataClientSource : ClientSource {
         id: Int,
         field: String,
         value: Any,
-        reference: String
     ) {
-        collection
-            .document(reference)
-            .update(
-                mapOf(field to value),
-            )
-            .await()
+        try {
+            val reference = collection
+                .whereEqualTo("id", id)
+                .get()
+                .await()
+                .first()
+                .reference
+                .id
+
+            collection
+                .document(reference)
+                .update(
+                    mapOf(field to value),
+                )
+                .await()
+        } catch (e: Exception) {
+            Log.e("Update Client", "Fail to update client: ${e.message}")
+            throw e
+        }
+
+
     }
 
     override suspend fun getClientReference(id: Int): String {
@@ -122,7 +136,7 @@ class FirebaseDataClientSource : ClientSource {
                 .reference
             return querySnapshot.id
         } catch (e: Exception) {
-            Log.e("TAG", "Fail to get client's reference: ${e.message}")
+            Log.e("Update Client", "Fail to update client: ${e.message}")
             throw e
         }
     }
@@ -150,5 +164,9 @@ class FirebaseDataClientSource : ClientSource {
             Log.e("Delete Image", "Error al eliminar imagen: ${e.message}")
             false
         }
+    }
+
+    override fun setCurrentClient(position: Int) {
+        currentClient = clientListFB[position]
     }
 }

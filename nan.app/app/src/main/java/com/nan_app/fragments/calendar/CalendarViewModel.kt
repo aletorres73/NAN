@@ -68,12 +68,10 @@ class CalendarViewModel : ViewModel() {
                     if (checkSizeDateClient(dateClient, amountClass)) {
                         dateClient[day] = time
                         viewModelScope.launch {
-                            val referenceClient = clientSource.getClientReference(clientId)
                             clientSource.updateClientById(
                                 clientId,
                                 "dates",
                                 dateClient,
-                                referenceClient
                             )
                             loadState(STATE_LOAD_LIST)
                         }
@@ -88,12 +86,10 @@ class CalendarViewModel : ViewModel() {
                     if (dateClient[day] != "") {
                         dateClient[day] = ""
                         viewModelScope.launch {
-                            val referenceClient = clientSource.getClientReference(clientId)
                             clientSource.updateClientById(
                                 clientId,
                                 "dates",
                                 dateClient,
-                                referenceClient
                             )
                             loadState(STATE_LOAD_LIST)
                         }
