@@ -91,7 +91,6 @@ class HomeFragment : Fragment() {
                 viewModel.searchByName(query.orEmpty())
                 return false
             }
-
             override fun onQueryTextChange(newText: String?) = false
         })
     }

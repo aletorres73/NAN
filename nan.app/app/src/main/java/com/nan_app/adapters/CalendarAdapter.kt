@@ -12,7 +12,6 @@ import com.nan_app.entities.Clients
 import kotlin.properties.Delegates
 
 class CalendarAdapter(
-    // creo que solamente necesito como parámetro la lista de clientes, los otros valores son fijos
     private var listClient: List<Clients>,
     private var dayOfWeekStr: String,
     private var onItemSelected: (Int, Boolean) -> Unit
@@ -22,7 +21,6 @@ class CalendarAdapter(
     private var listSpaces = Calendar().spacesList
 
     class CalendarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        //        private  var viewModeL = ViewModelProvider()[CalendarViewModel::class.java]
         private var spaceFull by Delegates.notNull<Boolean>()
 
         private var binding = ItemCalendarBinding.bind(view)
@@ -72,9 +70,9 @@ class CalendarAdapter(
                     while (currentSpaceIndex < textSpaces.size &&
                         textSpaces[currentSpaceIndex].text.isNotEmpty() &&
                         textSpaces[currentSpaceIndex].text == fullNameClient
-                    ) {
+                    )
                         currentSpaceIndex++
-                    }
+
                     if (currentSpaceIndex >= textSpaces.size) {
                         spaceFull = true
                         break

@@ -26,8 +26,6 @@ class ClientAdapter(
             binding.txtId.text = client.id.toString()
             binding.txtName.text = client.Name
             binding.txtLastName.text = client.LastName
-/*            binding.txtPayDay.text = client.PayDay
-            binding.txtFinishDay.text = client.FinishDay*/
 
             setClientStateValue(client.FinishDay)
             setBirthday(client.Birthday)
@@ -37,7 +35,6 @@ class ClientAdapter(
         }
 
         private fun setClientStateValue(finishDay: String) {
-
             if (finishDay != "") {
                 val formatter1 = DateTimeFormatter.ofPattern("d/M/yyyy")
                 val formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy")
