@@ -24,7 +24,7 @@ class CalendarAdapter(
         private var spaceFull by Delegates.notNull<Boolean>()
 
         private var binding = ItemCalendarBinding.bind(view)
-        private val textSpaces = listOf(
+        private var textSpaces = listOf(
             binding.textBed1,
             binding.textBed2,
             binding.textBed3,
@@ -61,24 +61,27 @@ class CalendarAdapter(
             itemTime: String
         ) {
             var currentSpaceIndex = 0
+            if (textSpaces.any { it.text.isNotEmpty() })
+                textSpaces.forEach { it.text = "" }
 
             for (client in listClient) {
-                val fullNameClient = "${client.Name} ${client.LastName}"
-                val clientDay = client.dates[dayOfWeekStr]
+                if (currentSpaceIndex != textSpaces.size) {
+                    if (!(client.dates.all { it.value.isEmpty() })) {
 
-                if (clientDay != null && clientDay == itemTime) {
-                    while (currentSpaceIndex < textSpaces.size &&
-                        textSpaces[currentSpaceIndex].text.isNotEmpty() &&
-                        textSpaces[currentSpaceIndex].text == fullNameClient
-                    )
-                        currentSpaceIndex++
+                        val fullNameClient = "${client.Name} ${client.LastName}"
+                        val clientTime = client.dates[dayOfWeekStr]
 
-                    if (currentSpaceIndex >= textSpaces.size) {
-                        spaceFull = true
-                        break
+                        if (clientTime == itemTime) {
+                            while (currentSpaceIndex < textSpaces.size &&
+                                textSpaces[currentSpaceIndex].text.isNotEmpty() &&
+                                textSpaces[currentSpaceIndex].text == fullNameClient
+                            )
+                                currentSpaceIndex++
+
+                            textSpaces[currentSpaceIndex].text = fullNameClient
+                            currentSpaceIndex++
+                        }
                     }
-                    textSpaces[currentSpaceIndex].text = fullNameClient
-                    currentSpaceIndex++
                 }
             }
             spaceFull = textSpaces.any { it.text.isEmpty() }.not()

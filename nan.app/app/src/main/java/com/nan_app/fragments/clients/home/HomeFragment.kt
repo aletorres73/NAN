@@ -53,22 +53,23 @@ class HomeFragment : Fragment() {
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 HomeViewModel.STATE_INIT -> {
+//                    binding.homeProgressBar.isVisible = true
                     viewModel.getList()
                 }
 
                 HomeViewModel.STATE_EMPTY -> {
+//                    binding.homeProgressBar.isVisible = false
                     Toast.makeText(requireContext(), "Lista vacía", Toast.LENGTH_SHORT).show()
                 }
 
                 HomeViewModel.STATE_LOADING -> {
                     viewModel.listClients.observe(viewLifecycleOwner) {
-
                         adapter = ClientAdapter(it) { position -> onItemSelected(position) }
-
                         binding.rvClient.layoutManager = LinearLayoutManager(context)
                         binding.rvClient.adapter = adapter
 
                         adapter.updateList(it.toMutableList())
+//                        binding.homeProgressBar.isVisible = false
                     }
                     filterList()
                 }
@@ -89,9 +90,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun filterList() {
+//        binding.homeProgressBar.isVisible = true
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.searchByName(query.orEmpty())
+//                binding.homeProgressBar.isVisible= false
                 return false
             }
 
