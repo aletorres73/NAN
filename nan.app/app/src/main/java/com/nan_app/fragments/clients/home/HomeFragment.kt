@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
 
                 HomeViewModel.STATE_LOADING -> {
                     viewModel.listClients.observe(viewLifecycleOwner) {
-                        adapter = ClientAdapter(it) { position -> onItemSelected(position) }
+                        adapter = ClientAdapter(it) { position -> onItemSelected(it[position].id) }
                         binding.rvClient.layoutManager = LinearLayoutManager(context)
                         binding.rvClient.adapter = adapter
 
@@ -102,8 +102,8 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun onItemSelected(position: Int) {
-        viewModel.getCurrentClient(position)
+    private fun onItemSelected(id: Int) {
+        viewModel.getCurrentClient(id)
         goEditFragment()
     }
 

@@ -38,8 +38,8 @@ class HomeViewModel : ViewModel() {
         viewState.value = STATE_INIT
     }
 
-    fun getCurrentClient(position: Int) {
-        clientSource.setCurrentClient(position)
+    fun getCurrentClient(id: Int) {
+        clientSource.setCurrentClient(id)
     }
 
     private suspend fun setClientStateValue(list: List<Clients>) {
@@ -99,7 +99,7 @@ class HomeViewModel : ViewModel() {
         val filteredByName = listClients.value!!.filter {
             it.Name
                 .lowercase()
-                .contains(query)
+                .contains(query.lowercase())
         }
         if (filteredByName.isNotEmpty()) {
             listClients.value = filteredByName.toMutableList()

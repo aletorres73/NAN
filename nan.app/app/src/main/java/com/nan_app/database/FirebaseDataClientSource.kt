@@ -166,7 +166,9 @@ class FirebaseDataClientSource : ClientSource {
         }
     }
 
-    override fun setCurrentClient(position: Int) {
-        currentClient = clientListFB[position]
+    override fun setCurrentClient(id: Int) {
+        val list = clientListFB.filter { it.id == id }
+        if (list.isNotEmpty())
+            currentClient = list[0]
     }
 }
