@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -69,7 +70,10 @@ class ClientAdapter(
                     Glide.with(binding.imageProductItem.context)
                         .load(uri)
                         .into(binding.imageProductItem)
-                }
+                } else
+                    binding.imageProductItem.setImageDrawable(
+                        getDrawable(binding.imageProductItem.context, R.drawable.df)
+                    )
         }
 
         @SuppressLint("SetTextI18n")
