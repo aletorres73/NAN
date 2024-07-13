@@ -49,7 +49,8 @@
     <string name="delet_image_edit_fragment">Eliminar foto de perfil</string>
     <string name="description_image_edit_fragment">Contenedor de foto de perfildel usuario</string>
     <string name="delete_client_fragment_edit">Eliminar alumno</string>
-    <string name="boton_update_fragment_edit">Listo</string>
+    <string name="button_update_fragment_edit">Listo</string>
+    <string name="button_share_fragment_edit">Compartir</string>
 
     <!--    calendar view-->
     <string name="bed1">Cama 1:</string>
@@ -57,7 +58,7 @@
     <string name="bed3">Cama 3:</string>
     <string name="bed4">Cama 4:</string>
     <string name="bed5">Cama 5:</string>
-<!--    calendar dialog-->
+    <!--    calendar dialog-->
     <string name="dialog_bed1">Cama 1</string>
     <string name="dialog_bed2">Cama 2</string>
     <string name="dialog_bed3">Cama 3</string>

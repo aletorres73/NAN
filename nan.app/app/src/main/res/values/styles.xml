@@ -36,7 +36,6 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginEnd">4dp</item>
-        <item name="android:layout_marginTop">0dp</item>
         <item name="android:textAlignment">textEnd</item>
     </style>
 
@@ -46,10 +45,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="layout_constraintStart_toEndOf">@id/textAmount</item>
         <item name="layout_constraintEnd_toEndOf">parent</item>
-        <item name="android:layout_marginTop">8dp</item>
-<!--        <item name=""></item>-->
-<!--        <item name="android:layout_marginTop">0.5dp</item>-->
-
+        <item name="android:layout_marginTop">2dp</item>
     </style>
 
     <style name="style_fragment_edit_button">
