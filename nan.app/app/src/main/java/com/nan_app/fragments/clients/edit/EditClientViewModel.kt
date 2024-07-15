@@ -160,8 +160,8 @@ class EditClientViewModel : ViewModel() {
                         clientSource.updateClientById(
                             id, "imageName", editedClient.ImageName
                         )
-/*                if (!imageSaved)
-                    clientSource.updateClientById(id, "imageName", "", referenceClient)*/
+                /*                if (!imageSaved)
+                                    clientSource.updateClientById(id, "imageName", "", referenceClient)*/
                 loadState(STATE_DONE_UPDATE_CLIENT)
             } else loadState(STATE_ERROR_UPDATE_CLIENT)
         }

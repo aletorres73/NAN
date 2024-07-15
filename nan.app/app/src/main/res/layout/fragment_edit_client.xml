@@ -218,26 +218,26 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/edTxtDayPay"
                 app:layout_constraintTop_toBottomOf="@id/edtxtFinishDay" />
-
-            <Button
-                android:id="@+id/btnUpdate"
-                style="@style/style_fragment_edit_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_update_fragment_edit"
-                app:icon="@drawable/ic_check"
-                app:iconGravity="textEnd"
-                app:iconSize="30dp"
-                app:iconTintMode="multiply"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edSpinnerAmount" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnUpdate"
+        style="@style/style_fragment_edit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_update_fragment_edit"
+        app:icon="@drawable/ic_check"
+        app:iconGravity="textEnd"
+        app:iconSize="30dp"
+        app:iconTintMode="multiply"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topLinearLayout" />
+
+    <Button
+        android:id="@+id/btnShare"
         style="@style/style_fragment_edit_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -248,7 +248,7 @@
         app:iconTintMode="multiply"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topLinearLayout" />
+        app:layout_constraintTop_toBottomOf="@id/btnUpdate" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

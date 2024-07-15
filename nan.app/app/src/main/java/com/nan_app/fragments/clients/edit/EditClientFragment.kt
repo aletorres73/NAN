@@ -6,17 +6,24 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.PixelCopy
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.*
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +33,9 @@ import com.nan_app.R
 import com.nan_app.databinding.FragmentEditClientBinding
 import com.nan_app.entities.Clients
 import com.nan_app.fragments.datePicker.DatePickerFragment
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class EditClientFragment : Fragment() {
 
@@ -75,50 +85,65 @@ class EditClientFragment : Fragment() {
                 EditClientViewModel.STATE_INIT -> {
                     vm.currentClient.observe(viewLifecycleOwner) { currentClient ->
 
-                        binding.btnUpdate.setOnClickListener {
-//                            if (checkInput()) {
-                                binding.edProgressBar.isVisible = true
-                                binding.btnUpdate.isClickable = false
+                        with(binding) {
+                            btnUpdate.setOnClickListener {
+                                edProgressBar.isVisible = true
+                                btnUpdate.isClickable = false
                                 vm.updatedClient(
                                     getEditedClient(currentClient),
                                     currentClient.id
                                 )
-//                            } else
-//                                vm.loadState(EditClientViewModel.STATE_ERROR_UPDATE_CLIENT)
+                            }
+                            btnDeleteClient.setOnClickListener {
+                                showDeleteConfirmationDialog(
+                                    currentClient.id,
+                                    currentClient.ImageName,
+                                    currentClient.Name,
+                                    currentClient.LastName
+                                )
+                            }
+                            btnEdDeleteImg.setOnClickListener {
+                                edProgressBar.isVisible = true
+                                vm.loadState(EditClientViewModel.STATE_BUTTON_DELETE_IMAGE)
+                            }
+                            btnEditImage.setOnClickListener {
+                                if (currentClient.ImageName == "") showOptionsDialog()
+                                if (currentClient.ImageName == "null") showOptionsDialog()
+                                else vm.loadState(EditClientViewModel.STATE_INIT)
+                            }
+                            edTxtBirthday.setOnClickListener {
+                                vm.loadState(EditClientViewModel.STATE_SELECT_BIRTHDAY)
+                            }
+                            edTxtDayPay.setOnClickListener {
+                                vm.loadState(EditClientViewModel.STATE_SELECT_PAYDAY)
+                            }
+                            edtxtFinishDay.setOnClickListener {
+                                vm.loadState(EditClientViewModel.STATE_SELECT_FINISHDAY)
+                            }
+                            btnShare.setOnClickListener {
+                                getScreenShotFromViewInFragment(
+                                    topLinearLayout,
+                                    this@EditClientFragment
+                                ) {
+
+                                    val file = createImageFile()
+                                    saveBitmapToFile(it, file)
+                                    val uri: Uri =
+                                        FileProvider.getUriForFile(
+                                            requireContext(),
+                                            "com.nan_app.fileprovider",
+                                            file
+                                        )
+
+                                    val intent = Intent().apply {
+                                        action = Intent.ACTION_SEND
+                                        putExtra(Intent.EXTRA_STREAM, uri)
+                                        type = "image/*"
+                                    }
+                                    startActivity(Intent.createChooser(intent, null))
+                                }
+                            }
                         }
-                        binding.btnDeleteClient.setOnClickListener {
-                            showDeleteConfirmationDialog(
-                                currentClient.id,
-                                currentClient.ImageName,
-                                currentClient.Name,
-                                currentClient.LastName
-                            )
-                        }
-
-                        binding.btnEdDeleteImg.setOnClickListener {
-                            binding.edProgressBar.isVisible = true
-//                            if (currentClient.ImageUri == "") vm.loadState(EditClientViewModel.STATE_IMAGE_EMPTY)
-                            vm.loadState(EditClientViewModel.STATE_BUTTON_DELETE_IMAGE)
-                        }
-
-                        binding.btnEditImage.setOnClickListener {
-                            if (currentClient.ImageName == "") showOptionsDialog()
-                            if (currentClient.ImageName == "null") showOptionsDialog()
-                            else vm.loadState(EditClientViewModel.STATE_INIT)
-                        }
-
-                    }
-
-                    binding.edTxtBirthday.setOnClickListener {
-                        vm.loadState(EditClientViewModel.STATE_SELECT_BIRTHDAY)
-                    }
-
-                    binding.edTxtDayPay.setOnClickListener {
-                        vm.loadState(EditClientViewModel.STATE_SELECT_PAYDAY)
-                    }
-
-                    binding.edtxtFinishDay.setOnClickListener {
-                        vm.loadState(EditClientViewModel.STATE_SELECT_FINISHDAY)
                     }
                 }
 
@@ -248,6 +273,57 @@ class EditClientFragment : Fragment() {
         }
     }
 
+    private fun createImageFile(): File {
+        val dir = getExternalFilesDirs(requireContext(), Environment.DIRECTORY_PICTURES)
+
+        return File.createTempFile("IMG_${System.currentTimeMillis()}_", ".png", dir[0])
+    }
+
+    private fun saveBitmapToFile(bitmap: Bitmap, file: File) {
+        try {
+            val fos = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+            fos.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+    }
+
+
+    private fun getScreenShotFromViewInFragment(
+        view: View,
+        fragment: Fragment,
+        callback: (Bitmap) -> Unit
+    ) {
+        fragment.requireActivity().window?.let { window ->
+            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            val locationOfViewInWindow = IntArray(2)
+            view.getLocationInWindow(locationOfViewInWindow)
+            try {
+                PixelCopy.request(
+                    window,
+                    Rect(
+                        locationOfViewInWindow[0],
+                        locationOfViewInWindow[1],
+                        locationOfViewInWindow[0] + view.width,
+                        locationOfViewInWindow[1] + view.height
+                    ), bitmap, { copyResult ->
+                        if (copyResult == PixelCopy.SUCCESS) {
+                            callback(bitmap)
+                        } else {
+                            // Manejar otros códigos de resultado si es necesario
+                        }
+                    },
+                    Handler(Looper.myLooper()!!)
+                )
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
     private fun showDeleteConfirmationDialog(
         id: Int,
         imageName: String,
@@ -271,34 +347,19 @@ class EditClientFragment : Fragment() {
         alertDialog.show()
     }
 
-//    private fun checkInput(): Boolean {
-//        if (binding.edTextName.text.isEmpty())
-//            if (binding.edTxtLastName.text.isEmpty())
-//                if (binding.edTxtBirthday.text.isEmpty())
-//                    if (binding.edTxtPhone.text.isEmpty())
-//                        if (binding.edTxtEmail.text.isEmpty())
-//                            if (binding.edTxtDayPay.text.isEmpty())
-//                                if (binding.edtxtFinishDay.text.isEmpty())
-//                                    return false
-////                                    if (binding.edTxtAmount.text.isEmpty())
-//
-//
-//        return true
-//    }
-
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedFinshDay(year: Int, month: Int, day: Int) {
-        binding.edtxtFinishDay.setText("$day/${month+1}/$year")
+        binding.edtxtFinishDay.setText("$day/${month + 1}/$year")
     }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedDayPay(year: Int, month: Int, day: Int) {
-        binding.edTxtDayPay.setText("$day/${month+1}/$year")
+        binding.edTxtDayPay.setText("$day/${month + 1}/$year")
     }
 
     @SuppressLint("SetTextI18n")
     private fun onDateSelectedBirthday(year: Int, month: Int, day: Int) {
-        binding.edTxtBirthday.setText("$day/${month+1}/$year")
+        binding.edTxtBirthday.setText("$day/${month + 1}/$year")
     }
 
     private fun loadClientInfo() {
